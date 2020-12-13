@@ -1,0 +1,6 @@
+# Default dist folder
+dist/
+
+# Default resources folder
+src/client/assets
+src/client/slds

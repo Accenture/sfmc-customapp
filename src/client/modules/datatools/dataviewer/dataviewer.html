@@ -1,0 +1,91 @@
+<template>
+    <common-splitview>
+        <div slot="panelheader" title="Panel Header" style="width: 100%">
+            <lightning-layout vertical-align="center">
+                <lightning-layout-item>
+                    <h2 class="slds-truncate">Data Source</h2>
+                </lightning-layout-item>
+                <lightning-layout-item alignment-bump="left">
+                    <lightning-button
+                        label="Home"
+                        onclick={handlehome}
+                    ></lightning-button>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+
+        <common-datapicker
+            slot="panelbody"
+            onselectitem={handleSelectItem}
+            onerror={showErrors}
+        >
+        </common-datapicker>
+
+        <div
+            style="height: 100vh; width: 100%; background-color: white"
+            slot="main"
+        >
+            <template if:true={privateDataExtension}>
+                <lightning-layout>
+                    <lightning-layout-item size="12">
+                        <lightning-card
+                            variant="Narrow"
+                            title={privateDataExtension.name}
+                            icon-name="standard:opportunity"
+                        >
+                            <lightning-button-group slot="actions">
+                                <lightning-button
+                                    label="Load"
+                                    onclick={handleLoad}
+                                ></lightning-button>
+                                <lightning-button
+                                    label="Open"
+                                    onclick={handleClickOpen}
+                                ></lightning-button>
+                            </lightning-button-group>
+                            <p>
+                                <datatools-filterpanel
+                                    class="slds-p-horizontal_small"
+                                    fields={privateDataExtension.fields}
+                                    onfilterchange={handleFilter}
+                                >
+                                </datatools-filterpanel>
+                                <template if:true={privateDataExtension.fields}>
+                                    <lightning-datatable
+                                        min-column-width="150"
+                                        key-field="_CustomObjectKey"
+                                        columns={privateDataExtension.fields}
+                                        data={privateDataExtension.rows}
+                                        hide-checkbox-column
+                                        default-sort-direction={defaultSortDirection}
+                                        sorted-direction={sortDirection}
+                                        sorted-by={sortedBy}
+                                        onsort={onHandleSort}
+                                    >
+                                    </lightning-datatable>
+                                </template>
+                            </p>
+                        </lightning-card>
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+            <template if:false={privateDataExtension}>
+                <lightning-layout vertical-align="center" style="height: 100%">
+                    <lightning-layout-item flexibility="auto">
+                        <common-illustrationdesert type="desert" size="small"
+                            ><h2>
+                                Select a Data Extension to Start
+                            </h2></common-illustrationdesert
+                        >
+                    </lightning-layout-item>
+                </lightning-layout>
+            </template>
+        </div>
+    </common-splitview>
+    <template if:true={status.loading}>
+        <lightning-spinner
+            alternative-text="Loading"
+            size="large"
+        ></lightning-spinner>
+    </template>
+</template>

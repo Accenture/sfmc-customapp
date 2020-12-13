@@ -1,0 +1,135 @@
+<template>
+    <template if:true={isEdit}>
+        <common-savemodal
+            onclose={handleclose}
+            onsave={handlesave}
+            title="Edit Field"
+        >
+            <div slot="body">
+                <lightning-input
+                    name="name"
+                    label="Name"
+                    onchange={editname}
+                    type="text"
+                    value={updatedField.Name}
+                ></lightning-input>
+                <lightning-combobox
+                    name="datatpe"
+                    label="Data Type"
+                    value={updatedField.FieldType}
+                    placeholder="Select Field"
+                    options={types}
+                    onchange={edittype}
+                ></lightning-combobox>
+                <template if:true={isText}>
+                    <lightning-input
+                        name="length"
+                        label="Length"
+                        onchange={editlen}
+                        type="number"
+                        value={updatedField.MaxLength}
+                    ></lightning-input>
+                    <lightning-checkbox-group
+                        name="Checkbox Group"
+                        label="Checkbox Group"
+                        options={checkboxOptions}
+                        value={checkBoxValues}
+                        onchange={handleCheckboxChange}
+                    >
+                    </lightning-checkbox-group>
+                </template>
+                <template if:true={isDecimal}>
+                    <lightning-input
+                        name="precision"
+                        label="Precision (Total Length)"
+                        onchange={editprecision}
+                        type="number"
+                        value={updatedField.Precision}
+                    ></lightning-input>
+                    <lightning-input
+                        name="Scale"
+                        label="Scale (Decimal Places)"
+                        onchange={editscale}
+                        type="number"
+                        value={updatedField.Scale}
+                    ></lightning-input>
+                </template>
+            </div>
+        </common-savemodal>
+    </template>
+
+    <div class="slds-text-heading_small">{updatedField.Name}</div>
+    <lightning-layout>
+        <lightning-layout-item>
+            <span>{updatedField.FieldType}</span>
+
+            <template if:true={isText}>
+                <span>({updatedField.MaxLength})</span>
+            </template>
+            <template if:true={isDecimal}>
+                <span>({updatedField.Precision}, {updatedField.Scale})</span>
+            </template>
+            <template if:true={updatedField.IsRequired}>
+                <span> - Req</span>
+            </template>
+            <template if:false={updatedField.IsRequired}>
+                <span> - Opt</span>
+            </template>
+            <template if:true={updatedField.IsPrimaryKey}>
+                <span> - PK</span>
+            </template>
+        </lightning-layout-item>
+        <lightning-layout-item class="slds-col_bump-left">
+            <button
+                class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small"
+                title="More Options"
+                onclick={handleclick}
+                id={updatedField.key}
+            >
+                <svg class="slds-button__icon" aria-hidden="true">
+                    <use
+                        xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#settings"
+                    ></use>
+                </svg>
+                <span class="slds-assistive-text">More options</span>
+            </button>
+            <button
+                class="slds-button slds-button_icon slds-button_icon-border slds-button_icon-small"
+                style="background-color: red"
+                title="Delete Column"
+                onclick={handledelete}
+                id={updatedField.key}
+            >
+                <svg
+                    class="slds-button__icon"
+                    aria-hidden="true"
+                    style="fill: white"
+                >
+                    <use
+                        xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#delete"
+                    ></use>
+                </svg>
+                <span class="slds-assistive-text">Delete Column</span>
+            </button>
+        </lightning-layout-item>
+    </lightning-layout>
+
+    <div class="slds-var-p-vertical_small">
+        <div
+            class="slds-progress-bar slds-progress-bar_circular"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow={updatedField.match}
+            role="progressbar"
+        >
+            <span
+                class="slds-progress-bar__value slds-progress-bar__value_success"
+                style={updatedField.matchclass}
+            >
+                <span class="slds-assistive-text"
+                    >Progress: {updatedField.match}%</span
+                >
+            </span>
+        </div>
+    </div>
+</template>

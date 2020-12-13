@@ -1,0 +1,37 @@
+<template>
+    <table class="slds-table slds-table_cell-buffer slds-table_bordered">
+        <template if:true={fields}>
+            <thead>
+                <tr class="slds-line-height_reset">
+                    <template for:each={fields} for:item="field">
+                        <!-- TODO Add icon for type -->
+                        <th class="" scope="col" key={field.Name}>
+                            <div class="slds-truncate" title={field.Name}>
+                                {field.Name}
+                            </div>
+                        </th>
+                    </template>
+                </tr>
+            </thead>
+        </template>
+        <template if:true={rows}>
+            <tbody>
+                <template for:each={rows} for:item="row">
+                    <tr class="slds-hint-parent" key={row.key}>
+                        <template for:each={row.values} for:item="cell">
+                            <th
+                                data-label="cell.fieldName"
+                                scope="row"
+                                key={cell.fieldValue}
+                            >
+                                <div class="slds-truncate">
+                                    {cell.fieldValue}
+                                </div>
+                            </th>
+                        </template>
+                    </tr>
+                </template>
+            </tbody>
+        </template>
+    </table>
+</template>

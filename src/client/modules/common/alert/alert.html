@@ -1,0 +1,27 @@
+<template
+    ><div
+        if:true={visible}
+        class="slds-notify slds-notify_alert slds-theme_alert-texture slds-theme_warning overlay"
+        role="alert"
+    >
+        <span class="slds-assistive-text">{privateAlert.type}</span>
+        <lightning-icon
+            icon-name="utility:warning"
+            alternative-text="warning"
+            title="warning"
+            size="small"
+            class="slds-p-horizontal_x-small"
+        ></lightning-icon>
+        <h2>{privateAlert.message}</h2>
+        <template if:true={privateAlert.link}>
+            &nbsp;<a href={privateAlert.link}>Refresh</a>
+        </template>
+        <lightning-button-icon
+            icon-name="utility:close"
+            alternative-text="close"
+            title="close"
+            onclick={handleDismiss}
+            class="slds-notify__close"
+        ></lightning-button-icon>
+    </div>
+</template>

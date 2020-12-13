@@ -1,0 +1,7 @@
+{
+    "restHost": "rest.s7.exacttarget.com",
+    "stackKey": "S7",
+    "stackHost": "mc.s7.exacttarget.com",
+    "ssoUrl": "https://mc.s7.exacttarget.com/cloud/tools/SSO.aspx?env=default&legacy=1&sk=S7",
+    "fuelapiRestHost": "https://www-mc-s7.exacttargetapis.com/"
+}

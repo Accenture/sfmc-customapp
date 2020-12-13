@@ -1,0 +1,100 @@
+<template>
+    <template if:true={status.loading}>
+        <lightning-spinner
+            alternative-text="Loading"
+            size="large"
+        ></lightning-spinner>
+    </template>
+    <template if:true={status.save}>
+        <datatools-savemodal
+            fields={headers}
+            onclosesave={togglesave}
+            onloading={handleloading}
+        ></datatools-savemodal>
+    </template>
+    <common-alert alert-payload={alert}></common-alert>
+    <div class="slds-var-p-around_xx-small">
+        <div class="slds-box slds-box_x-small slds-theme_default">
+            <lightning-layout vertical-align="center">
+                <lightning-layout-item padding="horizontal-small">
+                    <label for="exampledata">Data: </label>
+                    <input
+                        type="file"
+                        id="exampledata"
+                        name="avatar"
+                        accept=".csv"
+                        onchange={loadData}
+                    />
+                </lightning-layout-item>
+                <lightning-layout-item padding="horizontal-small">
+                    <lightning-input
+                        name="defaultPhoneLocale"
+                        label="Default Phone Locale"
+                        ontextinput={setphonelocale}
+                        type="text"
+                        value={settings.defaultPhoneLocale}
+                    ></lightning-input>
+                </lightning-layout-item>
+                <lightning-layout-item
+                    alignment-bump="left"
+                    padding="horizontal-small"
+                >
+                    <lightning-button-group>
+                        <lightning-button
+                            label="(re)load"
+                            onclick={parsedata}
+                            disabled={hasNoInputData}
+                        ></lightning-button>
+                        <lightning-button
+                            label="Save"
+                            onclick={togglesave}
+                            disabled={hasNotLoadedData}
+                        ></lightning-button>
+                        <lightning-button
+                            label="Home"
+                            onclick={handlehome}
+                        ></lightning-button>
+                    </lightning-button-group>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </div>
+
+    <template if:true={rows}>
+        <div class="slds-var-p-around_xx-small">
+            <div
+                class="slds-box slds-box_xx-small slds-theme_default slds-scrollable"
+            >
+                <table
+                    class="slds-table slds-table_cell-buffer slds-table_bordered"
+                >
+                    <thead>
+                        <tr class="slds-line-height_reset">
+                            <template for:each={headers} for:item="header">
+                                <th key={header.key} class="" scope="col">
+                                    <datatools-fieldoptions
+                                        field={header}
+                                        onchangefield={updatedfield}
+                                        ondeletefield={deletedfield}
+                                    ></datatools-fieldoptions>
+                                </th>
+                            </template>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <template for:each={rows} for:item="row">
+                            <tr key={row.key} class="slds-hint-parent">
+                                <template
+                                    for:each={row.columns}
+                                    for:item="column"
+                                >
+                                    <td key={column.key}>{column.value}</td>
+                                </template>
+                            </tr>
+                        </template>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </template>
+</template>

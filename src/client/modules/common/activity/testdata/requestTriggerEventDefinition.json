@@ -1,0 +1,35 @@
+{
+    "eventDefinition": {
+        "id": "FED6E706-2B63-4FA8-82A2-87E850725262",
+        "name": "lWC",
+        "mode": "Production",
+        "isVisibleInPicker": false,
+        "type": "EmailAudience",
+        "iconUrl": "/images/icon-data-extension.svg",
+        "eventDefinitionKey": "DEAudience-571f35a8-ca78-ee41-4b24-37de63e9b12d",
+        "dataExtensionId": "b41b04f3-09f6-ea11-a2eb-1402ec937095",
+        "createdDate": "2020-09-13T14:00:06.880Z",
+        "createdBy": 7545830,
+        "modifiedDate": "2020-09-13T14:00:06.880Z",
+        "modifiedBy": 7545830,
+        "sourceApplicationExtensionId": "97e942ee-6914-4d3d-9e52-37ecb71f79ed",
+        "isPlatformObject": false,
+        "category": "Audience",
+        "metaData": {
+            "scheduleState": "No Schedule",
+            "criteriaDescription": "",
+            "scheduleFlowMode": "runOnce",
+            "runOnceScheduleMode": "onPublish"
+        },
+        "arguments": {
+            "serializedObjectType": 3,
+            "eventDefinitionId": "fed6e706-2b63-4fa8-82a2-87e850725262",
+            "eventDefinitionKey": "DEAudience-571f35a8-ca78-ee41-4b24-37de63e9b12d",
+            "dataExtensionId": "b41b04f3-09f6-ea11-a2eb-1402ec937095",
+            "criteria": "",
+            "useHighWatermark": false,
+            "automationId": "4c97412b-3469-4e93-9940-7d81b86cf633"
+        },
+        "configurationArguments": { "unconfigured": false }
+    }
+}

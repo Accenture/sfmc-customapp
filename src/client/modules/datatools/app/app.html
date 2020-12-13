@@ -1,0 +1,71 @@
+<template>
+    <common-alert alert-payload={alert}></common-alert>
+    <template if:true={isdataassessor}>
+        <datatools-dataassessor
+            class="app"
+            onhome={selectApp}
+            onerror={showAlert}
+        ></datatools-dataassessor>
+    </template>
+    <template if:true={isdataviewer}>
+        <datatools-dataviewer
+            class="app"
+            onhome={selectApp}
+            onerror={showAlert}
+        ></datatools-dataviewer>
+    </template>
+    <template if:true={isNone}>
+        <common-welcomemat onclick={selectApp}>
+            <div slot="infocontent">
+                <img
+                    class="logoplaceholder"
+                    src="/assets/ACC_GT_Dimensional_Purple_RGB_pos.svg"
+                />
+
+                <h3
+                    class="slds-welcome-mat__info-title"
+                    id="welcome-mat-100-label"
+                >
+                    Welcome to Accenture Data Tools
+                </h3>
+                <div
+                    class="slds-welcome-mat__info-description slds-text-longform"
+                >
+                    <p>
+                        These are open source tools for use in Marketing Cloud
+                    </p>
+                </div>
+                <span>by Douglas Midgley</span>
+                <div>
+                    <a href="https://www.linkedin.com/in/douglasmidgley">
+                        <img
+                            class="logoplaceholder"
+                            src="/assets/Linkedin_Logo.png"
+                        />
+                    </a>
+                    <a href="https://github.com/DougMidgley">
+                        <img
+                            class="logoplaceholder"
+                            src="/assets/GitHub_Logo.png"
+                        />
+                    </a>
+                </div>
+            </div>
+            <common-welcomemattile
+                slot="tiles"
+                title="Data Viewer"
+                name="dataviewer"
+                description="Easily filter Data Extensions"
+                icon-name="utility:record_lookup"
+            ></common-welcomemattile>
+            <common-welcomemattile
+                slot="tiles"
+                title="Data Assessor"
+                name="dataassessor"
+                description="Understand your data and auto-create data extensions from CSV"
+                icon-name="utility:metrics"
+            >
+            </common-welcomemattile>
+        </common-welcomemat>
+    </template>
+</template>

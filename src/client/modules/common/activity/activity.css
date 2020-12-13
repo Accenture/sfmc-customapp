@@ -1,0 +1,17 @@
+/* footer {
+    background: rgb(216, 237, 255);
+} */
+.activitycontainer {
+    background: white;
+}
+
+.activityfooter {
+    height: 50px;
+}
+.activityheader {
+    height: 45px;
+}
+.activitycontent {
+    height: calc(100vh - 50px - 45px);
+    overflow-y: auto;
+}

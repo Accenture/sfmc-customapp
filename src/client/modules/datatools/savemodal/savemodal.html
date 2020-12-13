@@ -1,0 +1,26 @@
+<template>
+    <common-savemodal
+        onclose={handleclose}
+        onsave={handlesave}
+        title="Save Data Extension"
+    >
+        <div slot="body">
+            <lightning-input
+                name="name"
+                label="Name"
+                onchange={handlefilename}
+                type="text"
+                value={filename}
+            ></lightning-input>
+
+            <template if:true={errors}>
+                <b>Errors:</b>
+                <ul>
+                    <template for:each={errors} for:item="error">
+                        <li key={error.errorNumber}>{error.statusMessage}</li>
+                    </template>
+                </ul>
+            </template>
+        </div>
+    </common-savemodal>
+</template>

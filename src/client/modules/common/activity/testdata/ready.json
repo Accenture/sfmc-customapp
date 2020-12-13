@@ -1,0 +1,63 @@
+{
+    "name": "",
+    "id": null,
+    "key": "REST-2",
+    "type": "REST",
+    "arguments": {
+        "execute": {
+            "inArguments": [],
+            "outArguments": [],
+            "url": "https://sfmc-lwcactivity.herokuapp.com/activity/execute",
+            "timeout": 10000,
+            "retryCount": 3,
+            "retryDelay": 1000,
+            "concurrentRequests": 5
+        }
+    },
+    "configurationArguments": {
+        "publish": {
+            "url": "https://sfmc-lwcactivity.herokuapp.com/activity/publish",
+            "useJwt": true
+        },
+        "validate": {
+            "url": "https://sfmc-lwcactivity.herokuapp.com/activity/validate",
+            "useJwt": true
+        },
+        "stop": {
+            "url": "https://sfmc-lwcactivity.herokuapp.com/activity/stop",
+            "useJwt": true
+        },
+        "save": {
+            "url": "https://sfmc-lwcactivity.herokuapp.com/activity/save",
+            "useJwt": true
+        },
+        "applicationExtensionKey": "eb67b37f-fc2d-4238-9771-f28b411339e0"
+    },
+    "metaData": {
+        "icon": "https://sfmc-lwcactivity.herokuapp.com/assets/platformeventsicon.png",
+        "category": "customer",
+        "backgroundColor": "#032e61",
+        "expressionBuilderPrefix": "Platform",
+        "iconSmall": null,
+        "statsContactIcon": null,
+        "original_icon": "https://sfmc-lwcactivity.herokuapp.com/assets/platformeventsicon.png"
+    },
+    "schema": {
+        "arguments": {
+            "execute": {
+                "inArguments": [],
+                "outArguments": []
+            }
+        }
+    },
+    "editable": true,
+    "outcomes": [
+        {
+            "next": "WAITBYDURATION-1",
+            "metaData": {
+                "invalid": false
+            }
+        }
+    ],
+    "errors": null
+}

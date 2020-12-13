@@ -1,0 +1,21 @@
+<template>
+    <common-modal
+        ><div slot="content" class="slds-welcome-mat">
+            <lightning-layout class="slds-welcome-mat__content">
+                <lightning-layout-item
+                    class="slds-welcome-mat__info"
+                    padding="around-small"
+                    size="6"
+                >
+                    <div class="slds-welcome-mat__info-content">
+                        <slot name="infocontent"></slot>
+                    </div>
+                </lightning-layout-item>
+                <lightning-layout-item class="slds-welcome-mat__tiles" size="6">
+                    <ul>
+                        <slot name="tiles"></slot>
+                    </ul>
+                </lightning-layout-item>
+            </lightning-layout></div
+    ></common-modal>
+</template>

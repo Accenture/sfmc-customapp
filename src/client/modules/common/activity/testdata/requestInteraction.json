@@ -1,0 +1,252 @@
+{
+    "id": "2d1399e9-403a-4dad-9ae9-282552cf07d1",
+    "version": 11,
+    "name": "lWC",
+    "description": "",
+    "workflowApiVersion": 1,
+    "entryMode": "MultipleEntries",
+    "activities": [
+        {
+            "type": "REST",
+            "key": "REST-1",
+            "name": "",
+            "outcomes": [
+                {
+                    "key": "f802b64e-b485-486d-8b43-b39bf3b5f8c4",
+                    "next": "WAITBYDURATION-1",
+                    "arguments": {},
+                    "metaData": {
+                        "invalid": false
+                    }
+                }
+            ],
+            "schema": {
+                "arguments": {
+                    "execute": {
+                        "inArguments": [],
+                        "outArguments": []
+                    }
+                }
+            },
+            "description": "",
+            "metaData": {
+                "icon": "https://sfmc-lwcactivity.herokuapp.com/assets/platformeventsicon.png",
+                "category": "customer",
+                "backgroundColor": "#032e61",
+                "expressionBuilderPrefix": "Platform",
+                "iconSmall": "",
+                "statsContactIcon": "",
+                "original_icon": "https://sfmc-lwcactivity.herokuapp.com/assets/platformeventsicon.png",
+                "isConfigured": true
+            },
+            "arguments": {
+                "executionMode": "{{Context.ExecutionMode}}",
+                "definitionId": "{{Context.DefinitionId}}",
+                "activityId": "{{Activity.Id}}",
+                "contactKey": "{{Context.ContactKey}}",
+                "execute": {
+                    "inArguments": [
+                        {
+                            "event": "exampleplatformevent__e"
+                        },
+                        {
+                            "fields": {
+                                "examplefield__c": "example",
+                                "ContactKey__c": "{{Contact.Attribute.\"Contact\".\"Contact Key\"}}"
+                            }
+                        }
+                    ],
+                    "outArguments": [],
+                    "url": "https://sfmc-lwcactivity.herokuapp.com/api/platformeventactivity/execute",
+                    "timeout": 10000,
+                    "retryCount": 3,
+                    "retryDelay": 1000,
+                    "concurrentRequests": 5,
+                    "useJwt": true
+                },
+                "testExecute": "",
+                "startActivityKey": "{{Context.StartActivityKey}}",
+                "definitionInstanceId": "{{Context.DefinitionInstanceId}}",
+                "requestObjectId": "{{Context.RequestObjectId}}"
+            },
+            "configurationArguments": {
+                "save": {
+                    "url": "https://sfmc-lwcactivity.herokuapp.com/api/platformeventactivity/save",
+                    "useJwt": true
+                },
+                "testSave": "",
+                "publish": {
+                    "url": "https://sfmc-lwcactivity.herokuapp.com/api/platformeventactivity/publish",
+                    "useJwt": true
+                },
+                "testPublish": "",
+                "unpublish": "",
+                "stop": {
+                    "url": "https://sfmc-lwcactivity.herokuapp.com/api/platformeventactivity/stop",
+                    "useJwt": true
+                },
+                "testStop": "",
+                "testUnpublish": "",
+                "partnerActivityId": "",
+                "validate": {
+                    "url": "https://sfmc-lwcactivity.herokuapp.com/api/platformeventactivity/validate",
+                    "useJwt": true
+                },
+                "testValidate": "",
+                "outArgumentSchema": {},
+                "applicationExtensionKey": "eb67b37f-fc2d-4238-9771-f28b411339e0"
+            }
+        },
+        {
+            "key": "WAITBYDURATION-1",
+            "name": "1 day",
+            "description": "",
+            "type": "WAIT",
+            "outcomes": [
+                {
+                    "key": "c5f1fdc1-643f-4fa8-aaa3-73e14f04b788",
+                    "arguments": {},
+                    "metaData": {
+                        "invalid": false
+                    },
+                    "next": null
+                }
+            ],
+            "schema": {
+                "arguments": {
+                    "endDate": {
+                        "dataType": "Date",
+                        "isNullable": false,
+                        "direction": "Out",
+                        "readOnly": false,
+                        "access": "Hidden"
+                    },
+                    "waitEndDateAttributeDataBound": {
+                        "dataType": "Text",
+                        "isNullable": true,
+                        "direction": "In",
+                        "readOnly": false,
+                        "access": "Hidden"
+                    },
+                    "waitDefinitionId": {
+                        "dataType": "Text",
+                        "isNullable": false,
+                        "direction": "In",
+                        "readOnly": false,
+                        "access": "Hidden"
+                    },
+                    "waitForEventId": {
+                        "dataType": "Text",
+                        "isNullable": true,
+                        "direction": "In",
+                        "readOnly": false,
+                        "access": "Hidden"
+                    },
+                    "executionMode": {
+                        "dataType": "Text",
+                        "isNullable": false,
+                        "direction": "In",
+                        "readOnly": false,
+                        "access": "Hidden"
+                    },
+                    "startActivityKey": {
+                        "dataType": "Text",
+                        "isNullable": true,
+                        "direction": "In",
+                        "readOnly": false,
+                        "access": "Hidden"
+                    },
+                    "waitQueueId": {
+                        "dataType": "LongNumber",
+                        "isNullable": true,
+                        "direction": "In",
+                        "readOnly": false,
+                        "access": "Hidden"
+                    }
+                }
+            },
+            "metaData": {
+                "isConfigured": true,
+                "uiType": "WAITBYDURATION"
+            },
+            "arguments": {
+                "waitEndDateAttributeDataBound": "",
+                "waitDefinitionId": "4b04091a-375a-490f-b041-1678750434d2",
+                "waitForEventId": "",
+                "executionMode": "{{Context.ExecutionMode}}",
+                "startActivityKey": "{{Context.StartActivityKey}}",
+                "waitQueueId": "{{Context.WaitQueueId}}"
+            },
+            "configurationArguments": {
+                "waitDuration": 1,
+                "waitUnit": "DAYS",
+                "specifiedTime": "",
+                "timeZone": "",
+                "description": "",
+                "waitEndDateAttributeExpression": "",
+                "specificDate": "",
+                "waitForEventKey": ""
+            }
+        }
+    ],
+    "persistenceModel_asyncStopping": {},
+    "persistenceModel_pausing": {},
+    "persistenceModel_resuming": {},
+    "metaData": {},
+    "key": "b4528508-b546-5329-e9ed-ec0293a2319f",
+    "createdDate": "2020-12-13T19:04:52.000Z",
+    "modifiedDate": "2020-12-13T19:04:52.000Z",
+    "goals": [],
+    "exits": [],
+    "definitionType": "Multistep",
+    "channel": "",
+    "executionMode": "Production",
+    "categoryId": 274749,
+    "definitionId": "063eee1e-10fa-4322-af42-491b1796ded7",
+    "scheduledStatus": "Draft",
+    "defaults": {
+        "email": [
+            "{{Event.DEAudience-eabac269-8abc-2a8b-aebb-56d0728fdfb3.\"Email\"}}"
+        ],
+        "mobileNumber": [],
+        "transactionKeys": null,
+        "properties": {
+            "analyticsTracking": {
+                "enabled": true,
+                "analyticsType": "google",
+                "urlDomainsToTrack": []
+            }
+        }
+    },
+    "triggers": [
+        {
+            "key": "TRIGGER",
+            "name": "TRIGGER",
+            "description": "",
+            "type": "EmailAudience",
+            "arguments": {
+                "startActivityKey": "{{Context.StartActivityKey}}",
+                "dequeueReason": "{{Context.DequeueReason}}",
+                "lastExecutedActivityKey": "{{Context.LastExecutedActivityKey}}",
+                "filterResult": "true"
+            },
+            "configurationArguments": {
+                "filterDefinitionId": "00000000-0000-0000-0000-000000000000",
+                "criteria": "",
+                "schemaVersionId": 0
+            },
+            "metaData": {
+                "sourceInteractionId": "00000000-0000-0000-0000-000000000000",
+                "eventDefinitionId": "83038384-EAA5-45FC-B3CD-5323DBEEB0AB",
+                "eventDefinitionKey": "DEAudience-eabac269-8abc-2a8b-aebb-56d0728fdfb3",
+                "chainType": "none",
+                "configurationRequired": false,
+                "iconUrl": "/images/icon-data-extension.svg",
+                "title": "Data Extension",
+                "entrySourceGroupConfigUrl": "jb:///data/entry/audience/entrysourcegroupconfig.json"
+            }
+        }
+    ],
+    "transactionKeys": null,
+    "status": "DRAFT"
+}

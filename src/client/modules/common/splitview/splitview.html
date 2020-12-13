@@ -1,0 +1,56 @@
+<template>
+    <div class="slds-grid">
+        <!-- panel -->
+        <div
+            if:false={isPanelClosed}
+            class="slds-split-view_container slds-is-open panel"
+            style="flex: none"
+        >
+            <article
+                aria-hidden="false"
+                id="split-view-id"
+                class="slds-split-view slds-grid slds-grid_vertical slds-grow"
+            >
+                <div class="slds-grid slds-grid_vertical" style="height: 100vh">
+                    <div class="slds-split-view__list-header slds-grid">
+                        <slot name="panelheader"> </slot>
+                    </div>
+
+                    <div class="slds-scrollable_y">
+                        <slot name="panelbody"> </slot>
+                    </div>
+                </div>
+            </article>
+        </div>
+        <!-- Button -->
+        <div class="slds-col slds-grow-none" style="height: 100vh">
+            <button
+                class="slds-button slds-button_icon slds-button_icon toggle-button slds-is-open"
+                aria-controls="split-view-id"
+                aria-expanded="true"
+                title="Close Split View"
+                onclick={togglePanel}
+            >
+                <svg
+                    class="slds-button__icon slds-button__icon_x-small"
+                    aria-hidden="true"
+                >
+                    <use
+                        xlink:href="/assets/icons/utility-sprite/svg/symbols.svg#left"
+                    ></use>
+                </svg>
+                <span class="slds-assistive-text">Close Split View</span>
+            </button>
+        </div>
+
+        <!-- Main -->
+        <div class={computedMainClass}>
+            <slot
+                name="main"
+                onclosepanel={handleClosePanel}
+                onopenpanel={handleOpenPanel}
+                style="height: 100vh"
+            ></slot>
+        </div>
+    </div>
+</template>

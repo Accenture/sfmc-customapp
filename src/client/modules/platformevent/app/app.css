@@ -1,0 +1,18 @@
+/* footer {
+    background: rgb(216, 237, 255);
+} */
+.activitycontainer {
+    height: 100vh;
+    background: white;
+}
+
+.activityfooter {
+    height: 8vh;
+}
+.activityheader {
+    height: 5vh;
+}
+.activitycontent {
+    height: 85vh;
+    overflow-y: scroll;
+}

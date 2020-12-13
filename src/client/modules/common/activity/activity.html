@@ -1,0 +1,53 @@
+<template>
+    <div class="activitycontainer">
+        <header class="activityheader">
+            <div
+                class="slds-card__header slds-media slds-media_center slds-has-flexi-truncate"
+            >
+                <div class="slds-media__figure">
+                    <lightning-icon
+                        icon-name="standard:data_integration_hub"
+                    ></lightning-icon>
+                </div>
+                <div class="slds-media__body">
+                    <h2 class="slds-card__header-title">{title}</h2>
+                </div>
+            </div>
+        </header>
+        <div class="activitycontent">
+            <slot></slot>
+        </div>
+        <footer class="activityfooter">
+            <div
+                class="slds-grid slds-var-p-around_x-small slds-grid_align-spread"
+            >
+                <div class="slds-col">
+                    <lightning-button
+                        label={prevValue}
+                        variant="base"
+                        onclick={cancel}
+                    ></lightning-button>
+                </div>
+
+                <template if:true={canNext}>
+                    <div class="slds-col">
+                        <lightning-button
+                            label={nextValue}
+                            variant="brand"
+                            onclick={done}
+                        ></lightning-button>
+                    </div>
+                </template>
+                <template if:false={canNext}>
+                    <div class="slds-col">
+                        <lightning-button
+                            label={nextValue}
+                            variant="brand"
+                            disabled
+                        ></lightning-button>
+                    </div>
+                </template>
+            </div>
+        </footer>
+    </div>
+</template>
