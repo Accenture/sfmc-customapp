@@ -28,6 +28,10 @@
         "SECRET_TOKEN": {
             "description": "A secret key for verifying the integrity of signed cookies.",
             "generator": "secret"
+        },
+        "SFMC_JWT": {
+            "description": "JWT signature from SFMC Installed Package",
+            "required": true
         }
     },
     "addons": [
