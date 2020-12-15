@@ -17,7 +17,7 @@ This is far from being a perfect app. Examples right now for improvement are
 
 ## TLDR
 
-Example custom application('for SFMC
+Example custom applications for SFMC
 
 -   Platform Events Activity
     -   App for Config at /platformeventapp
@@ -33,7 +33,7 @@ Custom development in Marketing Cloud falls largely into two catories, on-platfo
 
 ### Custom Activities
 
-Custom Activities allow native-like integration('into Journey Builder by leveraging an external service such as Heroku to manage the UI and the integration('with Journey Builder.
+Custom Activities allow native-like integration into Journey Builder by leveraging an external service such as Heroku to manage the UI and the integration with Journey Builder.
 
 [Official Documentation](https://developer.salesforce.com/docs/atlas.en-us.mc-app-development.meta/mc-app-development/getting-started.htm)
 
@@ -41,7 +41,7 @@ Custom Activities allow native-like integration('into Journey Builder by leverag
 
 ### Custom Applications
 
-Custom Application('are a way to integrate external web applications into the Marketing Cloud UI by using an Iframe and OAuth-base SSO.
+Custom Applications are a way to integrate external web applications into the Marketing Cloud UI by using an Iframe and OAuth-base SSO.
 
 [Official Documentation](https://developer.salesforce.com/docs/atlas.en-us.mc-app-development.meta/mc-app-development/create-a-mc-app.htm)
 
@@ -53,7 +53,7 @@ Custom Application('are a way to integrate external web applications into the Ma
 4. Run `npm i` to install dependencies.
 5. Create an Installed Package in SFMC
 6. Update `.env` file in root to store youre credentials. An example is included, but you will need to update some for your SFMC instance
-7. Once updated, run `npm run watch` to run the application('locally
+7. Once updated, run `npm run watch` to run the application locally
 8. Check below for app specific configuration.
 
 ## Platform Event Application
@@ -63,6 +63,14 @@ NOTE: We can only configure one `Application` per Installed package. This basica
 ### Configure Marketing Cloud
 
 -   To the Installed Package add an API Integration using Web App
+
+    -   Add Redirect Urls (you can put both if needed)
+
+        -   If running locally for dev - https://127.0.0.1:3001/api/sfmc/auth/login/response
+        -   If running on server for prod - https://HOSTNAMEHERE/api/sfmc/auth/login/response
+
+        NOTE: you will need the client id, secret and jwt for setup. If you do not know the hostname yet, you can put a temporary one and replace it later on.
+
 -   To the Installed Package add an Application with Login URL https://HOSTNAMEHERE/platformeventapp
 -   To the Installed Package add an Activity with Endpoint URL https://HOSTNAMEHERE/api/platformeventactivity
 
@@ -75,11 +83,11 @@ NOTE: We can only configure one `Application` per Installed package. This basica
 ## Known Limitations
 
 This repo shold be considered a beta version. We have this working and would love to see further extensions but feel it is enough to get started.
-We would also want to see improvements on('base-component support outside of the SFDC platfrom, along with relevant build tools to be able to build and extend custom development quicker.
+We would also want to see improvements on base-component support outside of the SFDC platfrom, along with relevant build tools to be able to build and extend custom development quicker.
 
 ## Extensions to Documentation
 
-These are aspects not covered by existing documentation('and may or not be official.
+These are aspects not covered by existing documentation and may or not be official.
 
 ### Postmonger Events
 
@@ -87,11 +95,119 @@ These are aspects not covered by existing documentation('and may or not be offic
 
 ### Schema (on('requestedSchema), trigger('requestSchema'))
 
-returns the schema (data designer model)
+returns the schema of the entry source
+
+```
+{
+    "schema": [
+        {
+            "key": "Event.DEAudience-eabac269-8abc-2a8b-aebb-56d0728fdfb3.ContactKey",
+            "type": "Text",
+            "length": 50,
+            "default": "secondValye",
+            "isNullable": null,
+            "isPrimaryKey": true
+        },
+        {
+            "key": "Event.DEAudience-eabac269-8abc-2a8b-aebb-56d0728fdfb3.Email",
+            "type": "EmailAddress",
+            "length": 254,
+            "default": null,
+            "isNullable": true,
+            "isPrimaryKey": null
+        },
+        {
+            "key": "Event.DEAudience-eabac269-8abc-2a8b-aebb-56d0728fdfb3.restrictedvalue",
+            "type": "Text",
+            "length": 50,
+            "default": "happy",
+            "isNullable": true,
+            "isPrimaryKey": null
+        }
+    ]
+}
+
+```
 
 ### DataSources (on('requestedDataSources), trigger('requestDataSources'))
 
 returns information('about the data sources used in the journey
+
+```
+[
+    {
+        "id": "Event",
+        "name": "Entry: lWC",
+        "eventDefinitionKey": "DEAudience-eabac269-8abc-2a8b-aebb-56d0728fdfb3",
+        "keyPrefix": "Event.DEAudience-eabac269-8abc-2a8b-aebb-56d0728fdfb3.",
+        "schema": null,
+        "deSchema": {
+            "links": {},
+            "fieldCount": 3,
+            "fields": [
+                {
+                    "defaultValue": "secondValye",
+                    "description": "",
+                    "id": "e175a7f5-36ee-4845-89f9-df73137abdf9",
+                    "isHidden": false,
+                    "isInheritable": false,
+                    "isNullable": false,
+                    "isOverridable": false,
+                    "isPrimaryKey": true,
+                    "isReadOnly": false,
+                    "isTemplateField": false,
+                    "length": 50,
+                    "masktype": "None",
+                    "mustOverride": false,
+                    "name": "ContactKey",
+                    "ordinal": 0,
+                    "storagetype": "Plain",
+                    "type": "Text"
+                },
+                {
+                    "description": "",
+                    "id": "e1b8d7ba-ed0f-4dad-978a-e4babe9ded47",
+                    "isHidden": false,
+                    "isInheritable": false,
+                    "isNullable": true,
+                    "isOverridable": false,
+                    "isPrimaryKey": false,
+                    "isReadOnly": false,
+                    "isTemplateField": false,
+                    "length": 254,
+                    "masktype": "None",
+                    "mustOverride": false,
+                    "name": "Email",
+                    "ordinal": 1,
+                    "storagetype": "Plain",
+                    "type": "EmailAddress"
+                },
+                {
+                    "defaultValue": "happy",
+                    "description": "",
+                    "id": "10e167ae-8cf4-42de-bbe8-cb57823618d4",
+                    "isHidden": false,
+                    "isInheritable": false,
+                    "isNullable": true,
+                    "isOverridable": false,
+                    "isPrimaryKey": false,
+                    "isReadOnly": false,
+                    "isTemplateField": false,
+                    "length": 50,
+                    "masktype": "None",
+                    "mustOverride": false,
+                    "name": "restrictedvalue",
+                    "ordinal": 2,
+                    "storagetype": "Plain",
+                    "type": "Text"
+                }
+            ],
+            "id": "209a7846-2294-ea11-a2e6-1402ec938a35"
+        },
+        "dataExtensionId": "209a7846-2294-ea11-a2e6-1402ec938a35"
+    }
+}
+```
 
 ### AllowedOriginResponse (on('registeredAllowedOriginResponse'))
 
@@ -103,11 +219,24 @@ returns the Goal Stats for the current Journey (used at run time, not config)
 
 ### ActivityPermissions (on('requestedActivityPermissions), trigger('requestActivityPermissions'))
 
-TBC
+```
+{
+    "view": true,
+    "edit": true,
+    "failedViewPermissions": [],
+    "failedEditPermissions": []
+}
+```
 
 ### EngineSettings (on('requestedEngineSettings), trigger('requestEngineSettings'))
 
-TBC
+```
+{
+    "journeyPauseEnabled": true,
+    "queueVersion": 1,
+    "preventPathOptimizerHoldback": false
+}
+```
 
 ### DataLibrarySource (on('requestedDataLibrarySource), trigger('requestDataLibrarySource'))
 
@@ -127,7 +256,9 @@ Returns the timezone config for the current user
 
 ### EntryEventDefinitionKey (on('requestedEntryEventDefinitionKey), trigger('requestEntryEventDefinitionKey'))
 
-TBC
+```
+{ "entryEventDefinitionKey": "DEAudience-eabac269-8abc-2a8b-aebb-56d0728fdfb3" }
+```
 
 ### I18nConfig (on('requestedI18nConfig), trigger('requestI18nConfig'))
 

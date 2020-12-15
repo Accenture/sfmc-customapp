@@ -295,7 +295,7 @@ exports.authenicate = async (req, res) => {
                 .toString('utf8')
                 .split('&')[1];
             logger.info(`REDIRECT: /${app}`);
-            res.redirect(`/${app}`);
+            res.redirect(`https://${req.hostname}/${app}`);
         } catch (ex) {
             logger.error('ERROR', ex);
             res.status(500).send({
