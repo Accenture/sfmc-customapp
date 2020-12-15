@@ -46,10 +46,12 @@ exports.loginurl = (cred, hostname, mid, state) => {
                 mid
         }
     });
-    return connectionArray[mid].oauth2.getAuthorizationUrl({
+    const authURLbase = connectionArray[mid].oauth2.getAuthorizationUrl({
         scope: 'api id web refresh_token offline_access',
         state: state
     });
+
+    return authURLbase + '&display=popup';
 };
 
 exports.status = async (mid) => {

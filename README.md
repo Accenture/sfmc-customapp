@@ -60,7 +60,7 @@ Custom Applications are a way to integrate external web applications into the Ma
 
 NOTE: We can only configure one `Application` per Installed package. This basically just allows the App to show up in App Exchange Menu. In this case we use the Platform Event Application as the main app, Data Tools will use the API Integration of this one, but have its own Application
 
-### Configure Marketing Cloud
+### Configure Marketing Cloud (Part 1)
 
 -   To the Installed Package add an API Integration using Web App
 
@@ -73,6 +73,33 @@ NOTE: We can only configure one `Application` per Installed package. This basica
 
 -   To the Installed Package add an Application with Login URL https://HOSTNAMEHERE/platformeventapp
 -   To the Installed Package add an Activity with Endpoint URL https://HOSTNAMEHERE/api/platformeventactivity
+
+### Configure Salesforce
+
+-   Create a connected App via `Setup => App Manager => New Connected App`
+-   Provide
+    -   A Name
+    -   An Email
+    -   Enable OAuth Settings = TRUE
+    -   Callback URL (You can put both if needed)
+        -   If running locally for dev - https://127.0.0.1:3001/api/platformeventactivity/oauth/response/MID-OF-BUSINESSUNIT
+        -   If running on a server for prod - https://HOSTNAMEHERE/api/platformeventactivity/oauth/response/MID-OF-BUSINESSUNIT
+    -   Permission
+        -   Access and manage your data
+        -   Perform Requests on your behalf at any time
+    -   Require Secret for Web Server Flow = TRUE
+-   Copy the Consumer Key & Consumer Secret
+
+### Configure Marketing Cloud (Part 2)
+
+-   Navigate to `App Exchange=> Platform Event App` (or whatever you called this app)
+-   Provide
+    -   Client Id - This is your SFDC Consumer Key
+    -   Client Secret Consumer Secret
+    -   Your Saleforce instace URL
+-   Click Connect
+
+NOTE: If you get an error like `error=redirect_uri_mismatch&error_description=redirect_uri%20must%20match%20configuration` it is because your redirect URLs in SFDC are incorrect
 
 ## Data Tools Application
 
