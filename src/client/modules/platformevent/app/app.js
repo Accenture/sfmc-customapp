@@ -14,7 +14,6 @@ export default class Config extends LightningElement {
     onsfdcclientsecretchange(e) {
         this.config.sfdcclientsecret = e.detail.value;
     }
-
     toggleEdit() {
         this.isEditing = !this.isEditing;
     }
@@ -32,9 +31,27 @@ export default class Config extends LightningElement {
             }
         );
         const jsonRes = await rawRes.json();
-        console.log(jsonRes);
         if (rawRes.status < 300) {
-            window.location = jsonRes.redirect;
+            const popup = window.open(
+                jsonRes.redirect,
+                'sfdc_login',
+                'width=500,height=500'
+            );
+            // we are running a check every 3 seconds if the popup is
+            // complete since it was easier to implement than having a
+            // whole other screen to return the values
+            // eslint-disable-next-line @lwc/lwc/no-async-operation
+            const checkComplete = setInterval(() => {
+                if (
+                    popup.location.href.includes(
+                        '/api/platformeventactivity/oauth/response/'
+                    )
+                ) {
+                    clearInterval(checkComplete);
+                    this.isLoading = false;
+                    this.isEditing = false;
+                }
+            }, 3000);
         } else {
             this.dispatchEvent(
                 new CustomEvent('error', {
@@ -45,14 +62,13 @@ export default class Config extends LightningElement {
                     }
                 })
             );
+            this.isLoading = false;
         }
-        this.isLoading = false;
     }
     async connectedCallback() {
         this.isLoading = true;
         const rawRes = await fetch('/api/platformeventactivity/sfdcstatus');
         const jsonRes = await rawRes.json();
-        console.log(jsonRes);
         if (rawRes.status < 300) {
             if (jsonRes) {
                 this.config = {

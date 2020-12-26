@@ -154,7 +154,7 @@ router.get('/oauth/response/:mid', async (req, res) => {
     try {
         await sfdc.authorize(req.params.mid, req.query.code);
         delete req.session.temp;
-        res.redirect('/platformeventapp');
+        res.status(200).send('Authorized, you can close this now!');
     } catch (ex) {
         res.status(500).json({ message: ex });
     }
