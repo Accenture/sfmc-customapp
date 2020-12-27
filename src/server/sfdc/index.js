@@ -7,7 +7,6 @@ const connectionArray = {};
 
 exports.getMetadata = async (mid) => {
     const res = await connectionArray[mid].describeGlobal();
-
     return Promise.all(
         res.sobjects
             .filter((obj) => obj.name.endsWith('__e'))
@@ -30,12 +29,20 @@ const init = async () => {
         connectionArray[withoutPrefix] = new jsforce.Connection(
             JSON.parse(conn)
         );
+        // add refresh handler to save refresh token
+        connectionArray[withoutPrefix].on('refresh', (accessToken, res) => {
+            logger.info('on Refresh', accessToken, res);
+            saveCredentials(withoutPrefix, connectionArray[withoutPrefix]);
+            logger.info('refreshed and saved credentials');
+            // Refresh event will be fired when renewed access token
+            // to store it in your storage for next request
+        });
     });
 };
 
 exports.loginurl = (cred, hostname, mid, state) => {
     connectionArray[mid] = new jsforce.Connection({
-        version: '50',
+        version: '50.0',
         loginUrl: cred.sfdcurl,
         oauth2: {
             loginUrl: cred.sfdcurl,
@@ -73,13 +80,15 @@ exports.authorize = async (mid, code) => {
     try {
         const userInfo = await connectionArray[mid].authorize(code);
         logger.info('userInfo', userInfo);
-        connectionArray[mid].on('refresh', async (accessToken, res) => {
+        connectionArray[mid] = new jsforce.Connection(connectionArray[mid]);
+        connectionArray[mid].on('refresh', (accessToken, res) => {
             logger.info('on Refresh', accessToken, res);
             saveCredentials(mid, connectionArray[mid]);
             logger.info('refreshed and saved credentials');
             // Refresh event will be fired when renewed access token
             // to store it in your storage for next request
         });
+
         await saveCredentials(mid, connectionArray[mid]);
         // Now you can get the access token, refresh token, and instance URL information.
         // Save them to establish connection next time.
@@ -95,14 +104,17 @@ exports.authorize = async (mid, code) => {
 
 async function saveCredentials(mid, conf) {
     logger.info('saving credentials to redis', mid, {
+        version: conf.version,
         oauth2: conf.oauth2,
         accessToken: conf.accessToken,
         refreshToken: conf.refreshToken,
         instanceUrl: conf.instanceUrl
     });
+
     const setCred = await redis.set(
         mid,
         JSON.stringify({
+            version: '50.0',
             oauth2: conf.oauth2,
             accessToken: conf.accessToken,
             refreshToken: conf.refreshToken,

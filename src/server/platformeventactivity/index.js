@@ -154,7 +154,9 @@ router.get('/oauth/response/:mid', async (req, res) => {
     try {
         await sfdc.authorize(req.params.mid, req.query.code);
         delete req.session.temp;
-        res.status(200).send('Authorized, you can close this now!');
+        res.status(200).send(
+            'Finalizing Authorization. This window will close in a couple of seconds'
+        );
     } catch (ex) {
         res.status(500).json({ message: ex });
     }

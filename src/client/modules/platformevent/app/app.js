@@ -47,11 +47,12 @@ export default class Config extends LightningElement {
                         '/api/platformeventactivity/oauth/response/'
                     )
                 ) {
+                    popup.close();
                     clearInterval(checkComplete);
                     this.isLoading = false;
                     this.isEditing = false;
                 }
-            }, 3000);
+            }, 1000);
         } else {
             this.dispatchEvent(
                 new CustomEvent('error', {
