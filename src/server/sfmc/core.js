@@ -188,9 +188,9 @@ exports.getRedirectURL = (req, appname) => {
 
     /*needed for testing */
     if (process.env.NODE_ENV !== 'production') {
-        req.session.auth.redirect_uri = `https://${req.hostname}:${process.env.CLIENT_PORT}/api/sfmc/auth/response`;
+        req.session.auth.redirect_uri = `https://${req.hostname}:${process.env.PORT}/sfmc/auth/response`;
     } else {
-        req.session.auth.redirect_uri = `https://${req.hostname}/api/sfmc/auth/response`;
+        req.session.auth.redirect_uri = `https://${req.hostname}/sfmc/auth/response`;
     }
     const params = qs.stringify({
         response_type: 'code',
@@ -232,8 +232,7 @@ exports.flattenResults = (Results) => {
         return flattenedObj;
     });
 };
-
-const privateAuthCheck = async (req, res, next, appname) => {
+exports.checkAuth = async (req, res, next, appname) => {
     try {
         if (
             req.session &&
@@ -242,16 +241,16 @@ const privateAuthCheck = async (req, res, next, appname) => {
         ) {
             const expireTime = new Date(req.session.auth.expiryDateTime);
             const currentTime = new Date();
-            logger.info('Auth Check', expireTime, currentTime);
-            if (expireTime > currentTime) {
-                logger.info('Auth still valid');
-                next();
-            } else {
-                logger.info('Auth Refreshing token');
+            logger.info(
+                'Auth Check: ' +
+                    Math.round((expireTime - currentTime) / (1000 * 60)) +
+                    ' Minutes'
+            );
+            if (!(expireTime > currentTime)) {
                 await this.refreshToken(req.session.auth);
                 logger.info('Auth Refreshed');
-                next();
             }
+            next();
         } else if (req.session.auth && req.session.auth.refresh_token) {
             await this.refreshToken(req.session.auth);
             next();
@@ -269,12 +268,6 @@ const privateAuthCheck = async (req, res, next, appname) => {
     }
 };
 
-exports.middlewareCheck = async (req, res, next) => {
-    privateAuthCheck(req, res, next, null);
-};
-exports.checkAuth = async (req, res, next, appname) => {
-    privateAuthCheck(req, res, next, appname);
-};
 exports.authenicate = async (req, res) => {
     if (
         req.query &&
@@ -291,11 +284,15 @@ exports.authenicate = async (req, res) => {
     } else {
         try {
             await this.getToken(req);
+
             const app = Buffer.from(req.query.state, 'base64')
                 .toString('utf8')
                 .split('&')[1];
             logger.info(`REDIRECT: /${app}`);
-            res.redirect(`https://${req.hostname}/${app}`);
+            const hostname = process.env.HOST
+                ? `${process.env.HOST}:${process.env.PORT}`
+                : req.hostname;
+            res.redirect(`https://${hostname}/${app}`);
         } catch (ex) {
             logger.error('ERROR', ex);
             res.status(500).send({

@@ -1,6 +1,6 @@
 import { LightningElement, track } from 'lwc';
 
-export default class Alert extends LightningElement {
+export default class App extends LightningElement {
     @track currentapp;
     @track alert = {};
 

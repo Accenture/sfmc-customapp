@@ -49,8 +49,7 @@ exports.loginurl = (cred, hostname, mid, state) => {
             clientId: cred.sfdcclientid,
             clientSecret: cred.sfdcclientsecret,
             redirectUri:
-                `https://${hostname}/api/platformeventactivity/oauth/response/` +
-                mid
+                `https://${hostname}/platformevent/oauth/response/` + mid
         }
     });
     return connectionArray[mid].oauth2.getAuthorizationUrl({

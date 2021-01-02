@@ -3,7 +3,6 @@ const CopyPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const LwcWebpackPlugin = require('lwc-webpack-plugin');
 const path = require('path');
-const fs = require('fs');
 
 const config = {
     entry: {
@@ -40,13 +39,13 @@ const config = {
 
         new HtmlWebpackPlugin({
             template: 'src/client/index.html',
-            filename: './platformeventapp/index.html',
+            filename: './platformevent/app/index.html',
             title: 'Platform Event Config',
             chunks: ['platformeventapp']
         }),
         new HtmlWebpackPlugin({
             template: 'src/client/index.html',
-            filename: './platformeventactivity/index.html',
+            filename: './platformevent/activity/index.html',
             title: 'Platform Event Activity',
             chunks: ['platformeventactivity']
         }),
@@ -88,30 +87,9 @@ if (process.env.NODE_ENV !== 'production') {
     require('dotenv').config();
     config.mode = 'development';
     config.devtool = 'source-map';
-    config.devServer = {
-        contentBase: path.resolve(__dirname, 'dist'),
-        compress: true,
-        port: process.env.CLIENT_PORT,
-        stats: 'errors-only', //confirm if correct to stop full list
-        proxy: {
-            '/': {
-                target: `https://${process.env.HOST}:${process.env.PORT}/`,
-                secure: false
-            }
-        },
-        https: true,
-        key: fs.readFileSync(
-            path.join(__dirname, 'certificates', 'private.key'),
-            'ascii'
-        ),
-        cert: fs.readFileSync(
-            path.join(__dirname, 'certificates', 'private.crt'),
-            'ascii'
-        ),
-        ca: fs.readFileSync(
-            path.join(__dirname, 'certificates', 'private.pem'),
-            'ascii'
-        )
+    config.watchOptions = {
+        ignored: /node_modules/,
+        aggregateTimeout: 5000
     };
 }
 

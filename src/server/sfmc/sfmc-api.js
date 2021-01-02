@@ -4,9 +4,6 @@ const core = require('./core.js');
 
 const router = express.Router();
 
-router.get('/auth/login/:app', (req, res) => {
-    res.redirect(301, core.getRedirectURL(req, req.params.app));
-});
 router.get('/auth/response', core.authenicate);
 
 // used to proxy requests directly to SFMC Rest API

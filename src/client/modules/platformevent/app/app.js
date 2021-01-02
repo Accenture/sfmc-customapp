@@ -19,17 +19,19 @@ export default class Config extends LightningElement {
     }
     async handleConnect() {
         this.isLoading = true;
-        const rawRes = await fetch(
-            '/api/platformeventactivity/sfdccredentials',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                redirect: 'follow',
-                body: JSON.stringify(this.config)
-            }
-        );
+        const csrf = document.cookie
+            .split(';')
+            .find((row) => row.startsWith('XSRF-TOKEN'))
+            .split('=')[1];
+        const rawRes = await fetch('/platformevent/sfdccredentials', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'xsrf-token': csrf
+            },
+            redirect: 'follow',
+            body: JSON.stringify(this.config)
+        });
         const jsonRes = await rawRes.json();
         if (rawRes.status < 300) {
             const popup = window.open(
@@ -44,7 +46,7 @@ export default class Config extends LightningElement {
             const checkComplete = setInterval(() => {
                 if (
                     popup.location.href.includes(
-                        '/api/platformeventactivity/oauth/response/'
+                        '/platformevent/oauth/response/'
                     )
                 ) {
                     popup.close();
@@ -68,7 +70,7 @@ export default class Config extends LightningElement {
     }
     async connectedCallback() {
         this.isLoading = true;
-        const rawRes = await fetch('/api/platformeventactivity/sfdcstatus');
+        const rawRes = await fetch('/platformevent/sfdcstatus');
         const jsonRes = await rawRes.json();
         if (rawRes.status < 300) {
             if (jsonRes) {

@@ -13,10 +13,10 @@ export const keyCodes = {
     right: 39,
     down: 40,
     delete: 46,
-    shift: 16,
+    shift: 16
 };
 
-// Acceptable values are defined here: https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/key/Key_Values
+// Acceptable values are defined here: https://developer.mozilla.org/en-US/docs/Web/KeyboardEvent/key/Key_Values
 // remove this function when IE11 support is dropped
 export function normalizeKeyValue(value) {
     switch (value) {

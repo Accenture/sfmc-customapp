@@ -9,8 +9,8 @@ export default class DataPicker extends LightningElement {
     async connectedCallback() {
         try {
             this.status.loading = true;
-            const resDEs = await fetch('/api/dataTools/getDataExtensions');
-            const resFolders = await fetch('/api/dataTools/getFolders');
+            const resDEs = await fetch('/dataTools/getDataExtensions');
+            const resFolders = await fetch('/dataTools/getFolders');
             const DElist = await resDEs.json();
             const Folderlist = await resFolders.json();
             if (resDEs.status === 200 && resFolders.status === 200) {
@@ -23,7 +23,7 @@ export default class DataPicker extends LightningElement {
                         detail: {
                             type: 'error',
                             message: 'Authentication error',
-                            link: '/api/sfmc/auth/login/dataTools'
+                            link: '/sfmc/auth/login/dataTools'
                         }
                     })
                 );

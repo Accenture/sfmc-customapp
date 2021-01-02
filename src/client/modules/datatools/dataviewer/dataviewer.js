@@ -59,7 +59,7 @@ export default class App extends LightningElement {
             this.status.loading = true;
             //get fields
             const resDE = await fetch(
-                `/api/dataTools/getDataExtension/${value.key}/fields`
+                `/dataTools/getDataExtension/${value.key}/fields`
             );
             if (resDE.status === 200) {
                 // raw fields
@@ -82,7 +82,7 @@ export default class App extends LightningElement {
                         detail: {
                             type: 'error',
                             message: 'Authentication error',
-                            link: '/api/sfmc/auth/login/dataTools'
+                            link: '/sfmc/auth/login/dataTools'
                         }
                     })
                 );
@@ -136,10 +136,15 @@ export default class App extends LightningElement {
     async handleLoad(e) {
         console.log('handleoad', e);
         this.status.loading = true;
-        const resData = await fetch('/api/dataTools/getDataExtensionData', {
+        const csrf = document.cookie
+            .split(';')
+            .find((row) => row.startsWith('XSRF-TOKEN'))
+            .split('=')[1];
+        const resData = await fetch('/dataTools/getDataExtensionData', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'xsrf-token': csrf
             },
             body: JSON.stringify({
                 key: this.privateDataExtension.key,

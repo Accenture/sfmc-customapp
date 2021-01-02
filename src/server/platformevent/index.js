@@ -2,8 +2,23 @@ const express = require('express');
 const logger = require('../utils/logger');
 const sfdc = require('../sfdc/index.js');
 const router = express.Router();
-const { middlewareCheck } = require('../sfmc/core.js');
+const { checkAuth, getRedirectURL } = require('../sfmc/core.js');
 const { decode } = require('../utils/jwt');
+
+router.get('/activity', (req, res, next) => {
+    res.cookie('XSRF-TOKEN', req.csrfToken());
+    checkAuth(req, res, next, req.path);
+});
+router.get('/activity/login', (req, res) => {
+    res.redirect(301, getRedirectURL(req, 'platformevent/activity'));
+});
+router.get('/app', (req, res, next) => {
+    res.cookie('XSRF-TOKEN', req.csrfToken());
+    checkAuth(req, res, next, req.path);
+});
+router.get('/app/login', (req, res) => {
+    res.redirect(301, getRedirectURL(req, 'platformevent/app'));
+});
 
 router.get('/config.json', (req, res) => {
     const config = {
@@ -30,7 +45,7 @@ router.get('/config.json', (req, res) => {
                 outArguments: [],
                 // Fill in the host with the host that this is running on.
                 // It must run under HTTPS
-                url: `https://${req.headers.host}/api/platformeventactivity/execute`,
+                url: `https://${req.headers.host}/platformevent/execute`,
                 // The amount of time we want Journey Builder to wait before cancel the request. Default is 60000, Minimal is 1000
                 timeout: 10000,
                 // how many retrys if the request failed with 5xx error or network error. default is 0
@@ -45,19 +60,19 @@ router.get('/config.json', (req, res) => {
         },
         configurationArguments: {
             publish: {
-                url: `https://${req.headers.host}/api/platformeventactivity/publish`,
+                url: `https://${req.headers.host}/platformevent/publish`,
                 useJwt: true
             },
             validate: {
-                url: `https://${req.headers.host}/api/platformeventactivity/validate`,
+                url: `https://${req.headers.host}/platformevent/validate`,
                 useJwt: true
             },
             stop: {
-                url: `https://${req.headers.host}/api/platformeventactivity/stop`,
+                url: `https://${req.headers.host}/platformevent/stop`,
                 useJwt: true
             },
             save: {
-                url: `https://${req.headers.host}/api/platformeventactivity/save`,
+                url: `https://${req.headers.host}/platformevent/save`,
                 useJwt: true
             }
         },
@@ -110,7 +125,7 @@ router.post('/save', decode, (req, res) => {
     res.json({ status: 'ok' });
 });
 
-router.get('/platformEvents', middlewareCheck, async (req, res) => {
+router.get('/platformEvents', checkAuth, async (req, res) => {
     //logger.info(core.checkAuth);
     try {
         const platformEvents = await sfdc.getMetadata(
@@ -135,7 +150,7 @@ router.post('/sfdccredentials', async (req, res) => {
             cred: req.body
         };
         const hostname = process.env.HOST
-            ? `${process.env.HOST}:${process.env.CLIENT_PORT}`
+            ? `${process.env.HOST}:${process.env.PORT}`
             : req.hostname;
         res.json({
             redirect: sfdc.loginurl(

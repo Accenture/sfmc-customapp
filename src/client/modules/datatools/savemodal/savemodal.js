@@ -33,10 +33,15 @@ export default class SaveModal extends LightningElement {
                 return field;
             }
         );
-        const resData = await fetch('/api/dataTools/createDataExtension', {
+        const csrf = document.cookie
+            .split(';')
+            .find((row) => row.startsWith('XSRF-TOKEN'))
+            .split('=')[1];
+        const resData = await fetch('/dataTools/createDataExtension', {
             method: 'POST',
             headers: {
-                'Content-Type': 'text/plain'
+                'Content-Type': 'text/plain',
+                'xsrf-token': csrf
             },
             body: JSON.stringify({
                 name: this.filename,

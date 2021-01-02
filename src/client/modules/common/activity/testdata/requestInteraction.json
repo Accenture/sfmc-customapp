@@ -57,7 +57,7 @@
                         }
                     ],
                     "outArguments": [],
-                    "url": "https://sfmc-lwcactivity.herokuapp.com/api/platformeventactivity/execute",
+                    "url": "https://sfmc-lwcactivity.herokuapp.com/platformevent/execute",
                     "timeout": 10000,
                     "retryCount": 3,
                     "retryDelay": 1000,
@@ -71,25 +71,25 @@
             },
             "configurationArguments": {
                 "save": {
-                    "url": "https://sfmc-lwcactivity.herokuapp.com/api/platformeventactivity/save",
+                    "url": "https://sfmc-lwcactivity.herokuapp.com/platformevent/save",
                     "useJwt": true
                 },
                 "testSave": "",
                 "publish": {
-                    "url": "https://sfmc-lwcactivity.herokuapp.com/api/platformeventactivity/publish",
+                    "url": "https://sfmc-lwcactivity.herokuapp.com/platformevent/publish",
                     "useJwt": true
                 },
                 "testPublish": "",
                 "unpublish": "",
                 "stop": {
-                    "url": "https://sfmc-lwcactivity.herokuapp.com/api/platformeventactivity/stop",
+                    "url": "https://sfmc-lwcactivity.herokuapp.com/platformevent/stop",
                     "useJwt": true
                 },
                 "testStop": "",
                 "testUnpublish": "",
                 "partnerActivityId": "",
                 "validate": {
-                    "url": "https://sfmc-lwcactivity.herokuapp.com/api/platformeventactivity/validate",
+                    "url": "https://sfmc-lwcactivity.herokuapp.com/platformevent/validate",
                     "useJwt": true
                 },
                 "testValidate": "",

@@ -8,7 +8,12 @@ const helmet = require('helmet');
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
-const sfmc = require('./sfmc/core.js');
+const rateLimit = require('express-rate-limit');
+const RedisRateLimit = require('rate-limit-redis');
+const csurf = require('csurf');
+
+// static vars
+const DIST_DIR = './dist';
 
 const app = express();
 //add logging for all requests in debug mode
@@ -29,6 +34,7 @@ app.use(
             defaultSrc: ["'self'", '*.exacttarget.com'],
             scriptSrc: ["'self'", '*.exacttarget.com'],
             objectSrc: ["'none'"],
+            imgSrc: ["'self'", '*.exacttarget.com', "'unsafe-inline'"],
             styleSrc: ["'self'", "'unsafe-inline'"],
             upgradeInsecureRequests: []
         }
@@ -59,30 +65,30 @@ app.use(
         saveUninitialized: false
     })
 );
+app.use(csurf({ cookie: false }));
 
-app.get('/api/test', (req, res) => {
+// Rate Limit API requests
+// this should probably exclude execute requests
+app.use(
+    '',
+    rateLimit({
+        store: new RedisRateLimit({
+            client: redis
+        }),
+        windowMs: 15 * 60 * 1000, // 15 minutes
+        max: 100
+    })
+);
+
+app.get('/test', (req, res) => {
     res.json({ success: true, session: req.session });
 });
 //generic SFMC endpoint
-app.use('/api/sfmc', require('./sfmc/sfmc-api.js'));
-
-// auth check for some paths which require authentication
-app.get(
-    ['/platformeventactivity', '/platformeventapp', '/dataTools'],
-    (req, res, next) => {
-        // check if token stil valid and if not, redirect to login
-        sfmc.checkAuth(req, res, next, req.path);
-    }
-);
+app.use('/sfmc', require('./sfmc/sfmc-api.js'));
 
 //put your custom endpoints here
-app.use('/api/dataTools', require('./dataTools/dataTools-api.js'));
-app.use(
-    '/api/platformeventactivity',
-    require('./platformeventactivity/index.js')
-);
-
-const DIST_DIR = './dist';
+app.use('/dataTools', require('./dataTools/dataTools-api.js'));
+app.use('/platformevent', require('./platformevent/index.js'));
 app.use(express.static(DIST_DIR));
 
 if (process.env.NODE_ENV !== 'production') {

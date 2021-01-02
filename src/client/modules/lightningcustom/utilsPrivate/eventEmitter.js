@@ -1,6 +1,6 @@
 /**
 An emitter implementation based on the Node.js EventEmitter API:
-https://nodejs.org/dist/latest-v6.x/docs/api/events.html#events_class_eventemitter
+https://nodejs.org/dist/latest-v6.x/docs/events.html#events_class_eventemitter
 **/
 export class EventEmitter {
     constructor() {
@@ -28,7 +28,7 @@ export class EventEmitter {
     @return {EventEmitter} - Returns a reference to the `EventEmitter` so that calls can be chained
     **/
     once(name, listener) {
-        const doOnce = function() {
+        const doOnce = function () {
             listener.apply(null, arguments);
             this.removeListener(name, doOnce);
         }.bind(this);
@@ -48,7 +48,7 @@ export class EventEmitter {
         let count = 0;
 
         if (listeners) {
-            listeners.forEach(listener => {
+            listeners.forEach((listener) => {
                 count += 1;
                 listener.apply(null, args);
             });

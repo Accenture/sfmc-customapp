@@ -42,7 +42,7 @@ export default class App extends LightningElement {
                     detail: {
                         type: 'error',
                         message: 'Only files up to 10mb are supported',
-                        link: '/api/sfmc/auth/login/dataTools'
+                        link: '/sfmc/auth/login/dataTools'
                     }
                 })
             );
@@ -94,13 +94,18 @@ export default class App extends LightningElement {
         this.status.loading = true;
         this.rows = null;
         this.headers = null;
+        const csrf = document.cookie
+            .split(';')
+            .find((row) => row.startsWith('XSRF-TOKEN'))
+            .split('=')[1];
         const resData = await fetch(
-            '/api/dataTools/exampledata?phonelocale=' +
+            '/dataTools/exampledata?phonelocale=' +
                 this.settings.defaultPhoneLocale,
             {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'text/plain'
+                    'Content-Type': 'text/plain',
+                    'xsrf-token': csrf
                 },
                 body: await this.settings.inputdata.text()
             }

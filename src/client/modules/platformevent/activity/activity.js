@@ -70,7 +70,7 @@ export default class PlatformEvent extends LightningElement {
     }
 
     async getPlatformEvents() {
-        const res = await fetch('/api/platformeventactivity/platformEvents');
+        const res = await fetch('/platformevent/platformEvents');
         if (res.status > 299) {
             this.showAlert({
                 detail: {
@@ -85,7 +85,7 @@ export default class PlatformEvent extends LightningElement {
     }
 
     async getSessionContext() {
-        const res = await fetch('/api/platformeventactivity/context');
+        const res = await fetch('/platformevent/context');
         if (res.status > 299) {
             this.showAlert({
                 detail: {
