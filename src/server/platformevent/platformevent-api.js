@@ -92,7 +92,7 @@ router.get('/config.json', (req, res) => {
             }
         },
         edit: {
-            url: `https://${req.headers.host}/platformeventactivity`
+            url: `https://${req.headers.host}/platformevent/activity`
         }
     };
     res.json(config);
