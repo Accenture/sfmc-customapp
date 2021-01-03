@@ -82,7 +82,7 @@ exports.authorize = async (mid, code) => {
         connectionArray[mid] = new jsforce.Connection(connectionArray[mid]);
         connectionArray[mid].on('refresh', (accessToken, res) => {
             logger.info('on Refresh', accessToken, res);
-            saveCredentials(mid, connectionArray[mid]);
+            await saveCredentials(mid, connectionArray[mid]);
             logger.info('refreshed and saved credentials');
             // Refresh event will be fired when renewed access token
             // to store it in your storage for next request
