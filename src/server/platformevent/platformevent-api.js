@@ -6,14 +6,14 @@ const csurf = require('csurf')();
 const { checkAuth, getRedirectURL } = require('../sfmc/core.js');
 const { decode } = require('../utils/jwt');
 
-router.get(['/activity', '/app'], (req, res, next) => {
+router.get(['/activity', '/app'], csurf, (req, res, next) => {
     res.cookie('XSRF-TOKEN', req.csrfToken(), {
         sameSite: 'none',
         secure: true
     });
     checkAuth(req, res, next, req.originalUrl);
 });
-router.get(['/activity/login', '/app/login'], (req, res) => {
+router.get(['/activity/login', '/app/login'], csurf, (req, res) => {
     res.redirect(
         301,
         getRedirectURL(req, req.originalUrl.replace('/login', ''))

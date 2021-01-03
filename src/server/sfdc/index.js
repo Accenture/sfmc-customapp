@@ -80,7 +80,7 @@ exports.authorize = async (mid, code) => {
         const userInfo = await connectionArray[mid].authorize(code);
         logger.info('userInfo', userInfo);
         connectionArray[mid] = new jsforce.Connection(connectionArray[mid]);
-        connectionArray[mid].on('refresh', (accessToken, res) => {
+        connectionArray[mid].on('refresh', async (accessToken, res) => {
             logger.info('on Refresh', accessToken, res);
             await saveCredentials(mid, connectionArray[mid]);
             logger.info('refreshed and saved credentials');

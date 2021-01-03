@@ -98,7 +98,7 @@ if (process.env.NODE_ENV !== 'production') {
     const path = require('path');
     const fs = require('fs');
 
-    const server = https
+    https
         .createServer(
             {
                 key: fs.readFileSync(
