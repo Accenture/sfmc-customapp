@@ -1,5 +1,5 @@
 import { LightningElement, track } from 'lwc';
-import { getCookieByName } from 'common/Utils';
+import { getCookieByName } from 'common/utils';
 
 export default class Config extends LightningElement {
     @track config = { clientId: '', loginUrl: '' };

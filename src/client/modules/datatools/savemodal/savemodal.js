@@ -1,5 +1,5 @@
 import { LightningElement, api, track } from 'lwc';
-import { getCookieByName } from 'common/Utils';
+import { getCookieByName } from 'common/utils';
 
 export default class SaveModal extends LightningElement {
     @api fields;

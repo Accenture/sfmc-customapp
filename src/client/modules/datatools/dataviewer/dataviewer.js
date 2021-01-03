@@ -1,6 +1,6 @@
 import { LightningElement, track, api } from 'lwc';
 import { classSet } from 'lightning/utils';
-import { getCookieByName } from 'common/Utils';
+import { getCookieByName } from 'common/utils';
 export default class App extends LightningElement {
     @api handleclick;
     @track status = {};
