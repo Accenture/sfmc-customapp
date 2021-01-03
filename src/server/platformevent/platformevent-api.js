@@ -11,12 +11,12 @@ router.get(['/activity', '/app'], csurf, (req, res, next) => {
         sameSite: 'none',
         secure: true
     });
-    checkAuth(req, res, next, req.originalUrl);
+    checkAuth(req, res, next, req.originalUrl.substring(1));
 });
 router.get(['/activity/login', '/app/login'], csurf, (req, res) => {
     res.redirect(
         301,
-        getRedirectURL(req, req.originalUrl.replace('/login', ''))
+        getRedirectURL(req, req.originalUrl.replace('/login', '').substring(1))
     );
 });
 
