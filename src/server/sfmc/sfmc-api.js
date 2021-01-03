@@ -1,13 +1,14 @@
 const express = require('express');
 const logger = require('../utils/logger');
 const core = require('./core.js');
+const csurf = require('csurf')();
 
 const router = express.Router();
 
 router.get('/auth/response', core.authenicate);
 
 // used to proxy requests directly to SFMC Rest API
-router.use('rest/*', core.checkAuth, async (req, res) => {
+router.use('rest/*', csurf, core.checkAuth, async (req, res) => {
     try {
         logger.info('proxy router');
         const proxyres = await core.restproxy(req);

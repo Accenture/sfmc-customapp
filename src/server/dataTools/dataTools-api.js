@@ -7,11 +7,13 @@ const profiler = require('./profiler.js');
 
 const router = express.Router();
 
+//all POST routes here are csrf protected
+const csurf = require('csurf')();
+router.use(csurf);
+
 router.get('/', (req, res, next) => {
     res.cookie('XSRF-TOKEN', req.csrfToken(), {
-        sameSite: 'none',
-        secure: true,
-        httpOnly: true
+        sameSite: 'none'
     });
     checkAuth(req, res, next, req.originalUrl);
 });

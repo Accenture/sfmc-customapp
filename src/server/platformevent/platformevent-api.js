@@ -2,30 +2,21 @@ const express = require('express');
 const logger = require('../utils/logger');
 const sfdc = require('../sfdc/index.js');
 const router = express.Router();
+const csurf = require('csurf')();
 const { checkAuth, getRedirectURL } = require('../sfmc/core.js');
 const { decode } = require('../utils/jwt');
 
-router.get('/activity', (req, res, next) => {
+router.get(['/activity', '/app'], (req, res, next) => {
     res.cookie('XSRF-TOKEN', req.csrfToken(), {
-        sameSite: 'none',
-        secure: true,
-        httpOnly: true
+        sameSite: 'none'
     });
     checkAuth(req, res, next, req.originalUrl);
 });
-router.get('/activity/login', (req, res) => {
-    res.redirect(301, getRedirectURL(req, 'platformevent/activity'));
-});
-router.get('/app', (req, res, next) => {
-    res.cookie('XSRF-TOKEN', req.csrfToken(), {
-        sameSite: 'none',
-        secure: true,
-        httpOnly: true
-    });
-    checkAuth(req, res, next, req.originalUrl);
-});
-router.get('/app/login', (req, res) => {
-    res.redirect(301, getRedirectURL(req, 'platformevent/app'));
+router.get(['/activity/login', '/app/login'], (req, res) => {
+    res.redirect(
+        301,
+        getRedirectURL(req, req.originalUrl.replace('/login', ''))
+    );
 });
 
 router.get('/config.json', (req, res) => {
@@ -147,7 +138,7 @@ router.get('/platformEvents', checkAuth, async (req, res) => {
 router.get('/context', (req, res) => {
     res.json(req.session.context);
 });
-router.post('/sfdccredentials', async (req, res) => {
+router.post('/sfdccredentials', csurf, async (req, res) => {
     if (
         req.session.context &&
         req.session.context.organization &&

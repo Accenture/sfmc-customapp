@@ -82,7 +82,7 @@ export default class App extends LightningElement {
                         detail: {
                             type: 'error',
                             message: 'Authentication error',
-                            link: '/sfmc/auth/login/dataTools'
+                            link: '/dataTools/login'
                         }
                     })
                 );

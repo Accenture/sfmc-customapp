@@ -42,7 +42,7 @@ export default class App extends LightningElement {
                     detail: {
                         type: 'error',
                         message: 'Only files up to 10mb are supported',
-                        link: '/sfmc/auth/login/dataTools'
+                        link: '/dataTools/login'
                     }
                 })
             );

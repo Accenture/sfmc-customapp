@@ -23,7 +23,7 @@ export default class DataPicker extends LightningElement {
                         detail: {
                             type: 'error',
                             message: 'Authentication error',
-                            link: '/sfmc/auth/login/dataTools'
+                            link: '/dataTools/login'
                         }
                     })
                 );
