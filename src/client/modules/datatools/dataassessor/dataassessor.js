@@ -1,4 +1,5 @@
 import { LightningElement, track, api } from 'lwc';
+import { getCookieByName } from 'common/Utils';
 
 export default class App extends LightningElement {
     @api handleclick;
@@ -9,6 +10,7 @@ export default class App extends LightningElement {
         defaultPhoneLocale: 'US',
         inputdata: null
     };
+    @track isLoading = false;
 
     get hasNoInputData() {
         return !this.settings.inputdata;
@@ -29,9 +31,9 @@ export default class App extends LightningElement {
     }
 
     loadData(inputdata) {
-        this.status.loading = true;
+        this.isLoading = true;
         if (inputdata.target.files[0].size > 1e7) {
-            this.status.loading = false;
+            this.isLoading = false;
             this.dispatchEvent(
                 new CustomEvent('error', {
                     bubbles: true,
@@ -45,7 +47,7 @@ export default class App extends LightningElement {
             );
         } else {
             this.settings.inputdata = inputdata.target.files[0];
-            this.status.loading = false;
+            this.isLoading = false;
         }
     }
 
@@ -84,13 +86,9 @@ export default class App extends LightningElement {
     }
 
     async parsedata() {
-        this.status.loading = true;
+        this.isLoading = true;
         this.rows = null;
         this.headers = null;
-        const csrf = document.cookie
-            .split(';')
-            .find((row) => row.startsWith('XSRF-TOKEN'))
-            .split('=')[1];
         const resData = await fetch(
             '/dataTools/exampledata?phonelocale=' +
                 this.settings.defaultPhoneLocale,
@@ -98,7 +96,7 @@ export default class App extends LightningElement {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'text/plain',
-                    'xsrf-token': csrf
+                    'xsrf-token': getCookieByName.call(this, 'XSRF-TOKEN')
                 },
                 body: await this.settings.inputdata.text()
             }
@@ -130,7 +128,7 @@ export default class App extends LightningElement {
                 })
             );
         }
-        this.status.loading = false;
+        this.isLoading = false;
     }
     changeField(button) {
         this.status.edit = true;
@@ -142,7 +140,7 @@ export default class App extends LightningElement {
 
     handleloading(e) {
         console.log('handleloading', e);
-        this.status.loading = e.detail;
+        this.isLoading = e.detail;
     }
     extractHeaders(fields) {
         return fields.map((a) => {

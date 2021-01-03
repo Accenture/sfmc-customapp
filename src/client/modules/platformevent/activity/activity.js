@@ -2,6 +2,7 @@ import { LightningElement, api, track } from 'lwc';
 
 export default class PlatformEvent extends LightningElement {
     @track status = {};
+    @track isLoading = false;
     @track alert = {};
 
     @api eventDefinition;
@@ -14,7 +15,7 @@ export default class PlatformEvent extends LightningElement {
     activity;
 
     async connectedCallback() {
-        this.status.loading = true;
+        this.isLoading = true;
     }
     get platformEventList() {
         return this.platformevents.map((e) => {
@@ -78,7 +79,7 @@ export default class PlatformEvent extends LightningElement {
                     message: (await res.json()).message
                 }
             });
-            this.status.loading = false;
+            this.isLoading = false;
             return [];
         }
         return res.json();
@@ -93,7 +94,7 @@ export default class PlatformEvent extends LightningElement {
                     message: (await res.json()).message
                 }
             });
-            this.status.loading = false;
+            this.isLoading = false;
             return null;
         }
         return res.json();
@@ -131,7 +132,7 @@ export default class PlatformEvent extends LightningElement {
                     return field;
                 });
         }
-        this.status.loading = false;
+        this.isLoading = false;
     }
 
     updateActivity() {

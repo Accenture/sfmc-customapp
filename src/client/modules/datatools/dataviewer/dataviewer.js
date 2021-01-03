@@ -1,5 +1,6 @@
 import { LightningElement, track, api } from 'lwc';
 import { classSet } from 'lightning/utils';
+import { getCookieByName } from 'common/Utils';
 export default class App extends LightningElement {
     @api handleclick;
     @track status = {};
@@ -8,6 +9,7 @@ export default class App extends LightningElement {
     @track newDataExtension = {};
     @track isPanelClosed = false;
     @track selectedDataExtensionName = '';
+    @track isLoading = false;
 
     //data table
     defaultSortDirection = 'asc';
@@ -56,7 +58,7 @@ export default class App extends LightningElement {
                 bubbles: true,
                 composed: true
             });
-            this.status.loading = true;
+            this.isLoading = true;
             //get fields
             const resDE = await fetch(
                 `/dataTools/getDataExtension/${value.key}/fields`
@@ -87,7 +89,7 @@ export default class App extends LightningElement {
                     })
                 );
             }
-            this.status.loading = false;
+            this.isLoading = false;
         }
         this.privateDataExtension = value;
     }
@@ -135,16 +137,12 @@ export default class App extends LightningElement {
     }
     async handleLoad(e) {
         console.log('handleoad', e);
-        this.status.loading = true;
-        const csrf = document.cookie
-            .split(';')
-            .find((row) => row.startsWith('XSRF-TOKEN'))
-            .split('=')[1];
+        this.isLoading = true;
         const resData = await fetch('/dataTools/getDataExtensionData', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'xsrf-token': csrf
+                'xsrf-token': getCookieByName.call(this, 'XSRF-TOKEN')
             },
             body: JSON.stringify({
                 key: this.privateDataExtension.key,
@@ -178,7 +176,7 @@ export default class App extends LightningElement {
                 })
             );
         }
-        this.status.loading = false;
+        this.isLoading = false;
     }
 
     // Used to sort the 'Age' column

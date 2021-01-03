@@ -3,12 +3,13 @@ import { classSet } from 'lightning/utils';
 export default class DataPicker extends LightningElement {
     @track alert = {};
     @track status = {};
+    @track isLoading = false;
     @track nestedItems = {};
     @track keyvalueItems = {};
 
     async connectedCallback() {
         try {
-            this.status.loading = true;
+            this.isLoading = true;
             const resDEs = await fetch('/dataTools/getDataExtensions');
             const resFolders = await fetch('/dataTools/getFolders');
             const DElist = await resDEs.json();
@@ -40,7 +41,7 @@ export default class DataPicker extends LightningElement {
                 })
             );
         }
-        this.status.loading = false;
+        this.isLoading = false;
     }
 
     get computedPanelClass() {

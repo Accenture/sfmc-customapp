@@ -1,4 +1,5 @@
 import { LightningElement, track } from 'lwc';
+import { getCookieByName } from 'common/Utils';
 
 export default class Config extends LightningElement {
     @track config = { clientId: '', loginUrl: '' };
@@ -19,19 +20,16 @@ export default class Config extends LightningElement {
     }
     async handleConnect() {
         this.isLoading = true;
-        const csrf = document.cookie
-            .split(';')
-            .find((row) => row.startsWith('XSRF-TOKEN'))
-            .split('=')[1];
         const rawRes = await fetch('/platformevent/sfdccredentials', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'xsrf-token': csrf
+                'xsrf-token': getCookieByName.call(this, 'XSRF-TOKEN')
             },
             redirect: 'follow',
             body: JSON.stringify(this.config)
         });
+
         const jsonRes = await rawRes.json();
         if (rawRes.status < 300) {
             const popup = window.open(
