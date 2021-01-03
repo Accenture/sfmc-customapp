@@ -30,6 +30,11 @@ router.get('/config.json', (req, res) => {
             backgroundColor: '#032e61',
             expressionBuilderPrefix: 'Platform'
         },
+        // allows copying of activity (undocumented)
+        copySettings: {
+            allowCopy: true,
+            displayCopyNotification: true
+        },
         // For Custom Activity this must say, "REST"
         type: 'REST',
         lang: {
