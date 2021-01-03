@@ -8,7 +8,8 @@ const { decode } = require('../utils/jwt');
 
 router.get(['/activity', '/app'], (req, res, next) => {
     res.cookie('XSRF-TOKEN', req.csrfToken(), {
-        sameSite: 'none'
+        sameSite: 'none',
+        secure: true
     });
     checkAuth(req, res, next, req.originalUrl);
 });

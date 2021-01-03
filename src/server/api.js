@@ -10,7 +10,6 @@ const session = require('express-session');
 const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const RedisRateLimit = require('rate-limit-redis');
-const csurf = require('csurf');
 
 // static vars
 const DIST_DIR = './dist';
@@ -65,7 +64,6 @@ app.use(
         saveUninitialized: false
     })
 );
-app.use(csurf({ cookie: false }));
 
 // Rate Limit API requests
 // this should probably exclude execute requests

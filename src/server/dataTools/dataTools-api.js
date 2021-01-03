@@ -12,8 +12,10 @@ const csurf = require('csurf')();
 router.use(csurf);
 
 router.get('/', (req, res, next) => {
+    console.log(req.csrfToken());
     res.cookie('XSRF-TOKEN', req.csrfToken(), {
-        sameSite: 'none'
+        sameSite: 'none',
+        secure: true
     });
     checkAuth(req, res, next, req.originalUrl);
 });
