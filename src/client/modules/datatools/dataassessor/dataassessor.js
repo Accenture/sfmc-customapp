@@ -15,7 +15,7 @@ export default class App extends LightningElement {
     }
 
     get hasNotLoadedData() {
-        return this.rows && this.headers;
+        return !(this.rows && this.headers);
     }
 
     handlehome() {
@@ -73,7 +73,7 @@ export default class App extends LightningElement {
         console.log(JSON.stringify(tempRows[0]));
         for (const row of tempRows) {
             //delete row.columns[i];
-            row.columns.splice(i, 1);
+            row.columns.splice(i, 1);~
         }
         console.log(JSON.stringify(tempRows[0]));
         this.rows = tempRows;
