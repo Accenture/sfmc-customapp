@@ -6,15 +6,23 @@ const { checkAuth, getRedirectURL } = require('../sfmc/core.js');
 const { decode } = require('../utils/jwt');
 
 router.get('/activity', (req, res, next) => {
-    res.cookie('XSRF-TOKEN', req.csrfToken());
-    checkAuth(req, res, next, req.path);
+    res.cookie('XSRF-TOKEN', req.csrfToken(), {
+        sameSite: 'none',
+        secure: true,
+        httpOnly: true
+    });
+    checkAuth(req, res, next, req.originalUrl);
 });
 router.get('/activity/login', (req, res) => {
     res.redirect(301, getRedirectURL(req, 'platformevent/activity'));
 });
 router.get('/app', (req, res, next) => {
-    res.cookie('XSRF-TOKEN', req.csrfToken());
-    checkAuth(req, res, next, req.path);
+    res.cookie('XSRF-TOKEN', req.csrfToken(), {
+        sameSite: 'none',
+        secure: true,
+        httpOnly: true
+    });
+    checkAuth(req, res, next, req.originalUrl);
 });
 router.get('/app/login', (req, res) => {
     res.redirect(301, getRedirectURL(req, 'platformevent/app'));

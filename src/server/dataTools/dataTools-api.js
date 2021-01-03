@@ -8,8 +8,12 @@ const profiler = require('./profiler.js');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-    res.cookie('XSRF-TOKEN', req.csrfToken());
-    checkAuth(req, res, next, req.path);
+    res.cookie('XSRF-TOKEN', req.csrfToken(), {
+        sameSite: 'none',
+        secure: true,
+        httpOnly: true
+    });
+    checkAuth(req, res, next, req.originalUrl);
 });
 router.get('/login', (req, res) => {
     res.redirect(301, getRedirectURL(req, 'dataTools'));
