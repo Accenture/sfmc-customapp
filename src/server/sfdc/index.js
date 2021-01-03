@@ -75,7 +75,7 @@ exports.authorize = async (mid, code) => {
         logger.info('userInfo', userInfo);
         connectionArray[mid].on('refresh', async (accessToken, res) => {
             logger.info('on Refresh', accessToken, res);
-            saveCredentials(mid, connectionArray[mid]);
+            await saveCredentials(mid, connectionArray[mid]);
             logger.info('refreshed and saved credentials');
             // Refresh event will be fired when renewed access token
             // to store it in your storage for next request
