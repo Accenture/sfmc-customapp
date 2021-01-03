@@ -15,10 +15,7 @@ export default class App extends LightningElement {
     }
 
     get hasNotLoadedData() {
-        if (this.rows && this.headers) {
-            return false;
-        }
-        return true;
+        return !(this.rows && this.headers);
     }
 
     handlehome() {
@@ -53,15 +50,11 @@ export default class App extends LightningElement {
     }
 
     updatedfield(e) {
-        let i = 0;
-        for (const header of this.headers) {
-            if (header.key === e.detail.key) {
-                this.headers[i] = e.detail;
-                break;
-            } else {
-                i++;
-            }
-        }
+        // finds the corresponding header for the detail and replace
+        const headerIndex = this.headers.findIndex(
+            (header) => header.key === e.detail.key
+        );
+        this.headers[headerIndex] = e.detail;
     }
 
     deletedfield(e) {
