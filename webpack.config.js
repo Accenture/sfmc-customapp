@@ -39,13 +39,13 @@ const config = {
 
         new HtmlWebpackPlugin({
             template: 'src/client/index.html',
-            filename: './platformevent/app/index.html',
+            filename: './platformevent/app.html',
             title: 'Platform Event Config',
             chunks: ['platformeventapp']
         }),
         new HtmlWebpackPlugin({
             template: 'src/client/index.html',
-            filename: './platformevent/activity/index.html',
+            filename: './platformevent/activity.html',
             title: 'Platform Event Activity',
             chunks: ['platformeventactivity']
         }),

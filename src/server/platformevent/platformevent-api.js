@@ -1,7 +1,7 @@
 const express = require('express');
 const logger = require('../utils/logger');
 const sfdc = require('../sfdc/index.js');
-const router = express.Router();
+const router = express.Router({ strict: true });
 const csurf = require('csurf')();
 const { checkAuth, getRedirectURL } = require('../sfmc/core.js');
 const { decode } = require('../utils/jwt');

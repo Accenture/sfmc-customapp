@@ -233,6 +233,7 @@ exports.flattenResults = (Results) => {
     });
 };
 exports.checkAuth = async (req, res, next, appname) => {
+    console.log('current request url', req.originalUrl);
     try {
         if (
             req.session &&
@@ -250,11 +251,13 @@ exports.checkAuth = async (req, res, next, appname) => {
                 await this.refreshToken(req.session.auth);
                 logger.info('Auth Refreshed');
             }
-            next();
+            console.log('next');
+            return next();
         } else if (req.session.auth && req.session.auth.refresh_token) {
             await this.refreshToken(req.session.auth);
-            next();
+            return next();
         } else if (appname) {
+            console.log('checkAuth redirect');
             res.redirect(301, this.getRedirectURL(req, appname));
         } else {
             res.status(401).send({ message: 'Log into SFMC' });
@@ -288,11 +291,13 @@ exports.authenicate = async (req, res) => {
             const app = Buffer.from(req.query.state, 'base64')
                 .toString('utf8')
                 .split('&')[1];
-            logger.info(`REDIRECT: /${app}`);
             const hostname = process.env.HOST
                 ? `${process.env.HOST}:${process.env.PORT}`
                 : req.hostname;
-            res.redirect(`https://${hostname}/${app}`);
+            const redirURL = `https://${hostname}/${app}`;
+            logger.info(`REDIRECT: ${redirURL}`);
+
+            res.redirect(redirURL);
         } catch (ex) {
             logger.error('ERROR', ex);
             res.status(500).send({

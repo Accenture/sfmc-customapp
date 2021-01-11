@@ -3,7 +3,7 @@ const logger = require('../utils/logger');
 const core = require('./core.js');
 const csurf = require('csurf')();
 
-const router = express.Router();
+const router = express.Router({ strict: true });
 
 router.get('/auth/response', core.authenicate);
 
