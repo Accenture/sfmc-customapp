@@ -177,7 +177,6 @@ exports.getContext = async (auth) => {
     return res.data;
 };
 exports.getRedirectURL = (req, appname) => {
-    console.log('GET REDIRECT URL FOR APP ', appname);
     //initialize auth if not done
     if (!req.session.auth) {
         req.session.auth = {
@@ -254,11 +253,11 @@ exports.checkAuth = async (req, res, next, appname) => {
                 await this.refreshToken(req.session.auth);
                 logger.info('Auth Refreshed');
             }
-            console.log('next');
+            
         } else if (req.session.auth && req.session.auth.refresh_token) {
             await this.refreshToken(req.session.auth);
         } else if (appname) {
-            console.log('checkAuth redirect');
+            
             res.redirect(301, this.getRedirectURL(req, appname));
         } else {
             res.status(401).send({ message: 'Log into SFMC' });
@@ -269,11 +268,14 @@ exports.checkAuth = async (req, res, next, appname) => {
             '../../../dist',
             req.originalUrl + '.html'
         );
-        console.log('sending file with added html', page, __dirname);
         res.sendFile(page);
     } catch (ex) {
-        console.log(ex);
-        logger.info('checkAuth Failed', ex.response.data);
+        if(ex.response && ex.response.data){
+            logger.info('checkAuth Failed', ex.response.data);
+        } else{
+            logger.info('checkAuth Failed', ex);
+        }
+        
         res.status(500).send({
             message: ex.message,
             details: ex.response.data
@@ -307,14 +309,7 @@ exports.authenicate = async (req, res) => {
                     : req.hostname;
 
             const redirURL = `https://${hostname}/${app}`;
-            console.log(
-                hostname,
-                app,
-                redirURL,
-                Buffer.from(req.query.state, 'base64').toString('utf8')
-            );
             logger.info(`REDIRECT: ${redirURL}`);
-
             res.redirect(redirURL);
         } catch (ex) {
             logger.error('ERROR', ex);
