@@ -1,4 +1,5 @@
 import { LightningElement, track, api } from 'lwc';
+import { getCookieByName } from 'common/utils';
 
 export default class App extends LightningElement {
     @api handleclick;
@@ -9,6 +10,7 @@ export default class App extends LightningElement {
         defaultPhoneLocale: 'US',
         inputdata: null
     };
+    @track isLoading = false;
 
     get hasNoInputData() {
         return !this.settings.inputdata;
@@ -29,9 +31,9 @@ export default class App extends LightningElement {
     }
 
     loadData(inputdata) {
-        this.status.loading = true;
+        this.isLoading = true;
         if (inputdata.target.files[0].size > 1e7) {
-            this.status.loading = false;
+            this.isLoading = false;
             this.dispatchEvent(
                 new CustomEvent('error', {
                     bubbles: true,
@@ -39,13 +41,13 @@ export default class App extends LightningElement {
                     detail: {
                         type: 'error',
                         message: 'Only files up to 10mb are supported',
-                        link: '/api/sfmc/auth/login/dataTools'
+                        link: '/dataTools/login'
                     }
                 })
             );
         } else {
             this.settings.inputdata = inputdata.target.files[0];
-            this.status.loading = false;
+            this.isLoading = false;
         }
     }
 
@@ -84,16 +86,17 @@ export default class App extends LightningElement {
     }
 
     async parsedata() {
-        this.status.loading = true;
+        this.isLoading = true;
         this.rows = null;
         this.headers = null;
         const resData = await fetch(
-            '/api/dataTools/exampledata?phonelocale=' +
+            '/dataTools/exampledata?phonelocale=' +
                 this.settings.defaultPhoneLocale,
             {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'text/plain'
+                    'Content-Type': 'text/plain',
+                    'xsrf-token': getCookieByName.call(this, 'XSRF-TOKEN')
                 },
                 body: await this.settings.inputdata.text()
             }
@@ -125,7 +128,7 @@ export default class App extends LightningElement {
                 })
             );
         }
-        this.status.loading = false;
+        this.isLoading = false;
     }
     changeField(button) {
         this.status.edit = true;
@@ -137,7 +140,7 @@ export default class App extends LightningElement {
 
     handleloading(e) {
         console.log('handleloading', e);
-        this.status.loading = e.detail;
+        this.isLoading = e.detail;
     }
     extractHeaders(fields) {
         return fields.map((a) => {

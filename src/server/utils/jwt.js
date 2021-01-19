@@ -16,7 +16,7 @@ module.exports = {
                     algorithm: 'HS256'
                 }
             );
-            next();
+            return next();
         } catch (ex) {
             logger.error('req.body', req.body);
             res.status(401).send('JWT was not correctly signed');

@@ -11,7 +11,7 @@
         next-value="Done"
         prev-value="Cancel"
     >
-        <template if:true={status.loading}>
+        <template if:true={isLoading}>
             <lightning-spinner
                 style="position: static"
                 alternative-text="Loading"

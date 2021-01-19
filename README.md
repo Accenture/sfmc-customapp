@@ -20,8 +20,8 @@ This is far from being a perfect app. Examples right now for improvement are
 Example custom applications for SFMC
 
 -   Platform Events Activity
-    -   App for Config at /platformeventapp
-    -   Activity at /platformeventactivity
+    -   App for Config at /platformevent/app
+    -   Activity at /platformevent/activity
 -   Data Tools
     -   Utilities at /dataTools
 
@@ -30,6 +30,14 @@ Example custom applications for SFMC
 ## How to start?
 
 Custom development in Marketing Cloud falls largely into two catories, on-platform (eg. SSJS, Cloud Pages) and off-platform (Custom Applications & Activities). Off-platform integrations are added via `Setup => Installed Packages`
+
+### Local execution
+
+1. Install Openssl if required (https://slproweb.com/products/Win32OpenSSL.html)
+2. Generate self-signed Certificates using ```npm run build:cert```
+3. Copy example.env and change to .env
+4. Update values (many of these come from below so don't worry if you dont have them all yet)
+
 
 ### Custom Activities
 
@@ -66,13 +74,13 @@ NOTE: We can only configure one `Application` per Installed package. This basica
 
     -   Add Redirect Urls (you can put both if needed)
 
-        -   If running locally for dev - https://127.0.0.1:3001/api/sfmc/auth/login/response
-        -   If running on server for prod - https://HOSTNAMEHERE/api/sfmc/auth/login/response
+        -   If running locally for dev - https://127.0.0.1:3002/sfmc/auth/login/response
+        -   If running on server for prod - https://HOSTNAMEHERE/sfmc/auth/login/response
 
         NOTE: you will need the client id, secret and jwt for setup. If you do not know the hostname yet, you can put a temporary one and replace it later on.
 
--   To the Installed Package add an Application with Login URL https://HOSTNAMEHERE/platformeventapp
--   To the Installed Package add an Activity with Endpoint URL https://HOSTNAMEHERE/api/platformeventactivity
+-   To the Installed Package add an Application with Login URL https://HOSTNAMEHERE/platformevent/app/login
+-   To the Installed Package add an Activity with Endpoint URL https://HOSTNAMEHERE/platformevent/activity
 
 ### Configure Salesforce
 
@@ -82,11 +90,13 @@ NOTE: We can only configure one `Application` per Installed package. This basica
     -   An Email
     -   Enable OAuth Settings = TRUE
     -   Callback URL (You can put both if needed)
-        -   If running locally for dev - https://127.0.0.1:3001/api/platformeventactivity/oauth/response/MID-OF-BUSINESSUNIT
-        -   If running on a server for prod - https://HOSTNAMEHERE/api/platformeventactivity/oauth/response/MID-OF-BUSINESSUNIT
+        -   If running locally for dev - https://127.0.0.1:3002/platformevent/oauth/response/MID-OF-BUSINESSUNIT
+        -   If running on a server for prod - https://HOSTNAMEHERE/platformevent/oauth/response/MID-OF-BUSINESSUNIT
     -   Permission
-        -   Access and manage your data
-        -   Perform Requests on your behalf at any time
+        -   Access your basic information (id, profile, email, address, phone)
+        -   Access and manage your data (api)
+        -   Provide access to your data via the Web (web)
+        -   Perform requests on your behalf at any time (refresh_token, offline_access)
     -   Require Secret for Web Server Flow = TRUE
 -   Copy the Consumer Key & Consumer Secret
 
@@ -105,7 +115,7 @@ NOTE: If you get an error like `error=redirect_uri_mismatch&error_description=re
 
 ### Configure Marketing Cloud
 
--   To the Installed Package add an Application with Login URL https://HOSTNAMEHERE/dataTools
+-   To the Installed Package add an Application with Login URL https://HOSTNAMEHERE/dataTools/login
 
 ## Known Limitations
 

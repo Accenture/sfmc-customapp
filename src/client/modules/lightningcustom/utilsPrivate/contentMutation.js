@@ -48,8 +48,8 @@ function extractElements(root, selector) {
 
 function extractContent(elements) {
     return elements
-        .map(element => element.textContent)
-        .filter(text => text.length)
+        .map((element) => element.textContent)
+        .filter((text) => text.length)
         .join(CONTENT_SEPARATOR);
 }
 
@@ -122,7 +122,7 @@ export class ContentMutation {
         const selector = (refs + '')
             .trim()
             .split(/\s+/)
-            .map(ref => `[id*="${ref}"]`)
+            .map((ref) => `[id*="${ref}"]`)
             .join(',');
         const liveId = { selector, callback };
         this.liveIds[refs] = liveId;
@@ -145,14 +145,14 @@ export class ContentMutation {
             attrState = this.state[attrName] = {
                 ids,
                 innerSelector,
-                placeholderContainerSelector,
+                placeholderContainerSelector
             };
         }
         if (this.isNative) {
             attrState.outerSelector = (ids + '')
                 .trim()
                 .split(/\s+/)
-                .map(ref => `#${ref}`)
+                .map((ref) => `#${ref}`)
                 .join(',');
             attrState.placeholder = document.createElement('span');
             attrState.placeholder.id = `auto-link-${attrName}-${this.guid}`;
@@ -185,7 +185,7 @@ export class ContentMutation {
 
     privateExtractIds(elements) {
         return elements
-            .map(el => {
+            .map((el) => {
                 return el.getAttribute('id');
             })
             .join(' ');
@@ -229,7 +229,7 @@ export class ContentMutation {
                 outerSelector,
                 content,
                 placeholder,
-                placeholderContainerSelector,
+                placeholderContainerSelector
             } = this.state[attrName];
             const newContent = extractContent(
                 extractElements(this.root, outerSelector)
@@ -268,7 +268,7 @@ export class ContentMutation {
         mo.observe(this.root, {
             characterData: true,
             childList: true,
-            subtree: true,
+            subtree: true
         });
     }
 }

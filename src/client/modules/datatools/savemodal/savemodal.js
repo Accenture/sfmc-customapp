@@ -1,4 +1,5 @@
 import { LightningElement, api, track } from 'lwc';
+import { getCookieByName } from 'common/utils';
 
 export default class SaveModal extends LightningElement {
     @api fields;
@@ -33,10 +34,11 @@ export default class SaveModal extends LightningElement {
                 return field;
             }
         );
-        const resData = await fetch('/api/dataTools/createDataExtension', {
+        const resData = await fetch('/dataTools/createDataExtension', {
             method: 'POST',
             headers: {
-                'Content-Type': 'text/plain'
+                'Content-Type': 'text/plain',
+                'xsrf-token': getCookieByName.call(this, 'XSRF-TOKEN')
             },
             body: JSON.stringify({
                 name: this.filename,

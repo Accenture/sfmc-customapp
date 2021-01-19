@@ -1,4 +1,5 @@
 import { LightningElement, track } from 'lwc';
+import { getCookieByName } from 'common/utils';
 
 export default class Config extends LightningElement {
     @track config = { clientId: '', loginUrl: '' };
@@ -19,17 +20,16 @@ export default class Config extends LightningElement {
     }
     async handleConnect() {
         this.isLoading = true;
-        const rawRes = await fetch(
-            '/api/platformeventactivity/sfdccredentials',
-            {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                redirect: 'follow',
-                body: JSON.stringify(this.config)
-            }
-        );
+        const rawRes = await fetch('/platformevent/sfdccredentials', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'xsrf-token': getCookieByName.call(this, 'XSRF-TOKEN')
+            },
+            redirect: 'follow',
+            body: JSON.stringify(this.config)
+        });
+
         const jsonRes = await rawRes.json();
         if (rawRes.status < 300) {
             const popup = window.open(
@@ -44,14 +44,15 @@ export default class Config extends LightningElement {
             const checkComplete = setInterval(() => {
                 if (
                     popup.location.href.includes(
-                        '/api/platformeventactivity/oauth/response/'
+                        '/platformevent/oauth/response/'
                     )
                 ) {
+                    popup.close();
                     clearInterval(checkComplete);
                     this.isLoading = false;
                     this.isEditing = false;
                 }
-            }, 3000);
+            }, 1000);
         } else {
             this.dispatchEvent(
                 new CustomEvent('error', {
@@ -67,7 +68,7 @@ export default class Config extends LightningElement {
     }
     async connectedCallback() {
         this.isLoading = true;
-        const rawRes = await fetch('/api/platformeventactivity/sfdcstatus');
+        const rawRes = await fetch('/platformevent/sfdcstatus');
         const jsonRes = await rawRes.json();
         if (rawRes.status < 300) {
             if (jsonRes) {

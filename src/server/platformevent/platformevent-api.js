@@ -1,9 +1,27 @@
 const express = require('express');
 const logger = require('../utils/logger');
 const sfdc = require('../sfdc/index.js');
-const router = express.Router();
-const { middlewareCheck } = require('../sfmc/core.js');
+const router = express.Router({ strict: true });
+const csurf = require('csurf')();
+const { checkAuth, getRedirectURL } = require('../sfmc/core.js');
 const { decode } = require('../utils/jwt');
+
+//default entry path with auth validation
+router.get(['/activity', '/app'], csurf, (req, res, next) => {
+    res.cookie('XSRF-TOKEN', req.csrfToken(), {
+        sameSite: 'none',
+        secure: true
+    });
+    checkAuth(req, res, next, req.originalUrl.substring(1));
+});
+
+// path in case we want to force a refresh of token
+router.get(['/activity/login', '/app/login'], csurf, (req, res) => {
+    res.redirect(
+        301,
+        getRedirectURL(req, req.originalUrl.replace('/login', '').substring(1))
+    );
+});
 
 router.get('/config.json', (req, res) => {
     const config = {
@@ -14,6 +32,11 @@ router.get('/config.json', (req, res) => {
             category: 'customer',
             backgroundColor: '#032e61',
             expressionBuilderPrefix: 'Platform'
+        },
+        // allows copying of activity (undocumented)
+        copySettings: {
+            allowCopy: true,
+            displayCopyNotification: true
         },
         // For Custom Activity this must say, "REST"
         type: 'REST',
@@ -30,7 +53,7 @@ router.get('/config.json', (req, res) => {
                 outArguments: [],
                 // Fill in the host with the host that this is running on.
                 // It must run under HTTPS
-                url: `https://${req.headers.host}/api/platformeventactivity/execute`,
+                url: `https://${req.headers.host}/platformevent/execute`,
                 // The amount of time we want Journey Builder to wait before cancel the request. Default is 60000, Minimal is 1000
                 timeout: 10000,
                 // how many retrys if the request failed with 5xx error or network error. default is 0
@@ -45,19 +68,19 @@ router.get('/config.json', (req, res) => {
         },
         configurationArguments: {
             publish: {
-                url: `https://${req.headers.host}/api/platformeventactivity/publish`,
+                url: `https://${req.headers.host}/platformevent/publish`,
                 useJwt: true
             },
             validate: {
-                url: `https://${req.headers.host}/api/platformeventactivity/validate`,
+                url: `https://${req.headers.host}/platformevent/validate`,
                 useJwt: true
             },
             stop: {
-                url: `https://${req.headers.host}/api/platformeventactivity/stop`,
+                url: `https://${req.headers.host}/platformevent/stop`,
                 useJwt: true
             },
             save: {
-                url: `https://${req.headers.host}/api/platformeventactivity/save`,
+                url: `https://${req.headers.host}/platformevent/save`,
                 useJwt: true
             }
         },
@@ -77,7 +100,7 @@ router.get('/config.json', (req, res) => {
             }
         },
         edit: {
-            url: `https://${req.headers.host}/platformeventactivity`
+            url: `https://${req.headers.host}/platformevent/activity`
         }
     };
     res.json(config);
@@ -110,7 +133,7 @@ router.post('/save', decode, (req, res) => {
     res.json({ status: 'ok' });
 });
 
-router.get('/platformEvents', middlewareCheck, async (req, res) => {
+router.get('/platformEvents', checkAuth, async (req, res) => {
     //logger.info(core.checkAuth);
     try {
         const platformEvents = await sfdc.getMetadata(
@@ -124,7 +147,7 @@ router.get('/platformEvents', middlewareCheck, async (req, res) => {
 router.get('/context', (req, res) => {
     res.json(req.session.context);
 });
-router.post('/sfdccredentials', async (req, res) => {
+router.post('/sfdccredentials', csurf, async (req, res) => {
     if (
         req.session.context &&
         req.session.context.organization &&
@@ -134,9 +157,10 @@ router.post('/sfdccredentials', async (req, res) => {
             mid: req.session.context.organization.member_id,
             cred: req.body
         };
-        const hostname = process.env.HOST
-            ? `${process.env.HOST}:${process.env.CLIENT_PORT}`
-            : req.hostname;
+        const hostname =
+            process.env.NODE_ENV === 'development'
+                ? `127.0.0.1:${process.env.PORT}`
+                : req.hostname;
         res.json({
             redirect: sfdc.loginurl(
                 req.body,
@@ -154,7 +178,9 @@ router.get('/oauth/response/:mid', async (req, res) => {
     try {
         await sfdc.authorize(req.params.mid, req.query.code);
         delete req.session.temp;
-        res.status(200).send('Authorized, you can close this now!');
+        res.status(200).send(
+            'Finalizing Authorization. This window will close in a couple of seconds'
+        );
     } catch (ex) {
         res.status(500).json({ message: ex });
     }

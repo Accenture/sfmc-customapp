@@ -2,6 +2,7 @@ import { LightningElement, api, track } from 'lwc';
 
 export default class PlatformEvent extends LightningElement {
     @track status = {};
+    @track isLoading = false;
     @track alert = {};
 
     @api eventDefinition;
@@ -14,7 +15,7 @@ export default class PlatformEvent extends LightningElement {
     activity;
 
     async connectedCallback() {
-        this.status.loading = true;
+        this.isLoading = true;
     }
     get platformEventList() {
         return this.platformevents.map((e) => {
@@ -70,7 +71,7 @@ export default class PlatformEvent extends LightningElement {
     }
 
     async getPlatformEvents() {
-        const res = await fetch('/api/platformeventactivity/platformEvents');
+        const res = await fetch('/platformevent/platformEvents');
         if (res.status > 299) {
             this.showAlert({
                 detail: {
@@ -78,14 +79,14 @@ export default class PlatformEvent extends LightningElement {
                     message: (await res.json()).message
                 }
             });
-            this.status.loading = false;
+            this.isLoading = false;
             return [];
         }
         return res.json();
     }
 
     async getSessionContext() {
-        const res = await fetch('/api/platformeventactivity/context');
+        const res = await fetch('/platformevent/context');
         if (res.status > 299) {
             this.showAlert({
                 detail: {
@@ -93,7 +94,7 @@ export default class PlatformEvent extends LightningElement {
                     message: (await res.json()).message
                 }
             });
-            this.status.loading = false;
+            this.isLoading = false;
             return null;
         }
         return res.json();
@@ -131,7 +132,7 @@ export default class PlatformEvent extends LightningElement {
                     return field;
                 });
         }
-        this.status.loading = false;
+        this.isLoading = false;
     }
 
     updateActivity() {

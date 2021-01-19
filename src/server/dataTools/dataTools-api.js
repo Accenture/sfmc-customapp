@@ -1,12 +1,27 @@
 const express = require('express');
 const logger = require('../utils/logger');
-const core = require('../sfmc/core.js');
+const { checkAuth, getRedirectURL } = require('../sfmc/core.js');
 const data = require('../sfmc/data.js');
 const platform = require('../sfmc/platform.js');
 const profiler = require('./profiler.js');
 
 const router = express.Router();
 
+//all POST routes here are csrf protected
+
+const csurf = require('csurf')();
+router.use(csurf);
+
+router.get('/', (req, res, next) => {
+    res.cookie('XSRF-TOKEN', req.csrfToken(), {
+        sameSite: 'none',
+        secure: true
+    });
+    checkAuth(req, res, next, req.originalUrl);
+});
+router.get('/login', (req, res) => {
+    res.redirect(301, getRedirectURL(req, 'dataTools'));
+});
 router.post('/exampledata', async (req, res) => {
     try {
         logger.info('locale', req.query);
@@ -17,7 +32,7 @@ router.post('/exampledata', async (req, res) => {
     }
 });
 
-router.get('/getDataExtensions', core.checkAuth, async (req, res) => {
+router.get('/getDataExtensions', checkAuth, async (req, res) => {
     try {
         res.json(await data.getDataExtensions(req));
     } catch (ex) {
@@ -25,17 +40,13 @@ router.get('/getDataExtensions', core.checkAuth, async (req, res) => {
         res.status(500).json(ex.message);
     }
 });
-router.get(
-    '/getDataExtension/:key/fields',
-    core.checkAuth,
-    async (req, res) => {
-        try {
-            res.json(await data.getDataExtensionFields(req));
-        } catch (ex) {
-            res.status(500).json(ex.message);
-        }
+router.get('/getDataExtension/:key/fields', checkAuth, async (req, res) => {
+    try {
+        res.json(await data.getDataExtensionFields(req));
+    } catch (ex) {
+        res.status(500).json(ex.message);
     }
-);
+});
 
 router.post('/getDataExtensionData', async (req, res) => {
     try {
@@ -68,14 +79,14 @@ router.post('/getDataExtensionData', async (req, res) => {
     }
 });
 
-router.get('/getFolders', core.checkAuth, async (req, res) => {
+router.get('/getFolders', checkAuth, async (req, res) => {
     try {
         res.json(await platform.getFolders(req));
     } catch (ex) {
         res.status(500).json(ex.message);
     }
 });
-router.post('/createDataExtension', core.checkAuth, async (req, res) => {
+router.post('/createDataExtension', checkAuth, async (req, res) => {
     try {
         res.json(await data.createDataExtension(req));
     } catch (ex) {

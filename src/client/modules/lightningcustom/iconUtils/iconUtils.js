@@ -11,7 +11,7 @@ const tokenNameMap = Object.assign(Object.create(null), {
     custom: 'lightning.customSprite',
     doctype: 'lightning.doctypeSprite',
     standard: 'lightning.standardSprite',
-    utility: 'lightning.utilitySprite',
+    utility: 'lightning.utilitySprite'
 });
 
 const tokenNameMapRtl = Object.assign(Object.create(null), {
@@ -19,7 +19,7 @@ const tokenNameMapRtl = Object.assign(Object.create(null), {
     custom: 'lightning.customSpriteRtl',
     doctype: 'lightning.doctypeSpriteRtl',
     standard: 'lightning.standardSpriteRtl',
-    utility: 'lightning.utilitySpriteRtl',
+    utility: 'lightning.utilitySpriteRtl'
 });
 
 const defaultTokenValueMap = Object.assign(Object.create(null), {
@@ -34,8 +34,7 @@ const defaultTokenValueMap = Object.assign(Object.create(null), {
     'lightning.standardSpriteRtl':
         '/assets/icons/standard-sprite/svg/symbols.svg',
     'lightning.utilitySprite': '/assets/icons/utility-sprite/svg/symbols.svg',
-    'lightning.utilitySpriteRtl':
-        '/assets/icons/utility-sprite/svg/symbols.svg',
+    'lightning.utilitySpriteRtl': '/assets/icons/utility-sprite/svg/symbols.svg'
 });
 
 const getDefaultBaseIconPath = (category, nameMap) =>
@@ -48,7 +47,7 @@ const getBaseIconPath = (category, direction) => {
     );
 };
 
-const getMatchAtIndex = index => iconName => {
+const getMatchAtIndex = (index) => (iconName) => {
     const result = validNameRe.exec(iconName);
     return result ? result[index] : '';
 };
@@ -57,7 +56,7 @@ const getCategory = getMatchAtIndex(1);
 const getName = getMatchAtIndex(2);
 export { getCategory, getName };
 
-export const isValidName = iconName => validNameRe.test(iconName);
+export const isValidName = (iconName) => validNameRe.test(iconName);
 
 export const getIconPath = (iconName, direction = 'ltr') => {
     pathPrefix = pathPrefix !== undefined ? pathPrefix : getPathPrefix();
@@ -71,9 +70,7 @@ export const getIconPath = (iconName, direction = 'ltr') => {
             if (isIframeInEdge) {
                 // protocol => 'https:' or 'http:'
                 // host => hostname + port
-                const origin = `${window.location.protocol}//${
-                    window.location.host
-                }`;
+                const origin = `${window.location.protocol}//${window.location.host}`;
                 return `${origin}${pathPrefix}${baseIconPath}#${getName(
                     iconName
                 )}`;
@@ -84,7 +81,7 @@ export const getIconPath = (iconName, direction = 'ltr') => {
     return '';
 };
 
-export const computeSldsClass = iconName => {
+export const computeSldsClass = (iconName) => {
     if (isValidName(iconName)) {
         const category = getCategory(iconName);
         const name = getName(iconName).replace(underscoreRe, '-');

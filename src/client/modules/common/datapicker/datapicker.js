@@ -3,14 +3,15 @@ import { classSet } from 'lightning/utils';
 export default class DataPicker extends LightningElement {
     @track alert = {};
     @track status = {};
+    @track isLoading = false;
     @track nestedItems = {};
     @track keyvalueItems = {};
 
     async connectedCallback() {
         try {
-            this.status.loading = true;
-            const resDEs = await fetch('/api/dataTools/getDataExtensions');
-            const resFolders = await fetch('/api/dataTools/getFolders');
+            this.isLoading = true;
+            const resDEs = await fetch('/dataTools/getDataExtensions');
+            const resFolders = await fetch('/dataTools/getFolders');
             const DElist = await resDEs.json();
             const Folderlist = await resFolders.json();
             if (resDEs.status === 200 && resFolders.status === 200) {
@@ -23,7 +24,7 @@ export default class DataPicker extends LightningElement {
                         detail: {
                             type: 'error',
                             message: 'Authentication error',
-                            link: '/api/sfmc/auth/login/dataTools'
+                            link: '/dataTools/login'
                         }
                     })
                 );
@@ -40,7 +41,7 @@ export default class DataPicker extends LightningElement {
                 })
             );
         }
-        this.status.loading = false;
+        this.isLoading = false;
     }
 
     get computedPanelClass() {

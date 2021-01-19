@@ -3,7 +3,7 @@ import {
     newLineRegexString,
     emailRegexString,
     createHttpHref,
-    createEmailHref,
+    createEmailHref
 } from './linkUtils';
 
 /*
@@ -23,7 +23,7 @@ const newLineRegex = new RegExp(newLineRegexString, 'gi');
 function getTextPart(text) {
     return {
         isText: true,
-        value: text,
+        value: text
     };
 }
 
@@ -32,7 +32,7 @@ function getUrlPart(url, index) {
         isLink: true,
         value: url,
         href: createHttpHref(url),
-        key: `${url}-${index}`,
+        key: `${url}-${index}`
     };
 }
 
@@ -41,14 +41,14 @@ function getEmailPart(email, index) {
         isLink: true,
         value: email,
         href: createEmailHref(email),
-        key: `${email}-${index}`,
+        key: `${email}-${index}`
     };
 }
 
 function getNewlinePart(index) {
     return {
         isNewline: true,
-        key: index,
+        key: index
     };
 }
 

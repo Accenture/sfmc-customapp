@@ -1,4 +1,5 @@
 const logger = require('../utils/logger');
+const path = require('path');
 const axios = require('axios').default;
 const xml2js = require('xml2js');
 const builder = new xml2js.Builder({
@@ -188,9 +189,9 @@ exports.getRedirectURL = (req, appname) => {
 
     /*needed for testing */
     if (process.env.NODE_ENV !== 'production') {
-        req.session.auth.redirect_uri = `https://${req.hostname}:${process.env.CLIENT_PORT}/api/sfmc/auth/response`;
+        req.session.auth.redirect_uri = `https://${req.hostname}:${process.env.PORT}/sfmc/auth/response`;
     } else {
-        req.session.auth.redirect_uri = `https://${req.hostname}/api/sfmc/auth/response`;
+        req.session.auth.redirect_uri = `https://${req.hostname}/sfmc/auth/response`;
     }
     const params = qs.stringify({
         response_type: 'code',
@@ -232,8 +233,9 @@ exports.flattenResults = (Results) => {
         return flattenedObj;
     });
 };
-
-const privateAuthCheck = async (req, res, next, appname) => {
+exports.checkAuth = async (req, res, next, appname) => {
+    // remove first or last slash from appname
+    appname = appname.replace(/^\/+/, '').replace(/\/$/, '');
     try {
         if (
             req.session &&
@@ -242,26 +244,38 @@ const privateAuthCheck = async (req, res, next, appname) => {
         ) {
             const expireTime = new Date(req.session.auth.expiryDateTime);
             const currentTime = new Date();
-            logger.info('Auth Check', expireTime, currentTime);
-            if (expireTime > currentTime) {
-                logger.info('Auth still valid');
-                next();
-            } else {
-                logger.info('Auth Refreshing token');
+            logger.info(
+                'Auth Check: ' +
+                    Math.round((expireTime - currentTime) / (1000 * 60)) +
+                    ' Minutes'
+            );
+            if (!(expireTime > currentTime)) {
                 await this.refreshToken(req.session.auth);
                 logger.info('Auth Refreshed');
-                next();
             }
         } else if (req.session.auth && req.session.auth.refresh_token) {
             await this.refreshToken(req.session.auth);
-            next();
         } else if (appname) {
             res.redirect(301, this.getRedirectURL(req, appname));
         } else {
             res.status(401).send({ message: 'Log into SFMC' });
         }
+        //only allow format of /appmainname/appsubname or /appmainname
+        if (/^\/\w+(\/\w+)?$/.test(req.originalUrl)) {
+            //since request can continue now serve the html page correctly
+            res.sendFile(
+                path.join(__dirname, '../../../dist', req.originalUrl + '.html')
+            );
+        } else {
+            res.status(403).send({ message: 'requested URL is not supported', details: req.originalUrl });
+        }
     } catch (ex) {
-        logger.info('checkAuth Failed', ex.response.data);
+        if (ex.response && ex.response.data) {
+            logger.info('checkAuth Failed', ex.response.data);
+        } else {
+            logger.info('checkAuth Failed', ex);
+        }
+
         res.status(500).send({
             message: ex.message,
             details: ex.response.data
@@ -269,12 +283,6 @@ const privateAuthCheck = async (req, res, next, appname) => {
     }
 };
 
-exports.middlewareCheck = async (req, res, next) => {
-    privateAuthCheck(req, res, next, null);
-};
-exports.checkAuth = async (req, res, next, appname) => {
-    privateAuthCheck(req, res, next, appname);
-};
 exports.authenicate = async (req, res) => {
     if (
         req.query &&
@@ -291,11 +299,18 @@ exports.authenicate = async (req, res) => {
     } else {
         try {
             await this.getToken(req);
+
             const app = Buffer.from(req.query.state, 'base64')
                 .toString('utf8')
                 .split('&')[1];
-            logger.info(`REDIRECT: /${app}`);
-            res.redirect(`https://${req.hostname}/${app}`);
+            const hostname =
+                process.env.NODE_ENV === 'development'
+                    ? `127.0.0.1:${process.env.PORT}`
+                    : req.hostname;
+
+            const redirURL = `https://${hostname}/${app}`;
+            logger.info(`REDIRECT: ${redirURL}`);
+            res.redirect(redirURL);
         } catch (ex) {
             logger.error('ERROR', ex);
             res.status(500).send({

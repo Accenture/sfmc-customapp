@@ -1,5 +1,6 @@
 import { LightningElement, track, api } from 'lwc';
 import { classSet } from 'lightning/utils';
+import { getCookieByName } from 'common/utils';
 export default class App extends LightningElement {
     @api handleclick;
     @track status = {};
@@ -8,6 +9,7 @@ export default class App extends LightningElement {
     @track newDataExtension = {};
     @track isPanelClosed = false;
     @track selectedDataExtensionName = '';
+    @track isLoading = false;
 
     //data table
     defaultSortDirection = 'asc';
@@ -56,10 +58,10 @@ export default class App extends LightningElement {
                 bubbles: true,
                 composed: true
             });
-            this.status.loading = true;
+            this.isLoading = true;
             //get fields
             const resDE = await fetch(
-                `/api/dataTools/getDataExtension/${value.key}/fields`
+                `/dataTools/getDataExtension/${value.key}/fields`
             );
             if (resDE.status === 200) {
                 // raw fields
@@ -82,12 +84,12 @@ export default class App extends LightningElement {
                         detail: {
                             type: 'error',
                             message: 'Authentication error',
-                            link: '/api/sfmc/auth/login/dataTools'
+                            link: '/dataTools/login'
                         }
                     })
                 );
             }
-            this.status.loading = false;
+            this.isLoading = false;
         }
         this.privateDataExtension = value;
     }
@@ -135,11 +137,12 @@ export default class App extends LightningElement {
     }
     async handleLoad(e) {
         console.log('handleoad', e);
-        this.status.loading = true;
-        const resData = await fetch('/api/dataTools/getDataExtensionData', {
+        this.isLoading = true;
+        const resData = await fetch('/dataTools/getDataExtensionData', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'xsrf-token': getCookieByName.call(this, 'XSRF-TOKEN')
             },
             body: JSON.stringify({
                 key: this.privateDataExtension.key,
@@ -173,7 +176,7 @@ export default class App extends LightningElement {
                 })
             );
         }
-        this.status.loading = false;
+        this.isLoading = false;
     }
 
     // Used to sort the 'Age' column
