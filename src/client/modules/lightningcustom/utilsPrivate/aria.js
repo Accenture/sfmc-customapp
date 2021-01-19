@@ -3,7 +3,7 @@
  *   because `aria-${_.kebabCase('describedBy')}` => 'aria-described-by' (NOT aria property)
  * - correct aria property: 'aria-describedby'
  *  https://www.w3.org/TR/wai-aria/
-*/
+ */
 const ARIA_PROP_LIST = [
     'activeDescendant',
     'atomic',
@@ -53,7 +53,7 @@ const ARIA_PROP_LIST = [
     'valueMax',
     'valueMin',
     'valueNow',
-    'valueText',
+    'valueText'
 ];
 
 /**
@@ -69,7 +69,7 @@ const getAriaLookup = (list, type = 'default') => {
     }
     const lookupObj = {};
     if (type === 'default') {
-        list.forEach(name => {
+        list.forEach((name) => {
             const nameUpperCase = name.toUpperCase();
             if (!lookupObj[nameUpperCase]) {
                 lookupObj[nameUpperCase] = `aria-${name.toLowerCase()}`;
@@ -77,7 +77,7 @@ const getAriaLookup = (list, type = 'default') => {
         });
         return lookupObj;
     }
-    list.forEach(name => {
+    list.forEach((name) => {
         const ariaPropertyLowerCase = `aria-${name.toLowerCase()}`;
         const ariaPropertyCamelCase = `aria${name
             .charAt(0)

@@ -8,6 +8,7 @@ const profiler = require('./profiler.js');
 const router = express.Router();
 
 //all POST routes here are csrf protected
+
 const csurf = require('csurf')();
 router.use(csurf);
 

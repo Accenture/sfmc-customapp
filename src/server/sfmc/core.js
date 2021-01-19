@@ -1,4 +1,5 @@
 const logger = require('../utils/logger');
+const path = require('path');
 const axios = require('axios').default;
 const xml2js = require('xml2js');
 const builder = new xml2js.Builder({
@@ -176,6 +177,7 @@ exports.getContext = async (auth) => {
     return res.data;
 };
 exports.getRedirectURL = (req, appname) => {
+    console.log('GET REDIRECT URL FOR APP ', appname);
     //initialize auth if not done
     if (!req.session.auth) {
         req.session.auth = {
@@ -233,7 +235,8 @@ exports.flattenResults = (Results) => {
     });
 };
 exports.checkAuth = async (req, res, next, appname) => {
-    console.log('current request url', req.originalUrl);
+    // remove first or last slash from appname
+    appname = appname.replace(/^\/+/, '').replace(/\/$/, '');
     try {
         if (
             req.session &&
@@ -252,17 +255,24 @@ exports.checkAuth = async (req, res, next, appname) => {
                 logger.info('Auth Refreshed');
             }
             console.log('next');
-            return next();
         } else if (req.session.auth && req.session.auth.refresh_token) {
             await this.refreshToken(req.session.auth);
-            return next();
         } else if (appname) {
             console.log('checkAuth redirect');
             res.redirect(301, this.getRedirectURL(req, appname));
         } else {
             res.status(401).send({ message: 'Log into SFMC' });
         }
+        //since request can continue now serve the html page correctly
+        const page = path.join(
+            __dirname,
+            '../../../dist',
+            req.originalUrl + '.html'
+        );
+        console.log('sending file with added html', page, __dirname);
+        res.sendFile(page);
     } catch (ex) {
+        console.log(ex);
         logger.info('checkAuth Failed', ex.response.data);
         res.status(500).send({
             message: ex.message,
@@ -291,10 +301,18 @@ exports.authenicate = async (req, res) => {
             const app = Buffer.from(req.query.state, 'base64')
                 .toString('utf8')
                 .split('&')[1];
-            const hostname = process.env.HOST
-                ? `${process.env.HOST}:${process.env.PORT}`
-                : req.hostname;
+            const hostname =
+                process.env.NODE_ENV === 'development'
+                    ? `127.0.0.1:${process.env.PORT}`
+                    : req.hostname;
+
             const redirURL = `https://${hostname}/${app}`;
+            console.log(
+                hostname,
+                app,
+                redirURL,
+                Buffer.from(req.query.state, 'base64').toString('utf8')
+            );
             logger.info(`REDIRECT: ${redirURL}`);
 
             res.redirect(redirURL);

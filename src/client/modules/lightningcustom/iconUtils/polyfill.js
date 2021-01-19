@@ -17,7 +17,7 @@ import fetchSvg from './fetchSvg';
 import supportsSvg from './supportsSvg';
 
 const svgTagName = /svg/i;
-const isSvgElement = el => el && svgTagName.test(el.nodeName);
+const isSvgElement = (el) => el && svgTagName.test(el.nodeName);
 
 const requestCache = {};
 const symbolEls = {};
@@ -38,7 +38,7 @@ export function polyfill(el) {
             document.body.insertBefore(spritesEl, document.body.childNodes[0]);
         }
 
-        Array.from(el.getElementsByTagName('use')).forEach(use => {
+        Array.from(el.getElementsByTagName('use')).forEach((use) => {
             // We access the href differently in raptor and in aura, probably
             // due to difference in the way the svg is constructed.
             const src =
@@ -66,7 +66,7 @@ export function polyfill(el) {
                         requestCache[url] = fetchSvg(url);
                     }
 
-                    requestCache[url].then(svgContent => {
+                    requestCache[url].then((svgContent) => {
                         // create a document fragment from the svgContent returned (is parsed by HTML parser)
                         if (!svgFragments[url]) {
                             const svgFragment = document

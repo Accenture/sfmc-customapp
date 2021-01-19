@@ -15,7 +15,7 @@
         "express-rate-limit": "^5.2.3",
         "express-session": "^1.17.1",
         "google-libphonenumber": "^3.2.15",
-        "helmet": "^4.3.1",
+        "helmet": "^4.4.1",
         "ioredis": "^4.19.4",
         "jsforce": "^1.10.1",
         "jsonwebtoken": "^8.5.1",
@@ -26,21 +26,21 @@
         "xml2js": "^0.4.23"
     },
     "devDependencies": {
-        "@lwc/synthetic-shadow": "^1.9.7",
-        "@salesforce-ux/design-system": "^2.13.7",
+        "@lwc/synthetic-shadow": "^1.10.0",
+        "@salesforce-ux/design-system": "^2.14.1",
         "clean-webpack-plugin": "^3.0.0",
         "copy-webpack-plugin": "^7.0.0",
         "dotenv": "^8.2.0",
-        "eslint": "^7.17.0",
+        "eslint": "^7.18.0",
         "html-webpack-plugin": "^5.0.0-beta.1",
         "lightning-base-components": "^1.11.1-alpha",
-        "lwc-services": "^2.3.0",
-        "lwc-webpack-plugin": "^1.1.2",
+        "lwc-services": "^2.3.2",
+        "lwc-webpack-plugin": "^1.2.1",
         "npm-run-all": "^4.1.5",
         "postmonger": "0.0.16",
         "prettier": "^2.2.1",
-        "webpack": "5.11.1",
-        "webpack-cli": "^4.3.1"
+        "webpack": "5.16.0",
+        "webpack-cli": "^4.4.0"
     },
     "engines": {
         "node": "14.15.0",
@@ -72,6 +72,7 @@
         "watch": "run-p watch:client watch:server",
         "watch:client": "webpack --watch --config webpack.config.js --progress",
         "watch:server": "nodemon",
-        "start": "node src/server/api.js"
+        "start": "node src/server/api.js",
+        "prettier": "prettier --write \"**/*.js\""
     }
 }

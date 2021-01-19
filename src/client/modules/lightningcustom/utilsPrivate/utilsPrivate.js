@@ -10,13 +10,13 @@ export {
     normalizeBoolean,
     normalizeString,
     normalizeArray,
-    normalizeAriaAttribute,
+    normalizeAriaAttribute
 } from './normalize';
 export {
     keyCodes,
     runActionOnBufferedTypedCharacters,
     normalizeKeyValue,
-    isShiftMetaOrControlKey,
+    isShiftMetaOrControlKey
 } from './keyboard';
 export { raf } from './scroll';
 export { isChrome, isIE11, isSafari } from './browser';
@@ -25,7 +25,7 @@ export { observePosition } from './observers';
 export { hasOnlyAllowedVideoIframes } from './videoUtils';
 export {
     parseToFormattedLinkifiedParts,
-    parseToFormattedParts,
+    parseToFormattedParts
 } from './linkify';
 import { smartSetAttribute } from './smartSetAttribute';
 
@@ -39,7 +39,7 @@ export function synchronizeAttrs(element, values) {
         return;
     }
     const attributes = Object.keys(values);
-    attributes.forEach(attribute => {
+    attributes.forEach((attribute) => {
         smartSetAttribute(element, attribute, values[attribute]);
     });
 }
@@ -127,14 +127,14 @@ export function getZIndexBaseline() {
 }
 
 export function timeout(interval) {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         setTimeout(resolve, interval);
     });
 }
 
 export function animationFrame() {
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
         // eslint-disable-next-line @lwc/lwc/no-async-operation
         window.requestAnimationFrame(resolve);
     });
@@ -158,7 +158,7 @@ export function decorateInputForDragon(element) {
         },
         get: valuePropertyDescriptor.get,
         enumerable: true,
-        configurable: true,
+        configurable: true
     });
 }
 

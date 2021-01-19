@@ -32,7 +32,7 @@ const config = {
         }),
         new HtmlWebpackPlugin({
             template: 'src/client/index.html',
-            filename: './dataTools/index.html',
+            filename: './dataTools.html',
             title: 'Data Tools',
             chunks: ['dataTools']
         }),

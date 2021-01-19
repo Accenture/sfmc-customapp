@@ -126,14 +126,14 @@ if (process.env.NODE_ENV !== 'production') {
         )
         .listen(process.env.PORT, () => {
             logger.info(
-                `✅  Test Server started: https://${process.env.HOST}:${process.env.PORT}/`
+                `✅  Test Server started: https://127.0.0.1:${process.env.PORT}/`
             );
         });
 } else {
     //production build
     app.listen(process.env.PORT, () =>
         logger.info(
-            `✅  Production Server started: http://${process.env.HOST}:${process.env.PORT}/`
+            `✅  Production Server started: http(s)://${process.env.HEROKU_APP_NAME}.herokuapp.com:${process.env.PORT}/`
         )
     );
 }

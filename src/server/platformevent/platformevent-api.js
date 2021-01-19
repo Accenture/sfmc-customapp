@@ -6,6 +6,7 @@ const csurf = require('csurf')();
 const { checkAuth, getRedirectURL } = require('../sfmc/core.js');
 const { decode } = require('../utils/jwt');
 
+//default entry path with auth validation
 router.get(['/activity', '/app'], csurf, (req, res, next) => {
     res.cookie('XSRF-TOKEN', req.csrfToken(), {
         sameSite: 'none',
@@ -13,6 +14,8 @@ router.get(['/activity', '/app'], csurf, (req, res, next) => {
     });
     checkAuth(req, res, next, req.originalUrl.substring(1));
 });
+
+// path in case we want to force a refresh of token
 router.get(['/activity/login', '/app/login'], csurf, (req, res) => {
     res.redirect(
         301,
@@ -154,9 +157,10 @@ router.post('/sfdccredentials', csurf, async (req, res) => {
             mid: req.session.context.organization.member_id,
             cred: req.body
         };
-        const hostname = process.env.HOST
-            ? `${process.env.HOST}:${process.env.PORT}`
-            : req.hostname;
+        const hostname =
+            process.env.NODE_ENV === 'development'
+                ? `127.0.0.1:${process.env.PORT}`
+                : req.hostname;
         res.json({
             redirect: sfdc.loginurl(
                 req.body,

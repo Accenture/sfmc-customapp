@@ -31,6 +31,14 @@ Example custom applications for SFMC
 
 Custom development in Marketing Cloud falls largely into two catories, on-platform (eg. SSJS, Cloud Pages) and off-platform (Custom Applications & Activities). Off-platform integrations are added via `Setup => Installed Packages`
 
+### Local execution
+
+1. Install Openssl if required (https://slproweb.com/products/Win32OpenSSL.html)
+2. Generate self-signed Certificates using ```npm run build:cert```
+3. Copy example.env and change to .env
+4. Update values (many of these come from below so don't worry if you dont have them all yet)
+
+
 ### Custom Activities
 
 Custom Activities allow native-like integration into Journey Builder by leveraging an external service such as Heroku to manage the UI and the integration with Journey Builder.
