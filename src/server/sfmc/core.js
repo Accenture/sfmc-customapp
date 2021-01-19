@@ -253,29 +253,29 @@ exports.checkAuth = async (req, res, next, appname) => {
                 await this.refreshToken(req.session.auth);
                 logger.info('Auth Refreshed');
             }
-            
         } else if (req.session.auth && req.session.auth.refresh_token) {
             await this.refreshToken(req.session.auth);
         } else if (appname) {
-            
             res.redirect(301, this.getRedirectURL(req, appname));
         } else {
             res.status(401).send({ message: 'Log into SFMC' });
         }
-        //since request can continue now serve the html page correctly
-        const page = path.join(
-            __dirname,
-            '../../../dist',
-            req.originalUrl + '.html'
-        );
-        res.sendFile(page);
+        //only allow format of /appmainname/appsubname or /appmainname
+        if (/^\/\w+(\/\w+)?$/.test(req.originalUrl)) {
+            //since request can continue now serve the html page correctly
+            res.sendFile(
+                path.join(__dirname, '../../../dist', req.originalUrl + '.html')
+            );
+        } else {
+            res.status(403).send({ message: 'requested URL is not supported', details: req.originalUrl });
+        }
     } catch (ex) {
-        if(ex.response && ex.response.data){
+        if (ex.response && ex.response.data) {
             logger.info('checkAuth Failed', ex.response.data);
-        } else{
+        } else {
             logger.info('checkAuth Failed', ex);
         }
-        
+
         res.status(500).send({
             message: ex.message,
             details: ex.response.data
