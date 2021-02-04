@@ -9,7 +9,8 @@ const config = {
         fallback: './src/client/index.js',
         dataTools: './src/client/dataTools.js',
         platformeventapp: './src/client/platformeventapp.js',
-        platformeventactivity: './src/client/platformeventactivity.js'
+        platformeventactivity: './src/client/platformeventactivity.js',
+        webhooksactivity: './src/client/webhooks.js'
     },
     mode: 'production',
     output: {
@@ -48,6 +49,12 @@ const config = {
             filename: './platformevent/activity.html',
             title: 'Platform Event Activity',
             chunks: ['platformeventactivity']
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/client/index.html',
+            filename: './webhooks/activity.html',
+            title: 'Webhooks Activity',
+            chunks: ['webhooksactivity']
         }),
         new CopyPlugin({
             patterns: [

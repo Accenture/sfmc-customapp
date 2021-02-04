@@ -73,6 +73,7 @@
         "watch:client": "webpack --watch --config webpack.config.js --progress",
         "watch:server": "nodemon",
         "start": "node src/server/api.js",
-        "prettier": "prettier --write \"**/*.js\""
+        "prettier": "prettier --write \"**/*.js\"",
+        "redis": "docker run --name redis -p 6379:6379 redis"
     }
 }

@@ -90,6 +90,7 @@ app.use('/sfmc', require('./sfmc/sfmc-api.js'));
 //put your custom endpoints here
 app.use('/dataTools', require('./dataTools/dataTools-api.js'));
 app.use('/platformevent', require('./platformevent/platformevent-api.js'));
+// app.use('/webhooks', require('./webhooks/webhooks-api.js'));
 app.use(express.static(DIST_DIR));
 
 if (process.env.NODE_ENV !== 'production') {
