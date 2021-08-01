@@ -1,0 +1,84 @@
+<template>
+    <common-alert alert-payload={alert}></common-alert>
+
+    <common-activity
+        title="Create Platform Event"
+        icon="standard:data_integration_hub"
+        events={events}
+        context="activity"
+        oncontext={getContext}
+        can-next="true"
+        next-value="Done"
+        prev-value="Cancel"
+    >
+        <template if:true={isLoading}>
+            <lightning-spinner
+                style="position: static"
+                alternative-text="Loading"
+                size="large"
+            ></lightning-spinner>
+        </template>
+        <div if:true={platformevents} class="slds-var-p-around_x-small">
+            <lightning-layout
+                class="slds-box slds-box_x-small"
+                style="margin-bottom: 10px"
+            >
+                <lightning-layout-item>
+                    <lightning-combobox
+                        name="progress"
+                        label="Select Platform Event"
+                        value={platformevent}
+                        placeholder="Select Progress"
+                        options={platformEventList}
+                        onchange={handleEventChange}
+                    ></lightning-combobox> </lightning-layout-item
+            ></lightning-layout>
+
+            <lightning-layout
+                class="slds-box slds-box_x-small"
+                if:true={platformevent}
+            >
+                <lightning-layout-item size="6">
+                    <template for:each={fields} for:item="field">
+                        <lightning-layout key={field.name} vertical-align="end">
+                            <lightning-layout-item>
+                                <lightning-button-icon
+                                    icon-name="utility:edit"
+                                    name={field.name}
+                                    value={field.name}
+                                    alternative-text="Add Personalization"
+                                    title="Add Personalization"
+                                    onclick={toggleEdit}
+                                ></lightning-button-icon
+                            ></lightning-layout-item>
+                            <lightning-layout-item
+                                flexibility="grow"
+                                padding="horizontal-small"
+                            >
+                                <lightning-input
+                                    name={field.name}
+                                    label={field.label}
+                                    value={field.value}
+                                    onchange={onFieldChange}
+                                    disabled={field.disabled}
+                                >
+                                </lightning-input>
+                            </lightning-layout-item>
+                        </lightning-layout>
+                    </template>
+                </lightning-layout-item>
+                <template if:true={selectedField}>
+                    <lightning-layout-item padding="around-small" size="6">
+                        <div>Personalization</div>
+                        <common-schemapicker
+                            contactmodel={config.contactsSchema}
+                            journeymodel={config.dataSources}
+                            onselectitem={appendValue}
+                        >
+                        </common-schemapicker
+                    ></lightning-layout-item>
+                </template>
+            </lightning-layout>
+        </div>
+    </common-activity>
+</template>

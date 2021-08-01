@@ -123,4 +123,10 @@ async function saveCredentials(mid, conf) {
     logger.info('Credentials Set', setCred);
 }
 
+exports.getNotificationTypes = async (mid) => {
+    return connectionArray[mid].tooling.query(
+        'Select Id,CustomNotifTypeName from CustomNotificationType'
+    );
+};
+
 init();

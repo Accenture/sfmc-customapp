@@ -49,6 +49,12 @@ const config = {
             title: 'Platform Event Activity',
             chunks: ['platformeventactivity']
         }),
+        new HtmlWebpackPlugin({
+            template: 'src/client/index.html',
+            filename: './salesforcenotification/activity.html',
+            title: 'Salesforce Notification Activity',
+            chunks: ['salesforcenotification']
+        }),
         new CopyPlugin({
             patterns: [
                 {
@@ -64,11 +70,6 @@ const config = {
                     from:
                         'node_modules/@salesforce-ux/design-system/assets/icons',
                     to: 'assets/icons'
-                },
-                {
-                    from:
-                        'node_modules/@salesforce-ux/design-system/assets/fonts',
-                    to: 'assets/fonts'
                 },
                 {
                     from:
