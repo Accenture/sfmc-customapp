@@ -17,17 +17,18 @@
             <lightning-layout class="slds-box slds-box_x-small" if:true={notifConfig.type.value}>
 
                 <lightning-layout-item size="6">
-                    <!-- Target -->
+
+                    <!-- Recipient -->
                     <lightning-layout vertical-align="end">
                         <lightning-layout-item>
                             <lightning-button-icon icon-name="utility:edit" name="recipient"
-                                value={notifConfig.recipient.value} alternative-text="Add Dynamic Value"
-                                title="Add Dynamic Value" onclick={toggleEdit}>
+                                value={notifConfig.recipient.value} alternative-text="Recipient" title="Recipient"
+                                onclick={toggleEdit}>
                             </lightning-button-icon>
                         </lightning-layout-item>
                         <lightning-layout-item flexibility="grow" padding="horizontal-small">
-                            <lightning-input name="recipient" label="Target" value={notifConfig.recipient.value}
-                                onchange={onTargetChange} disabled={notifConfig.recipient.disabled}>
+                            <lightning-input name="recipient" label="Recipient" value={notifConfig.recipient.value}
+                                onchange={onRecipientChange} disabled={notifConfig.recipient.disabled}>
                             </lightning-input>
                         </lightning-layout-item>
                     </lightning-layout>
@@ -46,6 +47,20 @@
                                 onchange={onContentChange} disabled={notifConfig.content.disabled}>
 
                             </lightning-textarea>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <!-- Recipient -->
+                    <lightning-layout vertical-align="end">
+                        <lightning-layout-item>
+                            <lightning-button-icon icon-name="utility:edit" name="target"
+                                value={notifConfig.target.value} alternative-text="Target Record" title="Target Record"
+                                onclick={toggleEdit}>
+                            </lightning-button-icon>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="grow" padding="horizontal-small">
+                            <lightning-input name="target" label="Target" value={notifConfig.target.value}
+                                onchange={onTargetChange} disabled={notifConfig.target.disabled}>
+                            </lightning-input>
                         </lightning-layout-item>
                     </lightning-layout>
                 </lightning-layout-item>

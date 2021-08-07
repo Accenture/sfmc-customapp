@@ -129,13 +129,20 @@ exports.getNotificationTypes = async (mid) => {
     );
 };
 
-exports.publishNotification = async (typeId, content, recipientId, mid) => {
+exports.publishNotification = async (
+    typeId,
+    content,
+    recipientId,
+    targetId,
+    mid
+) => {
     const payload = [
         {
             customNotifTypeId: typeId,
             recipientIds: [recipientId],
             title: 'Marketing Cloud Notification',
-            body: content
+            body: content,
+            targetId: targetId
         }
     ];
     console.log(payload);

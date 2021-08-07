@@ -113,7 +113,8 @@ router.post('/execute', decode, (req, res) => {
         req.body.inArguments[0].type,
         req.body.inArguments[1].content,
         req.body.inArguments[2].recipient,
-        req.body.inArguments[3].mid
+        req.body.inArguments[3].target,
+        req.body.inArguments[4].mid
     );
 
     res.json({ status: 'ok' });
