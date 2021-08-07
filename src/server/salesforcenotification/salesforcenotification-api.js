@@ -110,9 +110,10 @@ router.get('/config.json', (req, res) => {
 router.post('/execute', decode, (req, res) => {
     logger.info('execute request:', req.body);
     sfdc.publishEvent(
-        req.body.inArguments[0].event,
-        req.body.inArguments[1].fields,
-        req.body.inArguments[2].mid
+        req.body.inArguments[0].type,
+        req.body.inArguments[1].content,
+        req.body.inArguments[2].recipient,
+        req.body.inArguments[3].mid
     );
 
     res.json({ status: 'ok' });

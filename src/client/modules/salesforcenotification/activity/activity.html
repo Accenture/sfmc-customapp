@@ -20,14 +20,14 @@
                     <!-- Target -->
                     <lightning-layout vertical-align="end">
                         <lightning-layout-item>
-                            <lightning-button-icon icon-name="utility:edit" name="target"
-                                value={notifConfig.target.value} alternative-text="Add Dynamic Value"
+                            <lightning-button-icon icon-name="utility:edit" name="recipient"
+                                value={notifConfig.recipient.value} alternative-text="Add Dynamic Value"
                                 title="Add Dynamic Value" onclick={toggleEdit}>
                             </lightning-button-icon>
                         </lightning-layout-item>
                         <lightning-layout-item flexibility="grow" padding="horizontal-small">
-                            <lightning-input name="target" label="Target" value={notifConfig.target.value}
-                                onchange={onTargetChange} disabled={notifConfig.target.disabled}>
+                            <lightning-input name="recipient" label="Target" value={notifConfig.recipient.value}
+                                onchange={onTargetChange} disabled={notifConfig.recipient.disabled}>
                             </lightning-input>
                         </lightning-layout-item>
                     </lightning-layout>

@@ -12,7 +12,7 @@ export default class Activity extends LightningElement {
             value: null,
             label: null
         },
-        target: {
+        recipient: {
             value: '',
             disabled: true
         },
@@ -38,7 +38,7 @@ export default class Activity extends LightningElement {
     }
 
     onTargetChange(e) {
-        this.notifConfig.target.value = e.detail.value;
+        this.notifConfig.recipient.value = e.detail.value;
     }
     onContentChange(e) {
         this.notifConfig.content.value = e.detail.value;
@@ -55,7 +55,8 @@ export default class Activity extends LightningElement {
             this.selectedField === e.target.name ? null : e.target.name;
 
         this.notifConfig.content.disabled = this.selectedField !== 'content';
-        this.notifConfig.target.disabled = this.selectedField !== 'target';
+        this.notifConfig.recipient.disabled =
+            this.selectedField !== 'recipient';
         console.log(JSON.parse(JSON.stringify(this.notifConfig)));
     }
 
@@ -138,8 +139,8 @@ export default class Activity extends LightningElement {
                 this.config.payload.arguments.execute.inArguments[0].type;
             this.notifConfig.content =
                 this.config.payload.arguments.execute.inArguments[1].content;
-            this.notifConfig.target =
-                this.config.payload.arguments.execute.inArguments[2].target;
+            this.notifConfig.recipient =
+                this.config.payload.arguments.execute.inArguments[2].recipient;
         }
         this.isLoading = false;
     }
@@ -151,7 +152,7 @@ export default class Activity extends LightningElement {
         newPayload.arguments.execute.inArguments = [
             { type: this.notifConfig.type },
             { content: this.notifConfig.content },
-            { target: this.notifConfig.target },
+            { recipient: this.notifConfig.recipient },
             { mid: this.sessionContext.organization.member_id }
         ];
 
@@ -161,7 +162,7 @@ export default class Activity extends LightningElement {
         newPayload.metaData.isConfigured =
             this.notifConfig.type &&
             this.notifConfig.content &&
-            this.notifConfig.target;
+            this.notifConfig.recipient;
         this.activity.update(newPayload);
     }
 }
