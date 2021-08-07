@@ -109,7 +109,7 @@ router.get('/config.json', (req, res) => {
 
 router.post('/execute', decode, (req, res) => {
     logger.info('execute request:', req.body);
-    sfdc.publishEvent(
+    sfdc.publishNotification(
         req.body.inArguments[0].type,
         req.body.inArguments[1].content,
         req.body.inArguments[2].recipient,
