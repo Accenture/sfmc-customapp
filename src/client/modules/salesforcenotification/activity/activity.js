@@ -5,7 +5,6 @@ import { showToastEvent } from 'common/toast';
 export default class Activity extends LightningElement {
     @track status = {};
     @track isLoading = false;
-    @track alert = {};
 
     @track notifConfig = {
         type: {
@@ -150,9 +149,9 @@ export default class Activity extends LightningElement {
 
         const newPayload = JSON.parse(JSON.stringify(this.config.payload));
         newPayload.arguments.execute.inArguments = [
-            { type: this.notifConfig.type },
-            { content: this.notifConfig.content },
-            { recipient: this.notifConfig.recipient },
+            { type: this.notifConfig.type.value },
+            { content: this.notifConfig.content.value },
+            { recipient: this.notifConfig.recipient.value },
             { mid: this.sessionContext.organization.member_id }
         ];
 
@@ -160,9 +159,9 @@ export default class Activity extends LightningElement {
         newPayload.configurationArguments.params =
             newPayload.arguments.execute.inArguments;
         newPayload.metaData.isConfigured =
-            this.notifConfig.type &&
-            this.notifConfig.content &&
-            this.notifConfig.recipient;
+            this.notifConfig.type.value &&
+            this.notifConfig.content.value &&
+            this.notifConfig.recipient.value;
         this.activity.update(newPayload);
     }
 }
