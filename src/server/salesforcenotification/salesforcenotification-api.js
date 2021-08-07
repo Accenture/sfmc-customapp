@@ -28,7 +28,7 @@ router.get('/config.json', (req, res) => {
         workflowApiVersion: '1.1',
         metaData: {
             // the location of our icon file
-            icon: `https://${req.headers.host}/assets/salesforcenotificationicon.png`,
+            icon: `https://${req.headers.host}/assets/notification.png`,
             category: 'messaging',
             backgroundColor: '#032e61',
             expressionBuilderPrefix: 'sfnotif'

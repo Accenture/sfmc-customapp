@@ -1,82 +1,61 @@
 <template>
-    <common-alert alert-payload={alert}></common-alert>
-
-    <common-activity
-        title="Create Platform Event"
-        icon="standard:data_integration_hub"
-        events={events}
-        context="activity"
-        oncontext={getContext}
-        can-next="true"
-        next-value="Done"
-        prev-value="Cancel"
-    >
+    <common-toast id="toast"></common-toast>
+    <common-activity title="Salesforce Notification" icon="utility:notification" events={events} context="activity"
+        oncontext={getContext} can-next="true" next-value="Done" prev-value="Cancel" ontoast={handleToast}>
         <template if:true={isLoading}>
-            <lightning-spinner
-                style="position: static"
-                alternative-text="Loading"
-                size="large"
-            ></lightning-spinner>
+            <lightning-spinner style="position: static" alternative-text="Loading" size="large"></lightning-spinner>
         </template>
-        <div if:true={platformevents} class="slds-var-p-around_x-small">
-            <lightning-layout
-                class="slds-box slds-box_x-small"
-                style="margin-bottom: 10px"
-            >
+        <div if:true={notificationTypes} class="slds-var-p-around_x-small">
+            <lightning-layout class="slds-box slds-box_x-small" style="margin-bottom: 10px">
                 <lightning-layout-item>
-                    <lightning-combobox
-                        name="progress"
-                        label="Select Platform Event"
-                        value={platformevent}
-                        placeholder="Select Progress"
-                        options={platformEventList}
-                        onchange={handleEventChange}
-                    ></lightning-combobox> </lightning-layout-item
-            ></lightning-layout>
+                    <lightning-combobox name="notificationType" label="Select Notification Type"
+                        value={notifConfig.type.label} placeholder="Select Notification Type"
+                        options={notificationTypesList} onchange={handleTypeChange}>
+                    </lightning-combobox>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout class="slds-box slds-box_x-small" if:true={notifConfig.type.value}>
 
-            <lightning-layout
-                class="slds-box slds-box_x-small"
-                if:true={platformevent}
-            >
                 <lightning-layout-item size="6">
-                    <template for:each={fields} for:item="field">
-                        <lightning-layout key={field.name} vertical-align="end">
-                            <lightning-layout-item>
-                                <lightning-button-icon
-                                    icon-name="utility:edit"
-                                    name={field.name}
-                                    value={field.name}
-                                    alternative-text="Add Personalization"
-                                    title="Add Personalization"
-                                    onclick={toggleEdit}
-                                ></lightning-button-icon
-                            ></lightning-layout-item>
-                            <lightning-layout-item
-                                flexibility="grow"
-                                padding="horizontal-small"
-                            >
-                                <lightning-input
-                                    name={field.name}
-                                    label={field.label}
-                                    value={field.value}
-                                    onchange={onFieldChange}
-                                    disabled={field.disabled}
-                                >
-                                </lightning-input>
-                            </lightning-layout-item>
-                        </lightning-layout>
-                    </template>
+                    <!-- Target -->
+                    <lightning-layout vertical-align="end">
+                        <lightning-layout-item>
+                            <lightning-button-icon icon-name="utility:edit" name="target"
+                                value={notifConfig.target.value} alternative-text="Add Dynamic Value"
+                                title="Add Dynamic Value" onclick={toggleEdit}>
+                            </lightning-button-icon>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="grow" padding="horizontal-small">
+                            <lightning-input name="target" label="Target" value={notifConfig.target.value}
+                                onchange={onTargetChange} disabled={notifConfig.target.disabled}>
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+                    <!-- Content -->
+
+                    <lightning-layout vertical-align="end">
+                        <lightning-layout-item>
+                            <lightning-button-icon icon-name="utility:edit" name="content"
+                                value={notifConfig.content.value} alternative-text="Add Personalization"
+                                title="Add Personalization" onclick={toggleEdit}>
+                            </lightning-button-icon>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="grow" padding="horizontal-small">
+                            <lightning-textarea name="content" label="Message" value={notifConfig.content.value}
+                                onchange={onContentChange} disabled={notifConfig.content.disabled}>
+
+                            </lightning-textarea>
+                        </lightning-layout-item>
+                    </lightning-layout>
                 </lightning-layout-item>
                 <template if:true={selectedField}>
                     <lightning-layout-item padding="around-small" size="6">
                         <div>Personalization</div>
-                        <common-schemapicker
-                            contactmodel={config.contactsSchema}
-                            journeymodel={config.dataSources}
-                            onselectitem={appendValue}
-                        >
-                        </common-schemapicker
-                    ></lightning-layout-item>
+                        <common-schemapicker contactmodel={config.contactsSchema} journeymodel={config.dataSources}
+                            onselectitem={appendValue}>
+                        </common-schemapicker>
+                    </lightning-layout-item>
                 </template>
             </lightning-layout>
         </div>

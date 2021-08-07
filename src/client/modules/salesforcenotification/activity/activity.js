@@ -1,14 +1,28 @@
 import { LightningElement, api, track } from 'lwc';
 
-export default class PlatformEvent extends LightningElement {
+import { showToastEvent } from 'common/toast';
+
+export default class Activity extends LightningElement {
     @track status = {};
     @track isLoading = false;
     @track alert = {};
 
-    @api eventDefinition;
-    @track platformevents;
-    @track platformevent;
-    @track fields;
+    @track notifConfig = {
+        type: {
+            value: null,
+            label: null
+        },
+        target: {
+            value: '',
+            disabled: true
+        },
+        content: {
+            value: '',
+            disabled: true
+        }
+    };
+
+    @track notificationTypes;
     @track selectedField;
     events = ['tokens', 'dataSources', 'contactsSchema'];
     //to communicate with framework
@@ -17,83 +31,89 @@ export default class PlatformEvent extends LightningElement {
     async connectedCallback() {
         this.isLoading = true;
     }
-    get platformEventList() {
-        return this.platformevents.map((e) => {
-            return { label: e.label, value: e.name };
+    get notificationTypesList() {
+        return this.notificationTypes.map((e) => {
+            return { label: e.CustomNotifTypeName, value: e.Id };
         });
     }
 
-    onFieldChange(event) {
-        for (const field of this.fields) {
-            if (field.name === this.selectedField) {
-                field.value = event.detail.value;
-                break;
-            }
-        }
-        this.updateActivity();
+    onTargetChange(e) {
+        this.notifConfig.target.value = e.detail.value;
+    }
+    onContentChange(e) {
+        this.notifConfig.content.value = e.detail.value;
     }
 
-    handleEventChange(event) {
-        this.platformevent = event.detail.value;
-
-        this.fields =
-            this.platformevents.length > 0
-                ? this.platformevents
-                      .filter((obj) => obj.name === this.platformevent)[0]
-                      .fields.filter((field) => field.createable)
-                      .map((field) => {
-                          field.value = field.defaultValue || '';
-                          field.disabled = true;
-                          return field;
-                      })
-                : [];
-        console.log('setting fields', JSON.parse(JSON.stringify(this.fields)));
+    handleTypeChange(e) {
+        console.log(e);
+        this.notifConfig.type.value = e.detail.value;
         this.updateActivity();
     }
 
     toggleEdit(e) {
         this.selectedField =
             this.selectedField === e.target.name ? null : e.target.name;
-        this.fields.map((field) => {
-            field.disabled = field.name !== this.selectedField;
-            return field;
-        });
+
+        this.notifConfig.content.disabled = this.selectedField !== 'content';
+        this.notifConfig.target.disabled = this.selectedField !== 'target';
+        console.log(JSON.parse(JSON.stringify(this.notifConfig)));
     }
 
     appendValue(e) {
-        for (const field of this.fields) {
-            if (field.name === this.selectedField) {
-                field.value += e.detail.name;
-                break;
-            }
-        }
+        this.notifConfig[this.selectedField].value += e.detail.name;
         this.updateActivity();
     }
 
-    async getPlatformEvents() {
-        const res = await fetch('/platformevent/platformEvents');
+    async getNotificationTypes() {
+        const res = await fetch('/salesforcenotification/notificationTypes');
+        const payload = await res.json();
         if (res.status > 299) {
-            this.showAlert({
-                detail: {
-                    type: 'error',
-                    message: (await res.json()).message
-                }
-            });
-            this.isLoading = false;
-            return [];
+            showToastEvent(
+                this,
+                {
+                    title: 'Error',
+                    message: payload.message,
+                    variant: 'error'
+                },
+                3000
+            );
+        } else if (payload.records.length) {
+            showToastEvent(
+                this,
+                {
+                    title: 'Success',
+                    message: 'Got ' + payload.records.length + ' records',
+                    variant: 'success'
+                },
+                3000
+            );
+            return payload.records;
         }
-        return res.json();
+        showToastEvent(
+            this,
+            {
+                title: 'Error',
+                message: 'No records found',
+                variant: 'error'
+            },
+            3000
+        );
+        this.isLoading = false;
+        return [];
     }
 
     async getSessionContext() {
-        const res = await fetch('/platformevent/context');
+        const res = await fetch('/salesforcenotification/context');
         if (res.status > 299) {
-            this.showAlert({
-                detail: {
-                    type: 'error',
-                    message: (await res.json()).message
-                }
-            });
+            showToastEvent(
+                this,
+                {
+                    title: 'Error',
+                    message: (await res.json()).message,
+                    variant: 'error'
+                },
+                3000
+            );
             this.isLoading = false;
             return null;
         }
@@ -104,7 +124,7 @@ export default class PlatformEvent extends LightningElement {
         this.activity = this.template.querySelector('common-activity');
         this.config = e.detail;
         this.sessionContext = await this.getSessionContext();
-        this.platformevents = await this.getPlatformEvents();
+        this.notificationTypes = await this.getNotificationTypes();
         // add config from previously configured
         if (
             this.config.payload &&
@@ -112,25 +132,14 @@ export default class PlatformEvent extends LightningElement {
             this.config.payload.arguments.execute &&
             this.config.payload.arguments.execute.inArguments &&
             this.config.payload.arguments.execute.inArguments[0] &&
-            this.config.payload.arguments.execute.inArguments[0].event
+            this.config.payload.arguments.execute.inArguments.length >= 3
         ) {
-            this.platformevent = this.config.payload.arguments.execute.inArguments[0].event;
-            this.fields = this.platformevents
-                .filter((obj) => obj.name === this.platformevent)[0]
-                .fields.filter((field) => field.createable)
-                .map((field) => {
-                    if (
-                        this.config.payload.arguments.execute.inArguments[1]
-                            .fields[field.name] != null
-                    ) {
-                        field.value = this.config.payload.arguments.execute.inArguments[1].fields[
-                            field.name
-                        ];
-                    }
-                    field.value = field.value || '';
-                    field.disabled = true;
-                    return field;
-                });
+            this.notifConfig.type =
+                this.config.payload.arguments.execute.inArguments[0].type;
+            this.notifConfig.content =
+                this.config.payload.arguments.execute.inArguments[1].content;
+            this.notifConfig.target =
+                this.config.payload.arguments.execute.inArguments[2].target;
         }
         this.isLoading = false;
     }
@@ -139,32 +148,20 @@ export default class PlatformEvent extends LightningElement {
         //do all fields have a value.
 
         const newPayload = JSON.parse(JSON.stringify(this.config.payload));
-
-        const argfields = this.fields.reduce((obj, field) => {
-            obj[field.name] = field.value;
-            return obj;
-        }, {});
         newPayload.arguments.execute.inArguments = [
-            { event: this.platformevent },
-            { fields: argfields },
+            { type: this.notifConfig.type },
+            { content: this.notifConfig.content },
+            { target: this.notifConfig.target },
             { mid: this.sessionContext.organization.member_id }
         ];
 
         //testing this to see if it saves
-        newPayload.configurationArguments.params = argfields;
+        newPayload.configurationArguments.params =
+            newPayload.arguments.execute.inArguments;
         newPayload.metaData.isConfigured =
-            this.fields.filter((field) => !field.value).length === 0;
+            this.notifConfig.type &&
+            this.notifConfig.content &&
+            this.notifConfig.target;
         this.activity.update(newPayload);
-    }
-
-    showAlert(e) {
-        if (e.detail.type) {
-            this.alert = e.detail;
-        } else {
-            this.alert = {
-                type: 'error',
-                message: e.detail.message || JSON.stringify(e.detail.errors)
-            };
-        }
     }
 }
