@@ -4,6 +4,7 @@ const Redis = require('ioredis');
 
 const redis = new Redis(process.env.REDIS_URL, { keyPrefix: 'sfdc:' });
 const connectionArray = {};
+const SF_API_VERSION = '51.0';
 
 exports.getMetadata = async (mid) => {
     const res = await connectionArray[mid].describeGlobal();
@@ -42,14 +43,14 @@ const init = async () => {
 
 exports.loginurl = (cred, hostname, mid, state) => {
     connectionArray[mid] = new jsforce.Connection({
-        version: '50.0',
+        version: SF_API_VERSION,
         loginUrl: cred.sfdcurl,
         oauth2: {
             loginUrl: cred.sfdcurl,
             clientId: cred.sfdcclientid,
             clientSecret: cred.sfdcclientsecret,
             redirectUri:
-                `https://${hostname}/platformevent/oauth/response/` + mid
+                `https://${hostname}/salesforceconfig/oauth/response/` + mid
         }
     });
     return connectionArray[mid].oauth2.getAuthorizationUrl({
@@ -113,7 +114,7 @@ async function saveCredentials(mid, conf) {
     const setCred = await redis.set(
         mid,
         JSON.stringify({
-            version: '50.0',
+            version: SF_API_VERSION,
             oauth2: conf.oauth2,
             accessToken: conf.accessToken,
             refreshToken: conf.refreshToken,

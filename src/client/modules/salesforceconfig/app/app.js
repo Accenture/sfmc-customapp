@@ -20,7 +20,7 @@ export default class Config extends LightningElement {
     }
     async handleConnect() {
         this.isLoading = true;
-        const rawRes = await fetch('/platformevent/sfdccredentials', {
+        const rawRes = await fetch('/salesforceconfig/sfdccredentials', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ export default class Config extends LightningElement {
             const checkComplete = setInterval(() => {
                 if (
                     popup.location.href.includes(
-                        '/platformevent/oauth/response/'
+                        '/salesforceconfig/oauth/response/'
                     )
                 ) {
                     popup.close();
@@ -68,7 +68,7 @@ export default class Config extends LightningElement {
     }
     async connectedCallback() {
         this.isLoading = true;
-        const rawRes = await fetch('/platformevent/sfdcstatus');
+        const rawRes = await fetch('/salesforceconfig/sfdcstatus');
         const jsonRes = await rawRes.json();
         if (rawRes.status < 300) {
             if (jsonRes) {

@@ -8,7 +8,7 @@ const config = {
     entry: {
         fallback: './src/client/index.js',
         dataTools: './src/client/dataTools.js',
-        platformeventapp: './src/client/platformeventapp.js',
+        salesforceconfig: './src/client/salesforceconfig.js',
         platformeventactivity: './src/client/platformeventactivity.js',
         salesforcenotification: './src/client/salesforcenotification.js'
     },
@@ -40,9 +40,9 @@ const config = {
 
         new HtmlWebpackPlugin({
             template: 'src/client/index.html',
-            filename: './platformevent/app.html',
-            title: 'Platform Event Config',
-            chunks: ['platformeventapp']
+            filename: './salesforceconfig/app.html',
+            title: 'Salesforce Config',
+            chunks: ['salesforceconfig']
         }),
         new HtmlWebpackPlugin({
             template: 'src/client/index.html',

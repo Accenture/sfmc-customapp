@@ -11,6 +11,7 @@ const bodyParser = require('body-parser');
 const rateLimit = require('express-rate-limit');
 const RedisRateLimit = require('rate-limit-redis');
 const Redis = require('ioredis');
+
 const redisClient = new Redis(process.env.REDIS_URL);
 
 // static vars
@@ -89,6 +90,11 @@ app.use('/sfmc', require('./sfmc/sfmc-api.js'));
 
 //put your custom endpoints here
 app.use('/dataTools', require('./dataTools/dataTools-api.js'));
+// this is a common app for anything connecting to SF
+app.use(
+    '/salesforceconfig',
+    require('./salesforceconfig/salesforceconfig-api.js')
+);
 app.use('/platformevent', require('./platformevent/platformevent-api.js'));
 app.use(
     '/salesforcenotification',
