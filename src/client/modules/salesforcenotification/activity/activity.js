@@ -8,7 +8,7 @@ export default class Activity extends LightningElement {
 
     @track notifConfig = {
         type: {
-            value: null,
+            value: '',
             label: null
         },
         recipient: {
@@ -42,12 +42,15 @@ export default class Activity extends LightningElement {
 
     onTargetChange(e) {
         this.notifConfig.target.value = e.detail.value;
+        this.updateActivity();
     }
     onRecipientChange(e) {
         this.notifConfig.recipient.value = e.detail.value;
+        this.updateActivity();
     }
     onContentChange(e) {
         this.notifConfig.content.value = e.detail.value;
+        this.updateActivity();
     }
 
     handleTypeChange(e) {
@@ -139,17 +142,16 @@ export default class Activity extends LightningElement {
             this.config.payload.arguments &&
             this.config.payload.arguments.execute &&
             this.config.payload.arguments.execute.inArguments &&
-            this.config.payload.arguments.execute.inArguments[0] &&
-            this.config.payload.arguments.execute.inArguments.length >= 4
+            this.config.payload.arguments.execute.inArguments[0]
         ) {
-            this.notifConfig.type =
+            this.notifConfig.type.value =
                 this.config.payload.arguments.execute.inArguments[0].type;
-            this.notifConfig.content =
-                this.config.payload.arguments.execute.inArguments[1].content;
-            this.notifConfig.recipient =
-                this.config.payload.arguments.execute.inArguments[2].recipient;
-            this.notifConfig.target =
-                this.config.payload.arguments.execute.inArguments[3].target;
+            this.notifConfig.content.value =
+                this.config.payload.arguments.execute.inArguments[0].content;
+            this.notifConfig.recipient.value =
+                this.config.payload.arguments.execute.inArguments[0].recipient;
+            this.notifConfig.target.value =
+                this.config.payload.arguments.execute.inArguments[0].target;
         }
         this.isLoading = false;
     }
@@ -159,16 +161,18 @@ export default class Activity extends LightningElement {
 
         const newPayload = JSON.parse(JSON.stringify(this.config.payload));
         newPayload.arguments.execute.inArguments = [
-            { type: this.notifConfig.type.value },
-            { content: this.notifConfig.content.value },
-            { recipient: this.notifConfig.recipient.value },
-            { target: this.notifConfig.target.value },
-            { mid: this.sessionContext.organization.member_id }
+            {
+                type: this.notifConfig.type.value,
+                content: this.notifConfig.content.value,
+                recipient: this.notifConfig.recipient.value,
+                target: this.notifConfig.target.value,
+                mid: this.sessionContext.organization.member_id
+            }
         ];
 
         //testing this to see if it saves
         newPayload.configurationArguments.params =
-            newPayload.arguments.execute.inArguments;
+            newPayload.arguments.execute.inArguments[0];
         newPayload.metaData.isConfigured =
             this.notifConfig.type.value &&
             this.notifConfig.content.value &&

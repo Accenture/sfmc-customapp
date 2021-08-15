@@ -114,7 +114,8 @@ export default class PlatformEvent extends LightningElement {
             this.config.payload.arguments.execute.inArguments[0] &&
             this.config.payload.arguments.execute.inArguments[0].event
         ) {
-            this.platformevent = this.config.payload.arguments.execute.inArguments[0].event;
+            this.platformevent =
+                this.config.payload.arguments.execute.inArguments[0].event;
             this.fields = this.platformevents
                 .filter((obj) => obj.name === this.platformevent)[0]
                 .fields.filter((field) => field.createable)
@@ -123,9 +124,10 @@ export default class PlatformEvent extends LightningElement {
                         this.config.payload.arguments.execute.inArguments[1]
                             .fields[field.name] != null
                     ) {
-                        field.value = this.config.payload.arguments.execute.inArguments[1].fields[
-                            field.name
-                        ];
+                        field.value =
+                            this.config.payload.arguments.execute.inArguments[1].fields[
+                                field.name
+                            ];
                     }
                     field.value = field.value || '';
                     field.disabled = true;

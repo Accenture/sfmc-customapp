@@ -1,46 +1,72 @@
 {
     "name": "",
-    "id": null,
+    "id": "4e8ba5bd-9c26-4ec5-a32c-762206fcf68d",
     "key": "REST-2",
     "type": "REST",
     "arguments": {
         "execute": {
-            "inArguments": [],
+            "inArguments": [
+                {
+                    "type": "0ML5J000000PBVKWA4",
+                    "content": "hi doug",
+                    "recipient": "dougid",
+                    "target": "dougid",
+                    "mid": 7330184
+                }
+            ],
             "outArguments": [],
-            "url": "https://sfmc-lwcactivity.herokuapp.com/activity/execute",
+            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/execute",
             "timeout": 10000,
             "retryCount": 3,
             "retryDelay": 1000,
-            "concurrentRequests": 5
+            "concurrentRequests": 5,
+            "useJwt": true
         }
     },
     "configurationArguments": {
         "publish": {
-            "url": "https://sfmc-lwcactivity.herokuapp.com/activity/publish",
+            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/publish",
             "useJwt": true
         },
         "validate": {
-            "url": "https://sfmc-lwcactivity.herokuapp.com/activity/validate",
+            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/validate",
             "useJwt": true
         },
         "stop": {
-            "url": "https://sfmc-lwcactivity.herokuapp.com/activity/stop",
+            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/stop",
             "useJwt": true
         },
         "save": {
-            "url": "https://sfmc-lwcactivity.herokuapp.com/activity/save",
+            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/save",
             "useJwt": true
         },
-        "applicationExtensionKey": "eb67b37f-fc2d-4238-9771-f28b411339e0"
+        "params": [
+            {
+                "type": "0ML5J000000PBVKWA4"
+            },
+            {
+                "content": ""
+            },
+            {
+                "recipient": ""
+            },
+            {
+                "target": ""
+            },
+            {
+                "mid": 7330184
+            }
+        ]
     },
     "metaData": {
-        "icon": "https://sfmc-lwcactivity.herokuapp.com/assets/platformeventsicon.png",
-        "category": "customer",
+        "icon": "https://sfmc-lwcactivity.herokuapp.com/assets/notification.png",
+        "category": "messaging",
         "backgroundColor": "#032e61",
-        "expressionBuilderPrefix": "Platform",
+        "expressionBuilderPrefix": "sfnotif",
         "iconSmall": null,
         "statsContactIcon": null,
-        "original_icon": "https://sfmc-lwcactivity.herokuapp.com/assets/platformeventsicon.png"
+        "original_icon": "https://sfmc-lwcactivity.herokuapp.com/assets/notification.png",
+        "isConfigured": false
     },
     "schema": {
         "arguments": {
@@ -53,7 +79,9 @@
     "editable": true,
     "outcomes": [
         {
-            "next": "WAITBYDURATION-1",
+            "key": "43d99f6f-e29f-454b-93ce-9163d065b5de",
+            "next": "WAITBYDURATION-6",
+            "arguments": {},
             "metaData": {
                 "invalid": false
             }
