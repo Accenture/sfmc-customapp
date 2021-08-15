@@ -1,16 +1,20 @@
 {
     "name": "",
-    "id": "4e8ba5bd-9c26-4ec5-a32c-762206fcf68d",
+    "id": "b58d71b3-66ef-4d3a-b549-2a4cdf8902b8",
     "key": "REST-2",
     "type": "REST",
     "arguments": {
+        "executionMode": "{{Context.ExecutionMode}}",
+        "definitionId": "{{Context.DefinitionId}}",
+        "activityId": "{{Activity.Id}}",
+        "contactKey": "{{Context.ContactKey}}",
         "execute": {
             "inArguments": [
                 {
                     "type": "0ML5J000000PBVKWA4",
-                    "content": "hi doug",
-                    "recipient": "dougid",
-                    "target": "dougid",
+                    "content": "Hi Doug",
+                    "recipient": "0055J000000lCFWQA2",
+                    "target": "0055J000000lCFWQA2",
                     "mid": 7330184
                 }
             ],
@@ -21,52 +25,47 @@
             "retryDelay": 1000,
             "concurrentRequests": 5,
             "useJwt": true
-        }
+        },
+        "testExecute": "",
+        "startActivityKey": "{{Context.StartActivityKey}}",
+        "definitionInstanceId": "{{Context.DefinitionInstanceId}}",
+        "requestObjectId": "{{Context.RequestObjectId}}"
     },
     "configurationArguments": {
-        "publish": {
-            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/publish",
-            "useJwt": true
-        },
-        "validate": {
-            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/validate",
-            "useJwt": true
-        },
-        "stop": {
-            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/stop",
-            "useJwt": true
-        },
         "save": {
             "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/save",
             "useJwt": true
         },
-        "params": [
-            {
-                "type": "0ML5J000000PBVKWA4"
-            },
-            {
-                "content": ""
-            },
-            {
-                "recipient": ""
-            },
-            {
-                "target": ""
-            },
-            {
-                "mid": 7330184
-            }
-        ]
+        "testSave": "",
+        "publish": {
+            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/publish",
+            "useJwt": true
+        },
+        "testPublish": "",
+        "unpublish": "",
+        "stop": {
+            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/stop",
+            "useJwt": true
+        },
+        "testStop": "",
+        "testUnpublish": "",
+        "partnerActivityId": "",
+        "validate": {
+            "url": "https://sfmc-lwcactivity.herokuapp.com/salesforcenotification/validate",
+            "useJwt": true
+        },
+        "testValidate": "",
+        "outArgumentSchema": {}
     },
     "metaData": {
         "icon": "https://sfmc-lwcactivity.herokuapp.com/assets/notification.png",
         "category": "messaging",
         "backgroundColor": "#032e61",
         "expressionBuilderPrefix": "sfnotif",
-        "iconSmall": null,
-        "statsContactIcon": null,
+        "iconSmall": "",
+        "statsContactIcon": "",
         "original_icon": "https://sfmc-lwcactivity.herokuapp.com/assets/notification.png",
-        "isConfigured": false
+        "isConfigured": true
     },
     "schema": {
         "arguments": {
@@ -76,7 +75,7 @@
             }
         }
     },
-    "editable": true,
+    "editable": false,
     "outcomes": [
         {
             "key": "43d99f6f-e29f-454b-93ce-9163d065b5de",

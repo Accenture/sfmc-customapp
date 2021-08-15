@@ -111,10 +111,10 @@ router.post('/execute', decode, (req, res) => {
     logger.info('execute request:', req.body);
     sfdc.publishNotification(
         req.body.inArguments[0].type,
-        req.body.inArguments[1].content,
-        req.body.inArguments[2].recipient,
-        req.body.inArguments[3].target,
-        req.body.inArguments[4].mid
+        req.body.inArguments[0].content,
+        req.body.inArguments[0].recipient,
+        req.body.inArguments[0].target,
+        req.body.inArguments[0].mid
     );
 
     res.json({ status: 'ok' });
