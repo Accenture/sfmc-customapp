@@ -9,7 +9,8 @@ const config = {
         fallback: './src/client/index.js',
         dataTools: './src/client/dataTools.js',
         platformeventapp: './src/client/platformeventapp.js',
-        platformeventactivity: './src/client/platformeventactivity.js'
+        platformeventactivity: './src/client/platformeventactivity.js',
+        salesforcenotification: './src/client/salesforcenotification.js'
     },
     mode: 'production',
     output: {
@@ -49,6 +50,12 @@ const config = {
             title: 'Platform Event Activity',
             chunks: ['platformeventactivity']
         }),
+        new HtmlWebpackPlugin({
+            template: 'src/client/index.html',
+            filename: './salesforcenotification/activity.html',
+            title: 'Salesforce Notification Activity',
+            chunks: ['salesforcenotification']
+        }),
         new CopyPlugin({
             patterns: [
                 {
@@ -56,25 +63,16 @@ const config = {
                     to: 'assets/'
                 },
                 {
-                    from:
-                        'node_modules/@salesforce-ux/design-system/assets/images',
+                    from: 'node_modules/@salesforce-ux/design-system/assets/images',
                     to: 'assets/images'
                 },
                 {
-                    from:
-                        'node_modules/@salesforce-ux/design-system/assets/icons',
+                    from: 'node_modules/@salesforce-ux/design-system/assets/icons',
                     to: 'assets/icons'
                 },
                 {
-                    from:
-                        'node_modules/@salesforce-ux/design-system/assets/fonts',
-                    to: 'assets/fonts'
-                },
-                {
-                    from:
-                        'node_modules/@salesforce-ux/design-system/assets/styles/salesforce-lightning-design-system.min.css',
-                    to:
-                        'assets/styles/salesforce-lightning-design-system.min.css'
+                    from: 'node_modules/@salesforce-ux/design-system/assets/styles/salesforce-lightning-design-system.min.css',
+                    to: 'assets/styles/salesforce-lightning-design-system.min.css'
                 }
             ]
         })

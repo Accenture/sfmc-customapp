@@ -65,7 +65,7 @@ const guessDataType = (values, phoneLocale) => {
             possibleTypes.Boolean++;
         } else if (
             line.includes('@') &&
-            /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(line)
+            /^((?!\.)[\w-_.]*[^.])(@\w+)(\.\w+(\.\w+)?[^.\W])$/.test(line)
         ) {
             possibleTypes.EmailAddress++;
         } else if (possibleLocale.length > 0) {

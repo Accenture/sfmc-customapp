@@ -115,10 +115,25 @@ export default class DataPicker extends LightningElement {
         //now nest things based on reverse order
         sortedList.reverse().forEach((ID) => {
             if (objectFolders[ID].categoryId) {
-                objectFolders[objectFolders[ID].categoryId].items.push(
-                    objectFolders[ID]
-                );
-                delete objectFolders[ID];
+                try{
+                    objectFolders[objectFolders[ID].categoryId].items.push(
+                        objectFolders[ID]
+                    );
+                    delete objectFolders[ID];
+                } catch(ex){
+                    console.log(objectFolders[ID]);
+                    this.dispatchEvent(
+                        new CustomEvent('error', {
+                            bubbles: true,
+                            composed: true,
+                            detail: {
+                                type: 'warning',
+                                message: objectFolders[ID].name + ' was not found'
+                            }
+                        })
+                    );
+                }
+
             }
         });
         //convert back to array

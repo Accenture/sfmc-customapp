@@ -267,7 +267,10 @@ exports.checkAuth = async (req, res, next, appname) => {
                 path.join(__dirname, '../../../dist', req.originalUrl + '.html')
             );
         } else {
-            res.status(403).send({ message: 'requested URL is not supported', details: req.originalUrl });
+            res.status(403).send({
+                message: 'requested URL is not supported',
+                details: req.originalUrl
+            });
         }
     } catch (ex) {
         if (ex.response && ex.response.data) {
@@ -278,7 +281,7 @@ exports.checkAuth = async (req, res, next, appname) => {
 
         res.status(500).send({
             message: ex.message,
-            details: ex.response.data
+            details: ex.response ? ex.response.data : ex.response
         });
     }
 };

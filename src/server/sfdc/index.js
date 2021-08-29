@@ -123,4 +123,35 @@ async function saveCredentials(mid, conf) {
     logger.info('Credentials Set', setCred);
 }
 
+exports.getNotificationTypes = async (mid) => {
+    return connectionArray[mid].tooling.query(
+        'Select Id,CustomNotifTypeName from CustomNotificationType'
+    );
+};
+
+exports.publishNotification = async (
+    typeId,
+    content,
+    recipientId,
+    targetId,
+    mid
+) => {
+    const payload = [
+        {
+            customNotifTypeId: typeId,
+            recipientIds: [recipientId],
+            title: 'Marketing Cloud Notification',
+            body: content,
+            targetId: targetId
+        }
+    ];
+    console.log(payload);
+    const res = await connectionArray[mid].requestPost(
+        '/actions/standard/customNotificationAction',
+        { inputs: payload }
+    );
+    logger.info('publishNotification', res);
+    return res;
+};
+
 init();
