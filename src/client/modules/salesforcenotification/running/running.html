@@ -1,0 +1,53 @@
+<template>
+    <common-toast id="toast"></common-toast>
+    <common-activity title="Salesforce Notification" icon="utility:notification" events={events} context="activity"
+        oncontext={getContext} prev-value="Close" ontoast={handleToast}>
+        <template if:true={isLoading}>
+            <lightning-spinner style="position: static" alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+        <div if:true={notificationTypes} class="slds-var-p-around_x-small">
+            <lightning-layout class="slds-box slds-box_x-small" style="margin-bottom: 10px">
+                <lightning-layout-item>
+                    <lightning-combobox name="notificationType" label="Select Notification Type"
+                        value={notifConfig.type.value} placeholder="Select Notification Type"
+                        options={notificationTypesList} disabled=true>
+                    </lightning-combobox>
+                </lightning-layout-item>
+            </lightning-layout>
+            <lightning-layout class="slds-box slds-box_x-small" if:true={notifConfig.type.value}>
+
+                <lightning-layout-item size="6">
+
+                    <!-- Recipient -->
+                    <lightning-layout vertical-align="end">
+                        <lightning-layout-item flexibility="grow" padding="horizontal-small">
+                            <lightning-input name="recipient" label="Recipient" value={notifConfig.recipient.value}
+                                disabled=true>
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+
+                    <!-- Content -->
+
+                    <lightning-layout vertical-align="end">
+                        <lightning-layout-item flexibility="grow" padding="horizontal-small">
+                            <lightning-textarea name="content" label="Message" value={notifConfig.content.value}
+                                disabled=true>
+
+                            </lightning-textarea>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                    <!-- Recipient -->
+                    <lightning-layout vertical-align="end">
+
+                        <lightning-layout-item flexibility="grow" padding="horizontal-small">
+                            <lightning-input name="target" label="Target" value={notifConfig.target.value}
+                                disabled=true>
+                            </lightning-input>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </lightning-layout-item>
+            </lightning-layout>
+        </div>
+    </common-activity>
+</template>

@@ -44,6 +44,7 @@ export default function setupTestHarness(jbSession) {
         console.log('[echo] ready');
         const data = require('./testdata/ready.json');
         jbSession.trigger('initActivity', data);
+        jbSession.trigger('initActivityRunningModal', data);
     });
 
     jbSession.on('setActivityDirtyState', function (value) {

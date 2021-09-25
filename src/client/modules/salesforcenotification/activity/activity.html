@@ -1,7 +1,8 @@
 <template>
     <common-toast id="toast"></common-toast>
-    <common-activity title="Salesforce Notification" icon="utility:notification" events={events} context="activity"
-        oncontext={getContext} can-next="true" next-value="Done" prev-value="Cancel" ontoast={handleToast}>
+    <common-activity title="Salesforce Notification" icon="utility:notification" events={events}
+        context="initActivityRunningModal" oncontext={getContext} can-next="true" next-value="Done" prev-value="Cancel"
+        ontoast={handleToast}>
         <template if:true={isLoading}>
             <lightning-spinner style="position: static" alternative-text="Loading" size="large"></lightning-spinner>
         </template>

@@ -6,8 +6,16 @@ const csurf = require('csurf')();
 const { checkAuth, getRedirectURL } = require('../sfmc/core.js');
 const { decode } = require('../utils/jwt');
 
+// path in case we want to force a refresh of token
+router.get(['/activity/login'], csurf, (req, res) => {
+    res.redirect(
+        301,
+        getRedirectURL(req, req.originalUrl.replace('/login', '').substring(1))
+    );
+});
+
 //default entry path with auth validation
-router.get(['/activity'], csurf, (req, res, next) => {
+router.get(['/running'], csurf, (req, res, next) => {
     res.cookie('XSRF-TOKEN', req.csrfToken(), {
         sameSite: 'none',
         secure: true
@@ -15,12 +23,13 @@ router.get(['/activity'], csurf, (req, res, next) => {
     checkAuth(req, res, next, req.originalUrl.substring(1));
 });
 
-// path in case we want to force a refresh of token
-router.get(['/activity/login'], csurf, (req, res) => {
-    res.redirect(
-        301,
-        getRedirectURL(req, req.originalUrl.replace('/login', '').substring(1))
-    );
+//default entry path with auth validation
+router.get(['/activity'], csurf, (req, res, next) => {
+    res.cookie('XSRF-TOKEN', req.csrfToken(), {
+        sameSite: 'none',
+        secure: true
+    });
+    checkAuth(req, res, next, req.originalUrl.substring(1));
 });
 
 router.get('/config.json', (req, res) => {
@@ -90,6 +99,13 @@ router.get('/config.json', (req, res) => {
             configInspector: {
                 size: 'scm-lg',
                 emptyIframe: true
+            },
+            runningModal: {
+                url: 'https://${req.headers.host}/salesforcenotification/running'
+            },
+            runningHover: {
+                url: 'https://${req.headers.host}/salesforcenotification/hover',
+                hideDetailsButton: true
             }
         },
         schema: {
@@ -137,7 +153,6 @@ router.post('/save', decode, (req, res) => {
 });
 
 router.get('/notificationTypes', checkAuth, async (req, res) => {
-    //logger.info(core.checkAuth);
     try {
         const notificationTypes = await sfdc.getNotificationTypes(
             req.session.context.organization.member_id

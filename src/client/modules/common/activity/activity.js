@@ -130,6 +130,10 @@ export default class App extends LightningElement {
         console.log('[update]', payload);
         this.state.payload = payload;
     }
+    //for hover and modal we assume you cannot edit anything so dont update when exiting
+    get canEdit() {
+        return this.context === 'activity';
+    }
     // update journey builder with new config
     done() {
         console.log('[updateActivity]');

@@ -10,7 +10,9 @@ const config = {
         dataTools: './src/client/dataTools.js',
         salesforceconfig: './src/client/salesforceconfig.js',
         platformeventactivity: './src/client/platformeventactivity.js',
-        salesforcenotification: './src/client/salesforcenotification.js'
+        salesforcenotification: './src/client/salesforcenotification.js',
+        salesforcenotificationrunning:
+            './src/client/salesforcenotificationrunning.js'
     },
     mode: 'production',
     output: {
@@ -55,6 +57,12 @@ const config = {
             filename: './salesforcenotification/activity.html',
             title: 'Salesforce Notification Activity',
             chunks: ['salesforcenotification']
+        }),
+        new HtmlWebpackPlugin({
+            template: 'src/client/index.html',
+            filename: './salesforcenotification/running.html',
+            title: 'Salesforce Notification Running Activity',
+            chunks: ['salesforcenotificationrunning']
         }),
         new CopyPlugin({
             patterns: [
