@@ -13,6 +13,7 @@ export default class App extends LightningElement {
     @api events;
     @api context;
     @track state = {};
+    @api beforedone;
 
     availableEvents = [
         'tokens',
@@ -133,6 +134,12 @@ export default class App extends LightningElement {
     // update journey builder with new config
     done() {
         console.log('[updateActivity]');
+
+        if (this.beforedone) {
+            console.log('[running beforeDone]');
+            this.beforedone();
+        }
+
         //todo: add better validation checks
         if (this.state.payload) {
             connection.trigger('updateActivity', this.state.payload);

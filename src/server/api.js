@@ -94,6 +94,7 @@ app.use(
     '/salesforcenotification',
     require('./salesforcenotification/salesforcenotification-api.js')
 );
+app.use('/webhook', require('./webhook/webhook-api.js'));
 app.use(express.static(DIST_DIR));
 
 if (process.env.NODE_ENV !== 'production') {

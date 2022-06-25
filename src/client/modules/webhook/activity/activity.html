@@ -1,0 +1,64 @@
+<template>
+    <common-toast id="toast"></common-toast>
+    <common-activity title="Webhook" icon="utility:notification" events={events} context="activity"
+        oncontext={getContext} can-next="true" next-value="Done" prev-value="Cancel" ontoast={handleToast}
+        beforedone={updateActivity}>
+        <template if:true={isLoading}>
+            <lightning-spinner style="position: static" alternative-text="Loading" size="large"></lightning-spinner>
+        </template>
+
+        <lightning-layout class="slds-box slds-box_x-small" style="margin-bottom: 10px">
+            <lightning-layout-item>
+                <lightning-combobox name="Request Type" label="Select Request Type" value={webhookConfig.type}
+                    placeholder="Select Request Type" options={requestTypes} onchange={handleTypeChange}>
+                </lightning-combobox>
+                <lightning-input name="URL" label="URL" value={webhookConfig.Url} onchange={onUrlChange} type='url'>
+                </lightning-input>
+            </lightning-layout-item>
+        </lightning-layout>
+        <lightning-layout class="slds-box slds-box_x-small">
+
+            <lightning-layout-item size="6">
+
+                <!-- Payload -->
+                <template for:each={webhookConfig.payload} for:item="field">
+                    <lightning-layout vertical-align="end" key={field.key}>
+
+                        <lightning-layout-item>
+                            <lightning-button-icon icon-name="utility:edit" name={field.fieldKey} value={field.value}
+                                alternative-text="Add Personalization" title="Add Personalization" onclick={toggleEdit}>
+                            </lightning-button-icon>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="grow" padding="horizontal-small">
+                            <lightning-input type="text" name={field.fieldKey} label="Key" value={field.name}
+                                onchange={onPayloadChange} data-type="fieldname" disabled={field.disabled}>
+                            </lightning-input>
+                        </lightning-layout-item>
+                        <lightning-layout-item flexibility="grow" padding="horizontal-small">
+                            <lightning-textarea name={field.fieldKey} label="Value" value={field.value}
+                                onchange={onPayloadChange} data-type="fieldvalue" disabled={field.disabled}>
+                            </lightning-textarea>
+                        </lightning-layout-item>
+                    </lightning-layout>
+                </template>
+
+
+            </lightning-layout-item>
+            <template if:true={selectedField}>
+                <lightning-layout-item padding="around-small" size="6">
+                    <div>Personalization</div>
+                    <common-schemapicker contactmodel={config.contactsSchema} journeymodel={config.dataSources}
+                        onselectitem={appendValue}>
+                    </common-schemapicker>
+                </lightning-layout-item>
+            </template>
+        </lightning-layout>
+
+        <lightning-layout class="slds-box slds-box_x-small">
+
+            <lightning-button label="Add Key" onclick={onAddKey}></lightning-button>
+
+        </lightning-layout>
+
+    </common-activity>
+</template>
