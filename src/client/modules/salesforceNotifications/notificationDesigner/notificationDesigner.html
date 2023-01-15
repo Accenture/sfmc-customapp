@@ -1,0 +1,65 @@
+<template>
+	<div if:true={config.availableTypes} class="slds-var-p-around_x-small">
+		<lightning-layout class="slds-box slds-box_x-small" style="margin-bottom: 10px">
+			<lightning-layout-item>
+				<lightning-combobox name="notificationType" label="Select Notification Type" value={config.type.label}
+					placeholder="Select Notification Type" options={notificationTypesList} onchange={handleTypeChange}>
+				</lightning-combobox>
+			</lightning-layout-item>
+		</lightning-layout>
+		<lightning-layout if:true={config.type.value}>
+			<lightning-layout-item size={calculateSize}>
+				<!-- Recipient -->
+				<lightning-layout vertical-align="end">
+					<lightning-layout-item>
+						<lightning-button-icon icon-name="utility:edit" name="recipient" value={config.recipient.value}
+							alternative-text="Recipient" title="Recipient" onclick={toggleEdit}>
+						</lightning-button-icon>
+					</lightning-layout-item>
+					<lightning-layout-item flexibility="grow" padding="horizontal-small">
+						<lightning-input name="recipient" label="Recipient" value={config.recipient.value}
+							onchange={onRecipientChange} disabled={config.recipient.disabled}>
+						</lightning-input>
+					</lightning-layout-item>
+				</lightning-layout>
+
+				<!-- Content -->
+
+				<lightning-layout vertical-align="end">
+					<lightning-layout-item>
+						<lightning-button-icon icon-name="utility:edit" name="content" value={config.content.value}
+							alternative-text="Add Personalization" title="Add Personalization" onclick={toggleEdit}>
+						</lightning-button-icon>
+					</lightning-layout-item>
+					<lightning-layout-item flexibility="grow" padding="horizontal-small">
+						<lightning-textarea name="content" label="Message" value={config.content.value}
+							onchange={onContentChange} disabled={config.content.disabled}>
+						</lightning-textarea>
+					</lightning-layout-item>
+				</lightning-layout>
+				<!-- Recipient -->
+				<lightning-layout vertical-align="end">
+					<lightning-layout-item>
+						<lightning-button-icon icon-name="utility:edit" name="target" value={config.target.value}
+							alternative-text="Target Record" title="Target Record" onclick={toggleEdit}>
+						</lightning-button-icon>
+					</lightning-layout-item>
+					<lightning-layout-item flexibility="grow" padding="horizontal-small">
+						<lightning-input name="target" label="Target" value={config.target.value}
+							onchange={onTargetChange} disabled={config.target.disabled}>
+						</lightning-input>
+					</lightning-layout-item>
+				</lightning-layout>
+			</lightning-layout-item>
+			<template if:true={selectedField}>
+				<lightning-layout-item class="slds-box slds-box_x-medium" style="background-color: white"
+					padding="around-small" size="6">
+					<div>Dynamic Attributes</div>
+					<sfmc-schemapicker journeymodel={context.dataSources} contactmodel={context.contactsSchema}
+						onselectitem={appendValue}>
+					</sfmc-schemapicker>
+				</lightning-layout-item>
+			</template>
+		</lightning-layout>
+	</div>
+</template>

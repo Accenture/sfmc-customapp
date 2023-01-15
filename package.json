@@ -1,79 +1,54 @@
 {
-    "name": "sfmc-lwcactivity",
-    "description": "Example App using LWC in SFMC",
-    "version": "0.0.1",
-    "author": "Douglas Midgley <douglas.midgley@accenture.com>",
-    "bugs": "https://github.com/Douglas Midgley/sfmc-lwcactivity/issues",
-    "dependencies": {
-        "axios": "^0.21.1",
-        "body-parser": "^1.19.0",
-        "compression": "^1.7.4",
-        "connect-redis": "^6.0.0",
-        "csurf": "^1.11.0",
-        "csvtojson": "^2.0.10",
-        "express": "^4.17.1",
-        "express-rate-limit": "^5.3.0",
-        "express-session": "^1.17.2",
-        "google-libphonenumber": "^3.2.22",
-        "helmet": "^4.6.0",
-        "ioredis": "^4.27.7",
-        "jsforce": "^1.10.1",
-        "jsonwebtoken": "^8.5.1",
-        "moment": "^2.29.1",
-        "morgan": "^1.10.0",
-        "rate-limit-redis": "^2.1.0",
-        "winston": "^3.3.3",
-        "xml2js": "^0.4.23"
-    },
-    "devDependencies": {
-        "@lwc/synthetic-shadow": "^2.3.0",
-        "@salesforce-ux/design-system": "^2.15.9",
-        "clean-webpack-plugin": "^3.0.0",
-        "copy-webpack-plugin": "^9.0.1",
-        "dotenv": "^10.0.0",
-        "eslint": "^7.32.0",
-        "eslint-plugin-inclusive-language": "^2.1.1",
-        "html-webpack-plugin": "^5.3.2",
-        "lightning-base-components": "^1.13.1-alpha",
-        "lwc-services": "^3.1.2",
-        "lwc-webpack-plugin": "^2.0.1",
-        "npm-run-all": "^4.1.5",
-        "postmonger": "0.0.16",
-        "prettier": "^2.3.2",
-        "webpack": "5.50.0",
-        "webpack-cli": "^4.8.0"
-    },
-    "engines": {
-        "node": ">=14.15.0",
-        "npm": ">=6.14.8"
-    },
-    "homepage": "https://github.com/Accenture/sfmc-customapp",
-    "keywords": [
-        "lwc",
-        "customactivity",
-        "sfmc"
-    ],
-    "license": "Apache-2.0",
-    "nodemonConfig": {
-        "watch": [
-            "src/server/**/*.js"
-        ],
-        "ext": "js",
-        "ignore": [
-            "src/**/*.spec.js",
-            "src/**/*.test.js"
-        ],
-        "exec": "node ./src/server/api.js"
-    },
-    "repository": "https://github.com/Accenture/sfmc-customapp",
-    "scripts": {
-        "build": "webpack --config webpack.config.js",
-        "build:cert": "cd certificates && buildCert.bat",
-        "lint": "eslint -c .eslintrc.json",
-        "watch": "run-p watch:client watch:server",
-        "watch:client": "webpack --watch --config webpack.config.js --progress",
-        "watch:server": "nodemon",
-        "start": "node src/server/api.js",
-        "prettier": "prettier --write \"**/*.js\""
-    }
+	"name": "lwc-standalone-playground",
+	"version": "1.0.0",
+	"description": "",
+	"scripts": {
+		"server": "node ./src/server/server.js",
+		"dev:client": "rollup --watch --config rollup.config.js",
+		"dev:server": "nodemon ./src/server/server.js --watch src/server ",
+		"dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:client\"",
+		"build": "rollup --config rollup.config.js"
+	},
+	"dependencies": {
+		"@google-cloud/connect-firestore": "^2.0.2",
+		"@google-cloud/firestore": "^6.4.1",
+		"@salesforce-ux/design-system": "^2.19.0",
+		"axios": "^1.2.1",
+		"body-parser": "^1.20.1",
+		"compression": "^1.7.4",
+		"dotenv": "^16.0.3",
+		"express": "^4.18.2",
+		"express-rate-limit": "^6.7.0",
+		"express-session": "^1.17.3",
+		"helmet": "^6.0.1",
+		"jsforce": "^1.11.0",
+		"jsonwebtoken": "^8.5.1",
+		"sfmc-sdk": "^0.6.1",
+		"winston": "^3.8.2"
+	},
+	"license": "MIT",
+	"keywords": [],
+	"devDependencies": {
+		"@avonni/base-components": "^1.5.1",
+		"@lwc/compiler": "2.34.0",
+		"@lwc/engine-dom": "2.34.0",
+		"@lwc/rollup-plugin": "2.34.0",
+		"@lwc/synthetic-shadow": "2.34.0",
+		"@lwc/wire-service": "2.34.0",
+		"@rollup/plugin-html": "^1.0.1",
+		"@rollup/plugin-multi-entry": "^6.0.0",
+		"@rollup/plugin-node-resolve": "^15.0.1",
+		"@rollup/plugin-replace": "5.0.2",
+		"concurrently": "^7.6.0",
+		"eslint": "^8.30.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-jsdoc": "^39.6.4",
+		"fs-extra": "^11.1.0",
+		"lightning-base-components": "1.16.9-alpha",
+		"nodemon": "^2.0.20",
+		"postmonger": "^0.0.16",
+		"rollup": "3.7.5",
+		"rollup-plugin-delete": "^2.0.0"
+	},
+	"type": "module"
 }

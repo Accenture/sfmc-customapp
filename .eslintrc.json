@@ -1,26 +1,53 @@
 {
     "plugins": [
-        "inclusive-language"
+        // "jsdoc"
     ],
     "extends": [
-        "@salesforce/eslint-config-lwc/recommended"
+        // "plugin:jsdoc/recommended",
+        "prettier"
     ],
-    "rules": {
-        "@lwc/lwc/no-async-operation": "warn",
-        "@lwc/lwc/no-inner-html": "warn",
-        "@lwc/lwc/no-document-query": "warn",
-        "inclusive-language/use-inclusive-words": "error"
-    },
     "overrides": [
         {
             "files": [
-                "src/server/**",
-                "webpack.config.js",
-                "lwc-services.config.js"
+                "src/client/modules/**/*.js",
+                "sfmc-custom-sdk/src/modules/**/*.js"
             ],
-            "env": {
-                "node": true
+            "plugins": [
+                "@lwc/eslint-plugin-lwc"
+            ],
+            "extends": [
+                "@salesforce/eslint-config-lwc/recommended"
+            ],
+            "rules": {
+                "@lwc/lwc/no-unexpected-wire-adapter-usages": "off"
             }
         }
-    ]
+    ],
+    "parserOptions": {
+        "sourceType": "module",
+        "ecmaVersion": 2022
+    },
+    "rules": {
+        // "jsdoc/no-undefined-types": "off",
+        // "jsdoc/require-jsdoc": [
+        //     2,
+        //     {
+        //         "require": {
+        //             "FunctionDeclaration": true,
+        //             "MethodDefinition": true,
+        //             "ClassDeclaration": false
+        //         }
+        //     }
+        // ],
+        "indent": [
+            2,
+            "tab",
+            {
+                "SwitchCase": 1
+            }
+        ],
+        "func-names": "off",
+        "vars-on-top": "off",
+        "no-unused-expressions": "off"
+    }
 }

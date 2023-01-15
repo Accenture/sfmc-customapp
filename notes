@@ -1,0 +1,2 @@
+    "rollup-plugin-commonjs": "^9.3.4", -> support cjs imports
+    "rollup-plugin-node-resolve": "^4.2.3" -> support npm imports

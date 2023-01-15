@@ -1,0 +1,11 @@
+runtime: nodejs16 # or another supported version
+entrypoint: npm run start
+# instance_class: F2
+
+# env_variables:
+#   BUCKET_NAME: "example-gcs-bucket"
+
+handlers:
+  - url: /.*
+    secure: always
+    script: auto
