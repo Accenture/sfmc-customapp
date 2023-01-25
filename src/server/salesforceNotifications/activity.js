@@ -37,7 +37,7 @@ export const salesforceNotifications = express.Router();
 
 salesforceNotifications.get("/config.json", config);
 salesforceNotifications.get("/v1/notificationTypes", async (req, res) => {
-	console.log('GETTING NOTIFICATIONS', req.session);
+	console.log("GETTING NOTIFICATIONS", req.session);
 	const conn = await getConnection(req.session.context.organization.member_id);
 	const notifs = await conn.tooling.query(
 		"Select Id,CustomNotifTypeName from CustomNotificationType"
@@ -51,14 +51,19 @@ salesforceNotifications.get("/v1/notificationTypes", async (req, res) => {
  */
 salesforceNotifications.post("/v1/execute", decodeJwt, async (req, res) => {
 	logger.info("LOGGING EXECUTE", req.body);
-	const notificationRes = await publishNotification(
-		req.body.inArguments[0].type,
-		req.body.inArguments[1].content,
-		req.body.inArguments[2].recipient,
-		req.body.inArguments[3].target,
-		req.body.inArguments[4].mid
-	);
-	res.json(notificationRes);
+	try {
+		const notificationRes = await publishNotification(
+			req.body.inArguments[0].type,
+			req.body.inArguments[1].content,
+			req.body.inArguments[2].recipient,
+			req.body.inArguments[3].target,
+			req.body.inArguments[4].mid
+		);
+		res.json(notificationRes);
+	} catch (ex) {
+		logger.error("ERROR: Publishing Notification Failed", ex.message);
+		res.status(500).json(ex.message);
+	}
 });
 salesforceNotifications.post("/v1/save", (req, res) => {
 	logger.info("LOGGING SAVE", req.body);

@@ -43,6 +43,7 @@ sfdcRoutes.post("/credentials", (req, res) => {
 });
 sfdcRoutes.delete("/credentials", async (req, res) => {
 	await deleteConfig("SFDC:" + req.session.context.organization.member_id);
+	delete connectionMap[req.session.context.organization.member_id];
 	res
 		.status(200)
 		.send({ status: "OK", statusMessage: "Credentials for SFDC deleted" });

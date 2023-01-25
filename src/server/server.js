@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 	next();
 });
 
-app.set("trust proxy", 1);// needed where server is not https itself (ie. with tunnel proxy)
+app.set("trust proxy", 1); // needed where server is not https itself (ie. with tunnel proxy)
 app.use(express.static("./src/resources"));
 app.use(express.static("./node_modules/@salesforce-ux/design-system/assets"));
 
@@ -92,8 +92,8 @@ app.use(
 		secret: process.env.SECRET_TOKEN,
 		cookie: {
 			secure: true, // this will set depending on connection being https OR http - making testing easier
-		// 	// maxAge: 24 * 60 * 60 * 1000 // 24 hours
-			sameSite: "none",
+			// 	// maxAge: 24 * 60 * 60 * 1000 // 24 hours
+			sameSite: "none"
 			// httpOnly: true
 		},
 		resave: false,

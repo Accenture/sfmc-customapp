@@ -34,8 +34,8 @@ export default class StepOne extends LightningElement {
 	/**
 	 *
 	 */
-	connectedCallback() {
-		//put MID
+	async connectedCallback() {
+		fireEvent(this, "loading", true);
 		this.config.mid = this.context.contactsSchema.schemaReponse.schema.clientID;
 		//rehydrate
 		if (this.workingActivity.metaData.sections[this.stepIndex]?.config) {
@@ -46,11 +46,36 @@ export default class StepOne extends LightningElement {
 				)
 			);
 		}
-		// this.config =
-		// 	|| this.config;
-		if (!this.config.availableTypes) {
-			this.getNotificationTypes();
+		const notificationList = await fetchWithHandleErrors(
+			this,
+			"/salesforceNotification/v1/notificationTypes"
+		);
+		if (notificationList && notificationList.records?.length > 0) {
+			this.config.availableTypes = notificationList.records;
+		} else if (notificationList && notificationList.length === 0) {
+			fireEvent(this, "toast", {
+				title: "No Results",
+				message: "No Notification Types were returned",
+				variant: "error",
+				timeout: 3000
+			});
 		}
+		if (this.config.type.value) {
+			const matchedNotificationType = notificationList.records.find(
+				(record) => record.Id === this.config.type.value
+			);
+			if (!matchedNotificationType) {
+				this.config.type.value = null;
+				fireEvent(this, "toast", {
+					title: "Invalid Notificaiton Type",
+					message: `The Notificaiton type ${this.config.type.value} count not be found, please select another`,
+					variant: "error",
+					timeout: 3000
+				});
+			}
+		}
+
+		fireEvent(this, "loading", false);
 	}
 	disconnectedCallback() {
 		//reset all values to disabled when going back
@@ -157,28 +182,5 @@ export default class StepOne extends LightningElement {
 
 	get calculateSize() {
 		return this.selectedField ? 6 : 12;
-	}
-
-	/**
-	 *
-	 */
-	async getNotificationTypes() {
-		fireEvent(this, "loading", true);
-		const notificationList = await fetchWithHandleErrors(
-			this,
-			"/salesforceNotification/v1/notificationTypes"
-		);
-		if (notificationList && notificationList.records?.length > 0) {
-			this.config.availableTypes = notificationList.records;
-		} else if (notificationList && notificationList.length === 0) {
-			fireEvent(this, "toast", {
-				title: "No Results",
-				message: "No Notification Types were returned",
-				variant: "error",
-				timeout: 3000
-			});
-		}
-
-		fireEvent(this, "loading", false);
 	}
 }

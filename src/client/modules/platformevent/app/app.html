@@ -1,0 +1,89 @@
+<template>
+    <article class="slds-card slds-var-m-around_x-small">
+        <template if:true={isLoading}>
+            <lightning-spinner
+                alternative-text="Loading"
+                size="large"
+            ></lightning-spinner>
+        </template>
+        <lightning-layout>
+            <lightning-layout-item padding="around-small" size="12">
+                <div>
+                    Configure Your Connected App in SFDC then provide
+                    credentials here
+                </div>
+            </lightning-layout-item></lightning-layout
+        >
+        <template if:true={isEditing}>
+            <lightning-layout>
+                <lightning-layout-item padding="around-small" size="12">
+                    <lightning-input
+                        name="sfdcclientid"
+                        label="SFDC ClientId"
+                        onchange={onsfdcclientidchange}
+                        type="text"
+                        value={config.sfdcclientid}
+                    >
+                    </lightning-input>
+                    <lightning-input
+                        name="sfdcclientsecret"
+                        label="SFDC ClientSecret"
+                        onchange={onsfdcclientsecretchange}
+                        type="password"
+                    >
+                    </lightning-input>
+                    <lightning-input
+                        name="sfdcurl"
+                        label="SFDC Url"
+                        onchange={onsfdcurlchange}
+                        type="url"
+                        placeholder="https://YOURDOMAINHERE.my.salesforce.com"
+                        value={config.sfdcurl}
+                    >
+                    </lightning-input>
+                    <div class="slds-var-p-vertical_small">
+                        <lightning-button
+                            name="connect"
+                            label="Connect"
+                            variant="brand"
+                            onclick={handleConnect}
+                            class="slds-var-p-around_small"
+                        ></lightning-button
+                        ><lightning-button
+                            name="Cancel"
+                            label="Cancel"
+                            variant="brand"
+                            onclick={toggleEdit}
+                            class="slds-var-p-around_small"
+                        ></lightning-button>
+                    </div>
+                </lightning-layout-item>
+            </lightning-layout>
+        </template>
+
+        <template if:false={isEditing}
+            ><lightning-layout
+                ><lightning-layout-item padding="around-small" size="12">
+                    <lightning-card
+                        title="Existing Connection"
+                        variant="Narrow"
+                        icon-name="standard:default"
+                    >
+                        <div class="slds-var-p-around_small">
+                            <div><b>Username: </b> {config.username}</div>
+                            <div><b>OrgId: </b> {config.organization_id}</div>
+                            <div><b>ClientId: </b> {config.sfdcclientid}</div>
+                            <div><b>URL: </b> {config.sfdcurl}</div>
+                        </div>
+                        <lightning-button
+                            slot="actions"
+                            name="Edit"
+                            label="Edit"
+                            variant="brand"
+                            onclick={toggleEdit}
+                        ></lightning-button
+                    ></lightning-card>
+                </lightning-layout-item> </lightning-layout
+        ></template>
+    </article>
+</template>

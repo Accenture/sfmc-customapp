@@ -5,25 +5,6 @@ import { getByEvent } from "./mapping.js";
 const stableSession = new Session();
 /**
  *
- * @param eventMap
- * @param data
- */
-function postMongerPromisify(eventMap, data) {
-	return new Promise((resolve) => {
-		//in case there is a response expected
-		if (eventMap.on) {
-			stableSession.on(eventMap.on, resolve);
-		}
-		stableSession.trigger(eventMap.trigger, data);
-		// when no response expected, then resolve right away
-		if (!eventMap.on) {
-			resolve();
-		}
-	});
-}
-
-/**
- *
  * @param event
  * @param data
  */

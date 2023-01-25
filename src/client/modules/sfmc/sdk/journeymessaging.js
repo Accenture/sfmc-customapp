@@ -1,57 +1,14 @@
-let _window = window;
 
-export class Connection {
-	connect;
-	from;
-	to;
-	constructor(options = {}) {
-		this.connect = options.connect || _window.parent;
-		this.from = options.from || "*";
-		this.to = options.to || "*";
 
-		//If string, grab based on id
-		if (typeof this.connect === "string") {
-			this.connect = document.getElementById(this.connect);
-		}
-		//If still no connection, check for iframe
-		else if (
-			this.connect &&
-			!this.connect.postMessage &&
-			(this.connect.contentWindow || this.connect.contentDocument)
-		) {
-			this.connect = this.connect.contentWindow || this.connect.contentDocument;
-		}
-		//Throw warning if connection could not be made
-		else if (!(this.connect && this.connect.postMessage)) {
-			throw new Error(
-				" Warning: Postmonger could not establish connection with ",
-				options.connect
-			);
-		}
-	}
-}
-
-export class EventInstance {
-	resolve;
-	reject;
-	prm;
-	constructor() {
-		this.prm = new Promise((resolve, reject) => {
-			this.resolve = resolve;
-			this.reject = reject;
-		});
-	}
-	done(value) {
-		this.resolve(value);
-	}
-}
+const _window = window;
 
 export class Session {
-	connection;
 	triggerMap = {};
+	
 
-	constructor(options) {
-		this.connection = new Connection(options);
+	constructor() {
+		var args = (arguments.length>0) ? Array.prototype.slice.call(arguments, 0) : [{}];
+		console.log('SESSION', args);
 		//Add the listener
 		if (_window.addEventListener) {
 			_window.addEventListener("message", this.postMessageListener, false);
@@ -61,12 +18,14 @@ export class Session {
 			);
 		}
 	}
-
+	
 	interact(triggerName, responseName, details) {
-		
+		let prm;
 		if(responseName){
 			//store promise for later resolving if response expected
-			this.triggerMap[responseName] = new EventInstance();
+			prm = new Promise( resolve => {
+				this.triggerMap[responseName] = resolve;
+			})
 		}
 		const message = { e: triggerName };
 		//TODO confirm if this case is normal (needed for save)
@@ -80,13 +39,14 @@ export class Session {
 			message["a1"] = details;
 
 		}
-		this.connection.connect.postMessage(
+		// _window.parent.postMessage();
+		_window.parent.postMessage(
 			JSON.stringify(message),
-			this.connection.to
+			'*'
 		);
 		if(responseName){
 			//return promise to allow async /await
-			return   this.triggerMap[responseName].prm;
+			return   prm;
 		} else {
 			return;
 		}
@@ -97,9 +57,9 @@ export class Session {
 		//confirm the source is mc
 		//Attempt to find the connection we're dealing with
 		if (
-			this.connection.connect === event.source &&
-			this.connection.from === "*" &&
-			this.connection.from !== event.origin
+			event.origin.endsWith('marketingcloudapps.com') && 
+			event.origin.startsWith( 'https://jbinteractions') && //ensures only messages from journey builder
+			_window.parent === event.source
 		) {
 			//Check the data that's been passed
 			const data = JSON.parse(event.data);
@@ -113,7 +73,8 @@ export class Session {
 				delete data.e;
 				//Format the passed in data
 				for (const k in data) {
-					this.triggerMap[responseName].done(data[k]);
+					//resolve the promise with data;
+					this.triggerMap[responseName](data[k]);
 					delete this.triggerMap[responseName];
 				}
 			}

@@ -9,8 +9,7 @@
     "overrides": [
         {
             "files": [
-                "src/client/modules/**/*.js",
-                "sfmc-custom-sdk/src/modules/**/*.js"
+                "src/client/modules/**/*.js"
             ],
             "plugins": [
                 "@lwc/eslint-plugin-lwc"
@@ -45,9 +44,9 @@
             {
                 "SwitchCase": 1
             }
-        ],
-        "func-names": "off",
-        "vars-on-top": "off",
-        "no-unused-expressions": "off"
+        ]
+        // "func-names": "off",
+        // "vars-on-top": "off",
+        // "no-unused-expressions": "off"
     }
 }

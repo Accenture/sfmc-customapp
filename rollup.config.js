@@ -7,7 +7,10 @@ const config = {
 	// input,
 	input: {
 		app: "src/client/app.js",
-		salesforceNotification: "src/client/salesforceNotification.js"
+		salesforceNotification: "src/client/salesforceNotification.js",
+		// platformEvent: "src/client/platformEvent.js",
+		// dataTools: "src/client/dataTools.js",
+		// test: "src/client/test.js"
 	},
 	output: {
 		dir: path.resolve("dist"),
