@@ -18,18 +18,25 @@ import * as data from "./data.js"; // this file should be replaced spending on y
 
 const HOST = process.env.API_HOST || "localhost";
 const PORT = process.env.PORT || 3000;
+const apiRoutes = express.Router();
+const baseRoutes = express.Router();
 
 if (
 	process.env.NODE_ENV === "production" ||
 	process.argv.includes("--production")
 ) {
-	console.log("LOADING PRODUCTION");
 	process.env.NODE_ENV = "production";
 } else {
-	console.log("LOADING DEVELOPMENT");
 	process.env.NODE_ENV = "development";
 	dotenv.config();
 }
+
+//settings used for app login
+const sfmcConfig = await data.getConfig("SFMC");
+process.env.SFMC_JWT = sfmcConfig.SFMC_JWT;
+process.env.SECRET_TOKEN = sfmcConfig.SECRET_TOKEN;
+process.env.AUTH_URL = sfmcConfig.AUTH_URL;
+process.env.CLIENT_ID = sfmcConfig.CLIENT_ID;
 
 const app = express();
 
@@ -39,10 +46,11 @@ app.use((req, res, next) => {
 });
 
 app.set("trust proxy", 1); // needed where server is not https itself (ie. with tunnel proxy)
-app.use(express.static("./src/resources"));
-app.use(express.static("./node_modules/@salesforce-ux/design-system/assets"));
-
 app.use(compression());
+app.use(express.static("./node_modules/@salesforce-ux/design-system/assets"));
+app.use(express.static("dist"));
+app.use(express.static("./src/resources"));
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.text({ type: "text/plain", limit: "10mb" }));
 app.use(bodyParser.json());
@@ -82,8 +90,13 @@ app.use(
 	})
 );
 
+//login path before session being set
+baseRoutes.get("/:appname/login", getAuthRedirect);
+baseRoutes.get("/:appname/oauth/response", getAccessToken, (req, res) =>
+	res.redirect(`/${req.params.appname}.html`)
+);
+
 app.use(
-	/.*(?<!\/login)$/, //everything BUT login
 	session({
 		store: new FirestoreStore({
 			dataset: new Firestore(),
@@ -111,43 +124,27 @@ app.use(
 		}
 	})
 );
-app.use(express.static("dist"));
 
-//default auth handlers here
-const apiRoutes = express.Router();
+// force login
+app.use((req, res, next) => {
+	if (req.url.endsWith(".html") && !req.session.auth) {
+		console.log("Forcing login");
+		res.redirect(req.url.replace(".html", "/login"));
+	} else {
+		next();
+	}
+});
+app.use(express.static("./src/html"));
 
 apiRoutes.get("/context", (req, res) => {
 	res.json(req.session.context);
 });
 
-const baseRoutes = express.Router();
-
-function logme(req, res, next) {
-	console.log("LOG OAUTHRESPONSE", req.path, req.query);
-	console.log("LOG ACCESSTOKEN", req.session);
-	next();
-}
-
-baseRoutes.get(
-	"/:appname/oauth/response",
-	logme,
-	getAccessToken,
-	logme,
-	(req, res) => res.redirect(`/${req.params.appname}.html`)
-);
-//login path assumed for login to activity or app
-baseRoutes.get("/:appname/login", getAuthRedirect);
-
-const sfmcConfig = await data.getConfig("SFMC");
-process.env.SFMC_JWT = sfmcConfig.SFMC_JWT;
-process.env.SECRET_TOKEN = sfmcConfig.SECRET_TOKEN;
-process.env.AUTH_URL = sfmcConfig.AUTH_URL;
-process.env.CLIENT_ID = sfmcConfig.CLIENT_ID;
-
 app.use("/salesforceNotification", salesforceNotifications);
 app.use("/sfdc", sfdcRoutes);
 app.use("/api", apiRoutes);
 app.use("/", baseRoutes);
+
 app.listen(PORT, () =>
 	console.log(`✅  Server started: http://${HOST}:${PORT}`)
 );

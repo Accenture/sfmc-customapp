@@ -12,8 +12,3 @@ Steps to allow for
 - Salesforce Notification
 -- Create Installed Package for Journey Builder config
 -- provide SFMC_JWT in the config.SFMC variable in firestore with the JWT from installed package
-
-
-
-rehydrate type
-popup oauth for sfdc
