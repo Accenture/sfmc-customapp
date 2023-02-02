@@ -3,12 +3,20 @@ import lwcRollupPlugin from "@lwc/rollup-plugin";
 import replace from "@rollup/plugin-replace";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import del from "rollup-plugin-delete";
+import multiInput from "rollup-plugin-multi-input";
+
 const config = {
 	// input,
-	input: {
-		app: "src/client/app.js",
-		salesforceNotification: "src/client/salesforceNotification.js"
-	},
+	input: [
+		{
+			app: "src/client/app.js",
+			// salesforceNotification: "src/client/salesforceNotification.js"
+			dataAssessor: "src/client/dataAssessor.js"
+			// platformEvent: "src/client/platformEvent.js",
+			// dataTools: "src/client/dataTools.js",
+			// test: "src/client/test.js"
+		}
+	],
 	output: {
 		dir: path.resolve("dist"),
 		format: "es",
@@ -16,6 +24,7 @@ const config = {
 	},
 	plugins: [
 		del({ targets: "dist/*" }),
+		multiInput.default(),
 		nodeResolve(),
 		lwcRollupPlugin({
 			rootDir: "src/client",
