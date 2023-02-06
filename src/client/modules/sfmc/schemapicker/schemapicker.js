@@ -28,16 +28,16 @@ export default class SchemaPicker extends LightningElement {
 			items: data.schemaReponse.schema.attributeGroups
 				.filter((group) => group.attributeSetIdentifiers)
 				.map((group) => {
-					const definitions = group.attributeSetIdentifiers.map(
+					const definitions = new Set(group.attributeSetIdentifiers.map(
 						(id) => id.definitionID
-					);
+					));
 					return {
 						label: group.fullyQualifiedName,
 						name: group.definitionID,
 						expanded: false,
 						items: data.schemaReponse.schema.setDefinitions
 							.filter((definition) =>
-								definitions.includes(definition.definitionID)
+								definitions.has(definition.definitionID)
 							)
 							.map((setDef) => {
 								return {
@@ -67,8 +67,8 @@ export default class SchemaPicker extends LightningElement {
 			label: "Journey",
 			name: "Journey",
 			expanded: false,
-			items: [
-				...data
+			items: 
+				data
 					.filter(
 						(source) =>
 							(source.schema && source.schema.fields.length > 0) ||
@@ -128,7 +128,7 @@ export default class SchemaPicker extends LightningElement {
 							})
 						};
 					})
-			]
+			
 		};
 	}
 	/**

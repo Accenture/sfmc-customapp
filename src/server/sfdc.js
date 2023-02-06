@@ -79,9 +79,9 @@ sfdcRoutes.get("/oauth/response", async (req, res) => {
 		logger.info("User ID: " + userInfo.id);
 		logger.info("Org ID: " + userInfo.organizationId);
 		res.redirect(state.appUri);
-	} catch (err) {
-		logger.error("ERROR authorize:", err);
-		throw err;
+	} catch (error) {
+		logger.error("ERROR authorize:", error);
+		throw error;
 	}
 });
 
@@ -94,13 +94,13 @@ sfdcRoutes.get("/connection", async (req, res) => {
 
 			const resp = await conn.identity();
 			res.json(resp);
-		} catch (ex) {
-			if (ex.message == "Key not found") {
+		} catch (error) {
+			if (error.message == "Key not found") {
 				res.status(204).send();
 			} else {
 				res.status(401).send({
 					status: "ERROR",
-					statusMessage: ex.message
+					statusMessage: error.message
 				});
 			}
 		}

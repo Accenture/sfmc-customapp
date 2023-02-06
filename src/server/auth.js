@@ -31,16 +31,16 @@ export async function JourneySessionAuthentication(req, res) {
 					"Unfortunately, only authorized users in the SFMC context can use this site."
 			});
 		}
-	} catch (ex) {
-		if (ex.response && ex.response.data) {
-			logger.info("checkAuth Failed", ex.response.data);
+	} catch (error) {
+		if (error.response && error.response.data) {
+			logger.info("checkAuth Failed", error.response.data);
 		} else {
-			logger.info("checkAuth Failed", ex);
+			logger.info("checkAuth Failed", error);
 		}
 
 		res.status(500).send({
-			message: ex.message,
-			details: ex.response ? ex.response.data : ex.response
+			message: error.message,
+			details: error.response ? error.response.data : error.response
 		});
 	}
 }
@@ -54,8 +54,8 @@ async function getContextFromToken(token) {
 			headers: { Authorization: `Bearer ${token}` }
 		});
 		console.log("GET CONTEXT", res.data);
-	} catch (ex) {
-		console.error(ex.response.data);
+	} catch (error) {
+		console.error(error.response.data);
 	}
 }
 
@@ -107,8 +107,8 @@ export async function getAccessToken(req, res, next) {
 		req.session.auth = response.data;
 		req.session.context = user.data;
 		next();
-	} catch (ex) {
-		console.error(ex);
-		res.status(500).json(ex);
+	} catch (error) {
+		console.error(error);
+		res.status(500).json(error);
 	}
 }

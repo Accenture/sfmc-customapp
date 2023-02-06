@@ -25,7 +25,7 @@ export default class App extends LightningElement {
 		// const session = await fetch("/api/context");
 		// const context = await session.json();
 		const res = await fetch("/sfdc/connection");
-		if (res.status == 200) {
+		if (res.status === 200) {
 			this.connection = await res.json();
 		}
 		// this.context = context;
@@ -42,7 +42,8 @@ export default class App extends LightningElement {
 				method: "DELETE"
 			});
 			this.connection = null;
-		} catch (ex) {}
+			// eslint-disable-next-line no-empty
+		} catch {}
 		this.isLoading = false;
 	}
 

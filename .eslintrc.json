@@ -4,7 +4,8 @@
     ],
     "extends": [
         // "plugin:jsdoc/recommended",
-        "prettier"
+        "prettier",
+        "plugin:unicorn/recommended"
     ],
     "overrides": [
         {
@@ -27,6 +28,8 @@
         "ecmaVersion": 2022
     },
     "rules": {
+        "unicorn/filename-case": "off", 
+        "unicorn/prevent-abbreviations":"off",
         // "jsdoc/no-undefined-types": "off",
         // "jsdoc/require-jsdoc": [
         //     2,

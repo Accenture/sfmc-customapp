@@ -60,9 +60,9 @@ salesforceNotifications.post("/v1/execute", decodeJwt, async (req, res) => {
 			req.body.inArguments[4].mid
 		);
 		res.json(notificationRes);
-	} catch (ex) {
-		logger.error("ERROR: Publishing Notification Failed", ex.message);
-		res.status(500).json(ex.message);
+	} catch (error) {
+		logger.error("ERROR: Publishing Notification Failed", error.message);
+		res.status(500).json(error.message);
 	}
 });
 salesforceNotifications.post("/v1/save", (req, res) => {

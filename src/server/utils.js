@@ -38,7 +38,7 @@ export function decodeJwt(req, res, next) {
 			algorithm: "HS256"
 		});
 		return next();
-	} catch (ex) {
+	} catch {
 		console.error("JWT PAYLOAD", req.body.toString("utf8"));
 		console.error("JWT KEY", process.env.SFMC_JWT);
 

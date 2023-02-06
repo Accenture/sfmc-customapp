@@ -32,14 +32,14 @@ export default class DataPicker extends LightningElement {
 					})
 				);
 			}
-		} catch (ex) {
+		} catch (error) {
 			this.dispatchEvent(
 				new CustomEvent("error", {
 					bubbles: true,
 					composed: true,
 					detail: {
 						type: "error",
-						message: ex.message
+						message: error.message
 					}
 				})
 			);
@@ -113,7 +113,7 @@ export default class DataPicker extends LightningElement {
 			return acc;
 		}, {});
 		//add data extensions to folders
-		deList.forEach((de) => {
+		for (const de of deList) {
 			const obj = {
 				label: de.Name,
 				name: de.CustomerKey,
@@ -121,17 +121,17 @@ export default class DataPicker extends LightningElement {
 			};
 			objectFolders[de.CategoryID].items.push(obj);
 			this.keyvalueItems[de.CustomerKey] = obj;
-		});
+		}
 
 		//now nest things based on reverse order
-		sortedList.reverse().forEach((ID) => {
+		for (const ID of sortedList.reverse()) {
 			if (objectFolders[ID].categoryId) {
 				try {
 					objectFolders[objectFolders[ID].categoryId].items.push(
 						objectFolders[ID]
 					);
 					delete objectFolders[ID];
-				} catch (ex) {
+				} catch {
 					console.log(objectFolders[ID]);
 					this.dispatchEvent(
 						new CustomEvent("error", {
@@ -145,7 +145,7 @@ export default class DataPicker extends LightningElement {
 					);
 				}
 			}
-		});
+		}
 		//convert back to array
 		this.nestedItems = objectFolders[0];
 	}

@@ -4,12 +4,13 @@ import { FirestoreStore } from "@google-cloud/connect-firestore";
 import { getAuthRedirect, getAccessToken } from "./auth.js";
 import { sfdcRoutes } from "./sfdc.js";
 import { salesforceNotifications } from "./salesforceNotifications/activity.js";
+import { dataAssessor } from "./dataAssessor/app.js";
 import compression from "compression";
 import helmet from "helmet";
 import express from "express";
 import bodyParser from "body-parser";
 import { JourneySessionAuthentication } from "./auth.js";
-import crypto from "crypto";
+import crypto from "node:crypto";
 import * as dotenv from "dotenv";
 
 import session from "express-session";
@@ -83,7 +84,7 @@ app.use(
 // we exclude routes ending with execute since these may be used
 // thousands of times be Journey Builder in short period
 app.use(
-	/.*[^execute]$/,
+	/.*[^cetux]$/,
 	rateLimit({
 		windowMs: 15 * 60 * 1000, // 15 minutes
 		max: 1000
@@ -105,8 +106,8 @@ app.use(
 		secret: process.env.SECRET_TOKEN,
 		cookie: {
 			secure: true, // this will set depending on connection being https OR http - making testing easier
-			// 	// maxAge: 24 * 60 * 60 * 1000 // 24 hours
-			sameSite: "none"
+			maxAge: 20 * 60 * 1000, // 20 minutes
+			sameSite: "none" //using lax and strict will result in cookies not being set inside of mc iframe
 			// httpOnly: true
 		},
 		resave: false,
@@ -141,6 +142,8 @@ apiRoutes.get("/context", (req, res) => {
 });
 
 app.use("/salesforceNotification", salesforceNotifications);
+app.use("/dataAssessor", dataAssessor);
+
 app.use("/sfdc", sfdcRoutes);
 app.use("/api", apiRoutes);
 app.use("/", baseRoutes);

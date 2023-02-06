@@ -33,7 +33,7 @@ export function config(req, res) {
 				// It must run under HTTPS
 				url: `https://${req.headers.host}/salesforceNotification/v1/execute`,
 				// The amount of time we want Journey Builder to wait before cancel the request. Default is 60000, Minimal is 1000
-				timeout: 10000,
+				timeout: 10_000,
 				// how many retrys if the request failed with 5xx error or network error. default is 0
 				retryCount: 3,
 				// wait in ms between retry.

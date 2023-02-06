@@ -32,11 +32,11 @@ export class Session {
 		if (details && Array.isArray(details)) {
 			for (const detail of details) {
 				console.log("detail", detail);
-				message["a1"] = detail;
+				message.a1 = detail;
 			}
 		} else if(details){
 			//TODO confirm if this case is normal (needed for save)
-			message["a1"] = details;
+			message.a1 = details;
 
 		}
 		// _window.parent.postMessage();
@@ -47,9 +47,9 @@ export class Session {
 		if(responseName){
 			//return promise to allow async /await
 			return   prm;
-		} else {
-			return;
-		}
+		} 
+			
+		
 		
 	}
 
@@ -65,9 +65,7 @@ export class Session {
 			const data = JSON.parse(event.data);
 			if (!data.e) {
 				throw new Error("Data returned was not in expected format");
-			} else if (!this.triggerMap[data.e]) {
-				console.warn("Event not handled or had no response", data);
-			} else {
+			} else if (this.triggerMap[data.e]) {
 				//delete e then cycle through all other keys
 				const responseName = data.e;
 				delete data.e;
@@ -77,6 +75,8 @@ export class Session {
 					this.triggerMap[responseName](data[k]);
 					delete this.triggerMap[responseName];
 				}
+			} else {
+				console.warn("Event not handled or had no response", data);
 			}
 		}
 	};

@@ -5,6 +5,6 @@ export default class WelcomeMat extends LightningModal {
     @api content;
 
     handleOkay() {
-        this.close('okay');
+    	this.close('okay');
     }
 }

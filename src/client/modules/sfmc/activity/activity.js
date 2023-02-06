@@ -49,12 +49,12 @@ export default class Activity extends LightningElement {
 			this.isLoading = false;
 			this.workingActivity = JSON.parse(JSON.stringify(this.context.activity));
 			this.loadStep();
-		} catch (ex) {
+		} catch (error) {
 			this.template.querySelector("sfmc-toast").showToastEvent({
 				title: "Error",
-				message: ex.message,
+				message: error.message,
 				variant: "error",
-				timeout: 10000
+				timeout: 10_000
 			});
 		}
 	}

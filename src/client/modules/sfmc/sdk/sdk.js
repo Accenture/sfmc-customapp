@@ -26,7 +26,7 @@ export async function interact(event, data) {
 
 	//special handling cases
 	switch (eventMap.dataKey) {
-		case "activity":
+		case "activity": {
 			// sections is a great way to store confg, but it stores it in string for some reason
 			// here we reset that to an object before returning.
 			if (
@@ -38,8 +38,10 @@ export async function interact(event, data) {
 				);
 			}
 			break;
-		default:
+		}
+		default: {
 			break;
+		}
 	}
 
 	return obj;
@@ -89,7 +91,7 @@ export async function authenticate(tokens) {
 		try {
 			const payload = await authRes.json();
 			throw new Error(payload.message);
-		} catch (ex) {
+		} catch {
 			throw new Error(authRes.statusText);
 		}
 	}
