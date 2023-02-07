@@ -3,19 +3,19 @@
 	<lightning-layout vertical-align="center">
 		<lightning-layout-item>
 			<span>{field.FieldType}</span>
-			<template if:true={isText}>
+			<template lwc:if={isText}>
 				<span>({field.MaxLength})</span>
 			</template>
-			<template if:true={isDecimal}>
+			<template lwc:if={isDecimal}>
 				<span>({field.Precision}, {field.Scale})</span>
 			</template>
-			<template if:true={field.IsRequired}>
+			<template lwc:if={field.IsRequired}>
 				<span> - Req</span>
 			</template>
-			<template if:false={field.IsRequired}>
+			<template lwc:else>
 				<span> - Opt</span>
 			</template>
-			<template if:true={field.IsPrimaryKey}>
+			<template lwc:if={field.IsPrimaryKey}>
 				<span> - PK</span>
 			</template>
 		</lightning-layout-item>

@@ -1,18 +1,61 @@
 <template>
 	<lightning-tabset>
 		<lightning-tab label="Salesforce Connection">
-			<template if:true={isLoading}>
-				<lightning-spinner alternative-text="Loading" size="medium"></lightning-spinner>
+			<template lwc:if={isLoading}>
+				<lightning-spinner
+					alternative-text="Loading"
+					size="medium"></lightning-spinner>
 			</template>
-			<template if:false={isLoading}>
-				<div style="margin:auto" class="slds-var-p-around_xx-large">
-					<template if:false={isEditable}>
+			<template lwc:else>
+				<div style="margin: auto" class="slds-var-p-around_xx-large">
+					<template lwc:if={isEditable}>
+						<lightning-input
+							type="url"
+							label="Instance URL"
+							name="instance_url"
+							onblur={handleInput}
+							value={connectionUrl}
+							class="slds-p-around_small"></lightning-input>
+						<lightning-input
+							type="password"
+							label="Client Key"
+							name="client_key"
+							onblur={handleInput}
+							class="slds-p-around_small">
+						</lightning-input>
+						<lightning-input
+							type="password"
+							label="Client Secret"
+							name="client_secret"
+							onblur={handleInput}
+							class="slds-p-around_small">
+						</lightning-input>
+						<lightning-button
+							label="Save"
+							title="Save"
+							onclick={handleSubmit}
+							class="slds-p-around_small">
+						</lightning-button>
+
+						<template lwc:if={connection}>
+							<lightning-button
+								label="Cancel"
+								title="Cancel"
+								onclick={handleCancel}
+								class="slds-p-around_small">
+							</lightning-button>
+						</template>
+					</template>
+					<template lwc:else>
 						<lightning-layout vertical-align="center" horizontal-align="space">
 							<lightning-layout-item flexibility="auto" padding="around-medium">
-								<lightning-icon icon-name="utility:success" alternative-text="Success!"
-									variant="success" title="success variant" size="large"></lightning-icon>
+								<lightning-icon
+									icon-name="utility:success"
+									alternative-text="Success!"
+									variant="success"
+									title="success variant"
+									size="large"></lightning-icon>
 							</lightning-layout-item>
-
 						</lightning-layout>
 
 						<lightning-layout vertical-align="center" horizontal-align="space">
@@ -20,47 +63,28 @@
 								<div>User: {connection.username}</div>
 								<div>Instance: {connection.urls.custom_domain}</div>
 							</lightning-layout-item>
-
 						</lightning-layout>
 
 						<lightning-layout vertical-align="center" horizontal-align="center">
 							<lightning-layout-item padding="around-medium">
-								<lightning-button label="Change" title="Change Connection" onclick={changeConnection}>
+								<lightning-button
+									label="Change"
+									title="Change Connection"
+									onclick={changeConnection}>
 								</lightning-button>
-
 							</lightning-layout-item>
 							<lightning-layout-item padding="around-medium">
-								<lightning-button variant="destructive" label="Remove" title="Remove Connection"
+								<lightning-button
+									variant="destructive"
+									label="Remove"
+									title="Remove Connection"
 									onclick={removeConnection}>
 								</lightning-button>
 							</lightning-layout-item>
-
 						</lightning-layout>
-
-					</template>
-					<template if:true={isEditable}>
-						<lightning-input type="url" label="Instance URL" name="instance_url" onblur={handleInput}
-							value={connectionUrl} class="slds-p-around_small"></lightning-input>
-						<lightning-input type="password" label="Client Key" name="client_key" onblur={handleInput}
-							class="slds-p-around_small">
-						</lightning-input>
-						<lightning-input type="password" label="Client Secret" name="client_secret" onblur={handleInput}
-							class="slds-p-around_small">
-						</lightning-input>
-						<lightning-button label="Save" title="Save" onclick={handleSubmit} class="slds-p-around_small">
-						</lightning-button>
-
-						<template if:true={connection}>
-							<lightning-button label="Cancel" title="Cancel" onclick={handleCancel}
-								class="slds-p-around_small">
-							</lightning-button>
-						</template>
-
 					</template>
 				</div>
 			</template>
 		</lightning-tab>
-
 	</lightning-tabset>
-
 </template>

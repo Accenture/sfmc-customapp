@@ -1,5 +1,5 @@
 <template>
-	<div if:true={isVisible} class="overlay" style="height: 4rem">
+	<div lwc:if={isVisible} class="overlay" style="height: 4rem">
 		<div class="slds-notify_container slds-is-relative">
 			<div class={variantClass} role="status">
 				<span class="slds-assistive-text">{variant}</span>

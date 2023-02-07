@@ -3,32 +3,28 @@ import LightningAlert from "lightning/alert";
 import SaveModal from "dataAssessor/saveModal";
 
 export default class App extends LightningElement {
-	@api handleclick;
-	@track status = { loading: false };
+	file;
 	@track rows;
 	@track headers;
 	@track settings = {
 		defaultPhoneLocale: "US",
-		delimiter: ",",
-		inputdata: undefined
+		delimiter: ","
 	};
 	@track isLoading = false;
 	get hasNoInputData() {
-		return !this.settings.inputdata;
+		return !this.file;
 	}
 	get hasNotLoadedData() {
 		return !(this.rows && this.headers);
 	}
 	async handleSave() {
 		await SaveModal.open({
-			fields: this.headers,
-			onloading: this.handleloading
+			fields: this.headers
 		});
 	}
 	loadData(inputdata) {
 		this.isLoading = true;
 		if (inputdata.target.files[0].size > 1e7) {
-			this.isLoading = false;
 			this.dispatchEvent(
 				new CustomEvent("error", {
 					bubbles: true,
@@ -41,9 +37,9 @@ export default class App extends LightningElement {
 				})
 			);
 		} else {
-			this.settings.inputdata = inputdata.target.files[0];
-			this.isLoading = false;
+			this.file = inputdata.target.files[0];
 		}
+		this.isLoading = false;
 	}
 	updatedfield(e) {
 		// finds the corresponding header for the detail and replace
@@ -93,7 +89,7 @@ export default class App extends LightningElement {
 				headers: {
 					"Content-Type": "text/plain"
 				},
-				body: await this.settings.inputdata.text()
+				body: await this.file.text()
 			}
 		);
 		if (resData.status === 200) {
@@ -130,14 +126,6 @@ export default class App extends LightningElement {
 		}
 		this.isLoading = false;
 	}
-	changeField(button) {
-		this.status.edit = true;
-		console.log("buttonclick", button, button.target.id, button.detail);
-	}
-	handleloading(e) {
-		console.log("handleloading", e);
-		this.isLoading = e.detail;
-	}
 	extractHeaders(fields) {
 		return fields.map((a) => {
 			const matchPc = Math.round((a.match / a.total) * 100);
@@ -153,10 +141,6 @@ export default class App extends LightningElement {
 				MaxLength: a.MaxLength
 			};
 		});
-	}
-
-	variant(pc) {
-		if()
 	}
 	extractRows(fields) {
 		const pivoted = [];

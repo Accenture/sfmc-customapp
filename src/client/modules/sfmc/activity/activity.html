@@ -1,44 +1,69 @@
 <template>
-	<template if:true={isLoading}>
-		<lightning-spinner alternative-text="Loading" size="large"></lightning-spinner>
+	<template lwc:if={isLoading}>
+		<lightning-spinner
+			alternative-text="Loading"
+			size="large"></lightning-spinner>
 	</template>
 	<sfmc-toast id="apptoast"></sfmc-toast>
-	<template if:true={isAuthenticated}>
+	<template lwc:if={isAuthenticated}>
 		<div class="common-page-header">
 			<lightning-layout>
 				<lightning-layout-item>
-					<lightning-icon icon-name={iconName} alternative-text="Approved" title="Approved" size="small">
+					<lightning-icon
+						icon-name={iconName}
+						alternative-text="Approved"
+						title="Approved"
+						size="small">
 					</lightning-icon>
 				</lightning-layout-item>
-				<lightning-layout-item padding="horizontal-medium" style="margin: auto 0">
+				<lightning-layout-item
+					padding="horizontal-medium"
+					style="margin: auto 0">
 					<h1>
-						<span class="slds-page-header__title slds-truncate" title={title}>{title}</span>
+						<span class="slds-page-header__title slds-truncate" title={title}
+							>{title}</span
+						>
 					</h1>
 				</lightning-layout-item>
 				<lightning-layout-item alignment-bump="left">
-					<lightning-icon icon-name="utility:close" alternative-text="Close" title="Close"
-						onclick={eventHandlers.close} size="small">
+					<lightning-icon
+						icon-name="utility:close"
+						alternative-text="Close"
+						title="Close"
+						onclick={eventHandlers.close}
+						size="small">
 					</lightning-icon>
 				</lightning-layout-item>
 			</lightning-layout>
 		</div>
-		<sfmc-step-handler lwc:dynamic={stepComponent} context={context} working-activity={workingActivity}
-			step-index={stepIndex} ontoast={handleToast} onloading={handleLoading}
-			onupdate={eventHandlers.updateActivity} interact={interact}>
+		<sfmc-step-handler
+			lwc:dynamic={stepComponent}
+			context={context}
+			working-activity={workingActivity}
+			step-index={stepIndex}
+			ontoast={handleToast}
+			onloading={handleLoading}
+			onupdate={eventHandlers.updateActivity}
+			interact={interact}>
 		</sfmc-step-handler>
 		<div class="slds-docked-form-footer">
 			<div class="footer-buttons">
-				<template if:true={backLabel}>
-					<button type="button" class="slds-button slds-button_neutral" onclick={onBack}>
+				<template lwc:if={backLabel}>
+					<button
+						type="button"
+						class="slds-button slds-button_neutral"
+						onclick={onBack}>
 						{backLabel}
 					</button>
 				</template>
-				<button type="button" class="slds-button slds-button_brand" onclick={onNext} disabled={isNextDisabled}>
+				<button
+					type="button"
+					class="slds-button slds-button_brand"
+					onclick={onNext}
+					disabled={isNextDisabled}>
 					{nextLabel}
 				</button>
 			</div>
-
 		</div>
 	</template>
-
 </template>

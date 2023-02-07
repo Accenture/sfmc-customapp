@@ -1,5 +1,5 @@
 <template>
-	<template if:true={isLoading}>
+	<template lwc:if={isLoading}>
 		<lightning-spinner
 			alternative-text="Loading"
 			size="large"></lightning-spinner>
@@ -7,25 +7,30 @@
 	<div class="slds-var-p-around_xx-small">
 		<div class="slds-box slds-box_x-small slds-theme_default">
 			<lightning-layout vertical-align="center">
-				<lightning-layout-item padding="horizontal-small">
-					<label for="exampledata">Data: </label>
-					<input
+				<lightning-layout-item flexibility="auto" padding="horizontal-small">
+					<lightning-input
+						variant="label-hidden"
 						type="file"
+						label="File"
 						id="exampledata"
 						name="avatar"
 						accept=".csv"
-						onchange={loadData} />
+						onchange={loadData}></lightning-input>
+
+					<div>{file.name}</div>
 				</lightning-layout-item>
-				<lightning-layout-item padding="horizontal-small">
+				<lightning-layout-item flexibility="auto" padding="horizontal-small">
 					<lightning-input
+						variant="label-inline"
 						name="defaultPhoneLocale"
 						label="Default Phone Locale"
 						ontextinput={setphonelocale}
 						type="text"
 						value={settings.defaultPhoneLocale}></lightning-input>
 				</lightning-layout-item>
-				<lightning-layout-item padding="horizontal-small"
+				<lightning-layout-item flexibility="auto" padding="horizontal-small"
 					><lightning-input
+						variant="label-inline"
 						name="delimiter"
 						label="Delimiter"
 						ontextinput={setDelimiter}
@@ -48,7 +53,7 @@
 		</div>
 	</div>
 
-	<template if:true={rows}>
+	<template lwc:if={rows}>
 		<div class="slds-var-p-around_xx-small">
 			<div
 				class="slds-box slds-box_xx-small slds-theme_default slds-scrollable">

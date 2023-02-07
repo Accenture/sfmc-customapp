@@ -49,7 +49,9 @@ export default class SetFieldOptions extends LightningModal {
 	handleCheckboxChange(e) {
 		this.hasChange = true;
 		this._field.IsPrimaryKey = e.detail.value.includes("IsPrimaryKey");
-		this._field.IsRequired = e.detail.value.includes("IsRequired");
+		this._field.IsRequired =
+			e.detail.value.includes("IsRequired") ||
+			e.detail.value.includes("IsPrimaryKey");
 	}
 
 	editname(e) {

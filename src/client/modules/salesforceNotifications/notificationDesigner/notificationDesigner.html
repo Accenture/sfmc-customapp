@@ -1,5 +1,5 @@
 <template>
-	<div if:true={config.availableTypes} class="slds-var-p-around_x-small">
+	<div lwc:if={config.availableTypes} class="slds-var-p-around_x-small">
 		<lightning-layout
 			class="slds-box slds-box_x-small"
 			style="margin-bottom: 10px">
@@ -14,7 +14,7 @@
 				</lightning-combobox>
 			</lightning-layout-item>
 		</lightning-layout>
-		<lightning-layout if:true={config.type.value}>
+		<lightning-layout lwc:if={config.type.value}>
 			<lightning-layout-item size={calculateSize}>
 				<!-- Recipient -->
 				<lightning-layout vertical-align="end">
@@ -85,7 +85,7 @@
 					</lightning-layout-item>
 				</lightning-layout>
 			</lightning-layout-item>
-			<template if:true={selectedField}>
+			<template lwc:if={selectedField}>
 				<lightning-layout-item
 					class="slds-box slds-box_x-medium"
 					style="background-color: white"

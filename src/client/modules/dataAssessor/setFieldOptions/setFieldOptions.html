@@ -15,7 +15,7 @@
 			placeholder="Select Field"
 			options={types}
 			onchange={edittype}></lightning-combobox>
-		<template if:true={isText}>
+		<template lwc:if={isText}>
 			<lightning-input
 				name="length"
 				label="Length"
@@ -30,7 +30,7 @@
 				onchange={handleCheckboxChange}>
 			</lightning-checkbox-group>
 		</template>
-		<template if:true={isDecimal}>
+		<template lwc:if={isDecimal}>
 			<lightning-input
 				name="precision"
 				label="Precision (Total Length)"
