@@ -28,8 +28,9 @@
         "ecmaVersion": 2022
     },
     "rules": {
-        "unicorn/filename-case": "off", 
-        "unicorn/prevent-abbreviations":"off",
+        "unicorn/filename-case": "off",  //not LWC compliant
+        "unicorn/prevent-abbreviations":"off", // dont like
+        "unicorn/prefer-dom-node-append": "off" // breaks LWC components
         // "jsdoc/no-undefined-types": "off",
         // "jsdoc/require-jsdoc": [
         //     2,

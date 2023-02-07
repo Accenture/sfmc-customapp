@@ -4,6 +4,6 @@ import Activity from "salesforceNotifications/activity";
 
 document
 	.querySelector("#main")
-	.append(
+	.appendChild(
 		createElement("salesforce-notifications-activity", { is: Activity })
 	);

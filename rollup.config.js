@@ -1,4 +1,4 @@
-import path from "path";
+import path from "node:path";
 import lwcRollupPlugin from "@lwc/rollup-plugin";
 import replace from "@rollup/plugin-replace";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
@@ -6,10 +6,9 @@ import del from "rollup-plugin-delete";
 import multiInput from "rollup-plugin-multi-input";
 
 const config = {
-	// input,
 	input: [
 		{
-			app: "src/client/app.js",
+			// app: "src/client/app.js"
 			// salesforceNotification: "src/client/salesforceNotification.js"
 			dataAssessor: "src/client/dataAssessor.js"
 			// platformEvent: "src/client/platformEvent.js",

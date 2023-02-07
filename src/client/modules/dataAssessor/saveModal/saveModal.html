@@ -1,0 +1,19 @@
+<template>
+	<template if:true={isLoading}>
+		<lightning-spinner
+			alternative-text="Loading"
+			size="large"></lightning-spinner>
+	</template>
+	<lightning-modal-header label="Save Data Extension"></lightning-modal-header>
+	<lightning-modal-body>
+		<lightning-input
+			name="name"
+			label="Name"
+			onchange={handlefilename}
+			type="text"
+			value={filename}></lightning-input>
+	</lightning-modal-body>
+	<lightning-modal-footer>
+		<lightning-button label="Save" onclick={handlesave}></lightning-button>
+	</lightning-modal-footer>
+</template>

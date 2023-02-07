@@ -4,4 +4,4 @@ import App from "salesforceNotifications/app";
 
 document
 	.querySelector("#main")
-	.append(createElement("salesforce-notifications-app", { is: App }));
+	.appendChild(createElement("salesforce-notifications-app", { is: App }));

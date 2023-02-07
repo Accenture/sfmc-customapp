@@ -1,0 +1,46 @@
+<template>
+	<div class="slds-text-heading_small">{field.Name}</div>
+	<lightning-layout vertical-align="center">
+		<lightning-layout-item>
+			<span>{field.FieldType}</span>
+			<template if:true={isText}>
+				<span>({field.MaxLength})</span>
+			</template>
+			<template if:true={isDecimal}>
+				<span>({field.Precision}, {field.Scale})</span>
+			</template>
+			<template if:true={field.IsRequired}>
+				<span> - Req</span>
+			</template>
+			<template if:false={field.IsRequired}>
+				<span> - Opt</span>
+			</template>
+			<template if:true={field.IsPrimaryKey}>
+				<span> - PK</span>
+			</template>
+		</lightning-layout-item>
+		<lightning-layout-item padding="horizontal-small" alignment-bump="left">
+			<lightning-button-group
+				><lightning-button-icon
+					icon-name="utility:settings"
+					alternative-text="More options"
+					title="More options"
+					onclick={handleEdit}
+					id={field.key}></lightning-button-icon>
+				<lightning-button-icon
+					icon-name="utility:delete"
+					alternative-text="Delete Column"
+					title="Delete Column"
+					onclick={handledelete}
+					id={field.key}></lightning-button-icon
+			></lightning-button-group>
+		</lightning-layout-item>
+	</lightning-layout>
+	<div class="slds-p-top_x-small">
+		<lightning-progress-bar
+			value={field.match}
+			size="large"
+			variant="circular"
+			aria-label="Progress: {field.match}%"></lightning-progress-bar>
+	</div>
+</template>

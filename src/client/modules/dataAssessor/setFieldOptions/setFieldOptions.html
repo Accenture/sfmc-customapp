@@ -1,0 +1,51 @@
+<template>
+	<lightning-modal-header
+		label="Update Field Settings"></lightning-modal-header>
+	<lightning-modal-body>
+		<lightning-input
+			name="name"
+			label="Name"
+			onchange={editname}
+			type="text"
+			value={_field.Name}></lightning-input>
+		<lightning-combobox
+			name="datatpe"
+			label="Data Type"
+			value={_field.FieldType}
+			placeholder="Select Field"
+			options={types}
+			onchange={edittype}></lightning-combobox>
+		<template if:true={isText}>
+			<lightning-input
+				name="length"
+				label="Length"
+				onchange={editlen}
+				type="number"
+				value={_field.MaxLength}></lightning-input>
+			<lightning-checkbox-group
+				name="options"
+				label="Options"
+				options={checkboxOptions}
+				value={checkBoxValues}
+				onchange={handleCheckboxChange}>
+			</lightning-checkbox-group>
+		</template>
+		<template if:true={isDecimal}>
+			<lightning-input
+				name="precision"
+				label="Precision (Total Length)"
+				onchange={editprecision}
+				type="number"
+				value={_field.Precision}></lightning-input>
+			<lightning-input
+				name="Scale"
+				label="Scale (Decimal Places)"
+				onchange={editscale}
+				type="number"
+				value={_field.Scale}></lightning-input>
+		</template>
+	</lightning-modal-body>
+	<lightning-modal-footer>
+		<lightning-button label="Save" onclick={handlesave}></lightning-button>
+	</lightning-modal-footer>
+</template>
