@@ -16,15 +16,18 @@
 						name="avatar"
 						accept=".csv"
 						onchange={loadData}></lightning-input>
-
-					<div>{file.name}</div>
+					<template lwc:if={file}>
+						<lightning-pill
+							label={file.name}
+							onremove={handleRemove}></lightning-pill>
+					</template>
 				</lightning-layout-item>
 				<lightning-layout-item flexibility="auto" padding="horizontal-small">
 					<lightning-input
 						variant="label-inline"
 						name="defaultPhoneLocale"
 						label="Default Phone Locale"
-						ontextinput={setphonelocale}
+						onchange={setphonelocale}
 						type="text"
 						value={settings.defaultPhoneLocale}></lightning-input>
 				</lightning-layout-item>
@@ -33,7 +36,7 @@
 						variant="label-inline"
 						name="delimiter"
 						label="Delimiter"
-						ontextinput={setDelimiter}
+						onchange={setDelimiter}
 						type="text"
 						value={settings.delimiter}></lightning-input
 				></lightning-layout-item>

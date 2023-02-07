@@ -2,7 +2,6 @@ import { LightningElement, track, api } from "lwc";
 import SetFieldOptions from "dataAssessor/SetFieldOptions";
 
 export default class FieldOptions extends LightningElement {
-	@track updatedField;
 	@api field;
 
 	async handleEdit() {

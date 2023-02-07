@@ -34,7 +34,9 @@ const guessDataType = (values, phoneLocale) => {
 				return false;
 			} catch (error) {
 				logger.error(error, line);
-				throw new Error(JSON.stringify({ messsage: error.message, value: line }));
+				throw new Error(
+					JSON.stringify({ messsage: error.message, value: line })
+				);
 			}
 		});
 
@@ -104,19 +106,19 @@ const guessDataType = (values, phoneLocale) => {
 			safeValues.length === 0
 				? 50
 				: Math.max.apply(
-					Math,
-					safeValues.map(function (value) {
-						return value.length;
-					})
+						Math,
+						safeValues.map(function (value) {
+							return value.length;
+						})
 				  );
 		const lenMin =
 			safeValues.length === 0
 				? 50
 				: Math.min.apply(
-					Math,
-					safeValues.map(function (value) {
-						return value.length;
-					})
+						Math,
+						safeValues.map(function (value) {
+							return value.length;
+						})
 				  );
 		// this is likely a field always filled with the same number of characters like a SFDC ID
 		if (lenMax > 0 && lenMax === lenMin) {
@@ -191,9 +193,17 @@ export async function parse(dataurl, phoneLocale, delimiter) {
 		}
 	}
 	//add values to field
+	// console.log(byField);
+	let i = 0;
 	for (const line of lines) {
+		i++;
+		//check columns against columns in line
+		if (Object.keys(line).length != Object.keys(byField).length) {
+			throw new Error(`Columns in Line ${i} not matching header line`);
+		}
 		for (const column in line) {
 			if (Object.prototype.hasOwnProperty.call(line, column)) {
+				console.log("LOG", column);
 				byField[column].push(line[column]);
 			}
 		}

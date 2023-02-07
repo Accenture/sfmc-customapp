@@ -25,17 +25,11 @@ export default class App extends LightningElement {
 	loadData(inputdata) {
 		this.isLoading = true;
 		if (inputdata.target.files[0].size > 1e7) {
-			this.dispatchEvent(
-				new CustomEvent("error", {
-					bubbles: true,
-					composed: true,
-					detail: {
-						type: "error",
-						message: "Only files up to 10mb are supported",
-						link: "/dataTools/login"
-					}
-				})
-			);
+			LightningAlert.open({
+				message: "Only files up to 10mb are supported",
+				theme: "error", // a red theme intended for error states
+				label: "Error!" // this is the header text
+			});
 		} else {
 			this.file = inputdata.target.files[0];
 		}
@@ -69,10 +63,14 @@ export default class App extends LightningElement {
 		this.rows = tempRows;
 	}
 	setphonelocale(e) {
-		this.settings.defaultPhoneLocale = e.detail.text;
+		this.settings.defaultPhoneLocale = e.detail.value;
 	}
 	setDelimiter(e) {
-		this.settings.delimiter = e.detail.text;
+		this.settings.delimiter = e.detail.value;
+	}
+
+	handleRemove() {
+		this.file = undefined;
 	}
 	async parsedata() {
 		this.isLoading = true;
@@ -102,27 +100,17 @@ export default class App extends LightningElement {
 				label: "Success!" // this is the header text
 			});
 		} else if (resData.status === 204) {
-			this.dispatchEvent(
-				new CustomEvent("error", {
-					bubbles: true,
-					composed: true,
-					detail: {
-						type: "warning",
-						message: "No Data Found"
-					}
-				})
-			);
+			LightningAlert.open({
+				message: "No Data Found",
+				theme: "warning", // a red theme intended for error states
+				label: "Warning!" // this is the header text
+			});
 		} else {
-			this.dispatchEvent(
-				new CustomEvent("error", {
-					bubbles: true,
-					composed: true,
-					detail: {
-						type: "error",
-						message: await resData.json()
-					}
-				})
-			);
+			LightningAlert.open({
+				message: await resData.json(),
+				theme: "error", // a red theme intended for error states
+				label: "Error!" // this is the header text
+			});
 		}
 		this.isLoading = false;
 	}
