@@ -20,65 +20,6 @@ dataAssessor.post("/exampledata", async (req, res) => {
 		res.status(500).json(error.message);
 	}
 });
-
-dataAssessor.get("/getDataExtensions", async (req, res) => {
-	try {
-		res.json(await data.getDataExtensions(req));
-	} catch (error) {
-		logger.error(error);
-		res.status(500).json(error.message);
-	}
-});
-dataAssessor.get(
-	"/getDataExtension/:key/fields",
-
-	async (req, res) => {
-		try {
-			res.json(await data.getDataExtensionFields(req));
-		} catch (error) {
-			res.status(500).json(error.message);
-		}
-	}
-);
-
-dataAssessor.post("/getDataExtensionData", async (req, res) => {
-	try {
-		const fieldSet = req.body.fields.map((field) => field.fieldName);
-		//add _CustomObjectKey
-		fieldSet.push("_CustomObjectKey");
-		if (fieldSet) {
-			const objectData = await data.getDataExtensionData(
-				req,
-				req.body.name,
-				fieldSet
-			);
-			if (objectData) {
-				res.json(objectData);
-			} else {
-				res.status(204).json({
-					message: "No Rows Found",
-					status: "warn"
-				});
-			}
-		} else {
-			res.status(500).json({
-				message: "No Fields Available",
-				status: "error"
-			});
-		}
-	} catch (error) {
-		logger.error(error);
-		res.status(500).json(error);
-	}
-});
-
-dataAssessor.get("/getFolders", async (req, res) => {
-	try {
-		res.json(await platform.getFolders(req));
-	} catch (error) {
-		res.status(500).json(error.message);
-	}
-});
 dataAssessor.post("/createDataExtension", async (req, res) => {
 	console.log("CREATE DATA EXTENSION", req.session);
 	try {

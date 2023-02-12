@@ -1,0 +1,51 @@
+<template>
+	<template lwc:if={isLoading}>
+		<lightning-spinner
+			alternative-text="Loading"
+			size="large"></lightning-spinner>
+	</template>
+	<lightning-card
+		variant="Narrow"
+		title="Data Viewer"
+		icon-name="standard:opportunity">
+		<lightning-button-group slot="actions">
+			<lightning-button
+				label="Select"
+				onclick={handleSelectSource}></lightning-button>
+
+			<lightning-button
+				label="Load"
+				onclick={handleLoad}
+				disabled={awaitingSelection}></lightning-button>
+			<lightning-button
+				label="Open"
+				onclick={handleClickOpen}
+				disabled={awaitingSelection}></lightning-button>
+		</lightning-button-group>
+
+		<template lwc:if={_dataExtension}>
+			<dataViewer-filterpanel
+				class="slds-p-horizontal_small"
+				fields={_dataExtension.fields}
+				onfilterchange={handleFilter}>
+			</dataViewer-filterpanel>
+
+			<lightning-datatable
+				min-column-width="150"
+				key-field="_CustomObjectKey"
+				columns={_dataExtension.fields}
+				data={_dataExtension.rows}
+				hide-checkbox-column
+				default-sort-direction={defaultSortDirection}
+				sorted-direction={sortDirection}
+				sorted-by={sortedBy}
+				onsort={onHandleSort}>
+			</lightning-datatable>
+		</template>
+		<template lwc:else>
+			<avonni-illustration variant="desert" size="large">
+				<span>Click <b>Select</b> to get started!</span>
+			</avonni-illustration>
+		</template>
+	</lightning-card>
+</template>

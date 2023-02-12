@@ -1,0 +1,13 @@
+<template>
+	<lightning-modal-header label="Select Data Source"></lightning-modal-header>
+	<lightning-modal-body>
+		<sfmc-datapicker onselectitem={handleSelectItem} onerror={showErrors}>
+		</sfmc-datapicker
+	></lightning-modal-body>
+	<lightning-modal-footer>
+		<lightning-button
+			label="OK"
+			onclick={handleOkay}
+			disabled={isDisabled}></lightning-button>
+	</lightning-modal-footer>
+</template>

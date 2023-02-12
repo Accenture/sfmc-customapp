@@ -1,8 +1,8 @@
 <template>
 	<lightning-tree
-		lwc:if={nestedItems}
+		lwc:if={tree}
 		id="base"
-		items={nestedItems.items}
+		items={tree.items}
 		onselect={handleClick}></lightning-tree>
 	<lightning-spinner
 		lwc:if={isLoading}

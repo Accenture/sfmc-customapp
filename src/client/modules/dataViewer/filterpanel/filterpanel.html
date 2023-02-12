@@ -1,0 +1,46 @@
+<template>
+    <lightning-layout
+        class="slds-p-horizontal_x-small"
+        horizontal-align="spread"
+    >
+        <lightning-layout-item
+            flexibility="auto"
+            padding="horizontal-small"
+            size="5"
+        >
+            <lightning-combobox
+                name="field"
+                label="Field"
+                value={filter.field}
+                placeholder="Select Field"
+                options={privateFields}
+                onchange={fieldHandler}
+            ></lightning-combobox>
+        </lightning-layout-item>
+        <lightning-layout-item
+            flexibility="auto"
+            padding="horizontal-small"
+            size="2"
+        >
+            <lightning-combobox
+                name="operators"
+                label="Operators"
+                value={filter.operator}
+                placeholder="Select Operator"
+                options={operators}
+                onchange={operatorHandler}
+            ></lightning-combobox> </lightning-layout-item
+        ><lightning-layout-item
+            flexibility="auto"
+            padding="horizontal-small"
+            size="5"
+        >
+            <lightning-input
+                type="text"
+                name="Value"
+                label="Provide a value"
+                onchange={valueHandler}
+            ></lightning-input>
+        </lightning-layout-item>
+    </lightning-layout>
+</template>

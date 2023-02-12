@@ -5,6 +5,7 @@ import { getAuthRedirect, getAccessToken } from "./auth.js";
 import { sfdcRoutes } from "./sfdc.js";
 import { salesforceNotifications } from "./salesforceNotifications/activity.js";
 import { dataAssessor } from "./dataAssessor/app.js";
+import { dataViewer } from "./dataViewer/app.js";
 import compression from "compression";
 import helmet from "helmet";
 import express from "express";
@@ -49,6 +50,7 @@ app.use((req, res, next) => {
 app.set("trust proxy", 1); // needed where server is not https itself (ie. with tunnel proxy)
 app.use(compression());
 app.use(express.static("./node_modules/@salesforce-ux/design-system/assets"));
+app.use(express.static("./node_modules/@avonni/base-components/static")); //has slds illustrations in
 app.use(express.static("dist"));
 app.use(express.static("./src/resources"));
 
@@ -143,6 +145,7 @@ apiRoutes.get("/context", (req, res) => {
 
 app.use("/salesforceNotification", salesforceNotifications);
 app.use("/dataAssessor", dataAssessor);
+app.use("/dataViewer", dataViewer);
 
 app.use("/sfdc", sfdcRoutes);
 app.use("/api", apiRoutes);
