@@ -1,5 +1,5 @@
 import express from "express";
-import { getConnection } from "../sfdc.js";
+import { getConnection } from "../adminApp/sfdc.js";
 import { decodeJwt, logger } from "../utils.js";
 import { config } from "./config.js";
 
@@ -37,7 +37,6 @@ export const salesforceNotifications = express.Router();
 
 salesforceNotifications.get("/config.json", config);
 salesforceNotifications.get("/v1/notificationTypes", async (req, res) => {
-	console.log("GETTING NOTIFICATIONS", req.session);
 	const conn = await getConnection(req.session.context.organization.member_id);
 	const notifs = await conn.tooling.query(
 		"Select Id,CustomNotifTypeName from CustomNotificationType"

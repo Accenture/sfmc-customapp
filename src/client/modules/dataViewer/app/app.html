@@ -4,15 +4,11 @@
 			alternative-text="Loading"
 			size="large"></lightning-spinner>
 	</template>
-	<lightning-card
-		variant="Narrow"
-		title="Data Viewer"
-		icon-name="standard:opportunity">
+	<sfmc-app-page title={sourceTitle} icon-name="standard:opportunity">
 		<lightning-button-group slot="actions">
 			<lightning-button
 				label="Select"
 				onclick={handleSelectSource}></lightning-button>
-
 			<lightning-button
 				label="Load"
 				onclick={handleLoad}
@@ -47,5 +43,5 @@
 				<span>Click <b>Select</b> to get started!</span>
 			</avonni-illustration>
 		</template>
-	</lightning-card>
+	</sfmc-app-page>
 </template>

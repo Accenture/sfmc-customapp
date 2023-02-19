@@ -4,7 +4,6 @@ const firestore = new Firestore();
 
 export async function setConfig(key, value) {
 	const documentReference = firestore.doc("config/" + key);
-	console.log("SETTING", value);
 	return documentReference.set(value);
 }
 export async function getConfig(key) {

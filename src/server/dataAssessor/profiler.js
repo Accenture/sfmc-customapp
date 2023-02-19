@@ -198,7 +198,6 @@ export async function parse(dataurl, phoneLocale, delimiter) {
 		}
 	}
 	//add values to field
-	// console.log(byField);
 	let i = 0;
 	for (const line of lines) {
 		i++;
@@ -208,7 +207,7 @@ export async function parse(dataurl, phoneLocale, delimiter) {
 		}
 		for (const column in line) {
 			if (Object.prototype.hasOwnProperty.call(line, column)) {
-				console.log("LOG", column);
+				
 				byField[column].push(line[column]);
 			}
 		}

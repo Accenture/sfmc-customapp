@@ -2,7 +2,7 @@ import { logger } from "./utils.js";
 import { Firestore } from "@google-cloud/firestore";
 import { FirestoreStore } from "@google-cloud/connect-firestore";
 import { getAuthRedirect, getAccessToken } from "./auth.js";
-import { sfdcRoutes } from "./sfdc.js";
+import { sfdcRoutes } from "./adminApp/sfdc.js";
 import { salesforceNotifications } from "./salesforceNotifications/activity.js";
 import { dataAssessor } from "./dataAssessor/app.js";
 import { dataViewer } from "./dataViewer/app.js";
@@ -116,13 +116,11 @@ app.use(
 		saveUninitialized: false,
 		genid: (req) => {
 			// we use the session ID from state if provided, otherwise generate new
+
 			if (req?.query?.state) {
-				console.log("HAS STATE", req.query.state);
 				return req.query.state;
 			} else {
-				const val = crypto.randomUUID();
-				console.log("NEW ID", val);
-				return val;
+				return crypto.randomUUID();
 			}
 		}
 	})
@@ -131,7 +129,6 @@ app.use(
 // force login
 app.use((req, res, next) => {
 	if (req.url.endsWith(".html") && !req.session.auth) {
-		console.log("Forcing login");
 		res.redirect(req.url.replace(".html", "/login"));
 	} else {
 		next();
@@ -152,5 +149,5 @@ app.use("/api", apiRoutes);
 app.use("/", baseRoutes);
 
 app.listen(PORT, () =>
-	console.log(`✅  Server started: http://${HOST}:${PORT}`)
+	logger.info(`✅  Server started: http://${HOST}:${PORT}`)
 );

@@ -1,6 +1,6 @@
-import { logger } from "./utils.js";
+import { logger } from "../utils.js";
 import jsforce from "jsforce";
-import { getConfig, setConfig, deleteConfig } from "./data.js";
+import { getConfig, setConfig, deleteConfig } from "../data.js";
 import express from "express";
 export const sfdcRoutes = express.Router();
 
@@ -25,7 +25,6 @@ sfdcRoutes.get("/status/:mid", async (req, res) => {
 	res.json(await getConnection(req.param.mid).identity());
 });
 sfdcRoutes.post("/credentials", (req, res) => {
-	console.log("SESSION", req.session);
 	const connectionSettings = {
 		loginUrl: req.body.instance_url,
 		clientId: req.body.client_key,

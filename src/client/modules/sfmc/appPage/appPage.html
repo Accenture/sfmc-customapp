@@ -1,0 +1,23 @@
+<template>
+	<div class="slds-card__header slds-grid">
+		<header
+			class="slds-media slds-media_center slds-has-flexi-truncate"
+			part="header">
+			<div class="slds-media__figure" part="icon">
+				<lightning-icon icon-name={iconName} size="small"></lightning-icon>
+			</div>
+
+			<div class="slds-media__body" part="title">
+				<h2 class="slds-card__header-title">
+					<span class="slds-text-heading_small slds-truncate"> {title} </span>
+				</h2>
+			</div>
+			<div class="slds-no-flex" part="actions">
+				<slot name="actions"></slot>
+			</div>
+		</header>
+	</div>
+	<div class="slds-card__body" part="body">
+		<slot></slot>
+	</div>
+</template>

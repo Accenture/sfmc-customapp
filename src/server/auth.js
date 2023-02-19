@@ -6,7 +6,6 @@ import { logger } from "./utils.js";
 export async function JourneySessionAuthentication(req, res) {
 	try {
 		//todo add check here for headers to avoid accidental loading
-		console.log("RUNNING AUTH");
 
 		// await getContextFromToken(req.body.access_token);
 		const authOptions = {
@@ -53,7 +52,6 @@ async function getContextFromToken(token) {
 			url: "/platform/v1/endpoints/?IsTSE=true",
 			headers: { Authorization: `Bearer ${token}` }
 		});
-		console.log("GET CONTEXT", res.data);
 	} catch (error) {
 		console.error(error.response.data);
 	}

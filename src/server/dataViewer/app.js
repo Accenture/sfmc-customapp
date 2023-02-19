@@ -103,7 +103,6 @@ dataViewer.get("/DataTree", async (req, res) => {
 		req.session.auth,
 		req.session.context.organization.member_id
 	);
-	console.log("DEs", deList);
 	const deCorrected = deList.map((de) => {
 		return {
 			label: de.Name,

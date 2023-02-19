@@ -12,6 +12,10 @@ export default class App extends LightningElement {
 		return !this._dataExtension;
 	}
 
+	get sourceTitle() {
+		return this._dataExtension?.label || "(PENDING)";
+	}
+
 	//data table
 	defaultSortDirection = "asc";
 	sortDirection = "asc";

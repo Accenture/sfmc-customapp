@@ -232,7 +232,7 @@ export function getSDKFromSession(auth, mid) {
 	});
 	sfmc.auth.authObject = auth;
 	// Object.assign(sfmc.auth, auth);
-	// console.log(sfmc);
+
 	return sfmc;
 }
 // export function checkAuth = async (req, res, next, appname) => {
