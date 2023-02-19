@@ -25,7 +25,7 @@ const guessDataType = (values, phoneLocale) => {
 		try {
 			Temporal.Instant.from(line);
 			possibleDate = true;
-		} catch (ex) {
+		} catch {
 			possibleDate = false;
 		}
 		// locale
@@ -45,7 +45,7 @@ const guessDataType = (values, phoneLocale) => {
 			}
 		});
 
-		let phNumber = null;
+		let phNumber;
 		try {
 			phNumber = phoneUtil.parseAndKeepRawInput(line, phoneLocale);
 		} catch {
@@ -66,7 +66,7 @@ const guessDataType = (values, phoneLocale) => {
 			possibleTypes.Date++;
 		} else if (Number.isSafeInteger(Number(line))) {
 			possibleTypes.Number++;
-		} else if (!isNaN(line)) {
+		} else if (!Number.isNaN(line)) {
 			possibleTypes.Decimal++;
 		} else if (["true", "false"].includes(line.toLowerCase())) {
 			possibleTypes.Boolean++;
@@ -84,7 +84,7 @@ const guessDataType = (values, phoneLocale) => {
 	//set any defaults here
 	const bestGuess = {
 		FieldType: "Text",
-		match: null,
+		match: undefined,
 		total: values.length,
 		MaxLength: 50,
 		IsRequired: false,
@@ -93,7 +93,7 @@ const guessDataType = (values, phoneLocale) => {
 	for (const type in possibleTypes) {
 		if (
 			possibleTypes[type] > 0 &&
-			(bestGuess.match === null || possibleTypes[type] > bestGuess.match)
+			(bestGuess.match === undefined || possibleTypes[type] > bestGuess.match)
 		) {
 			bestGuess.FieldType = type;
 			bestGuess.match = possibleTypes[type];
@@ -207,7 +207,6 @@ export async function parse(dataurl, phoneLocale, delimiter) {
 		}
 		for (const column in line) {
 			if (Object.prototype.hasOwnProperty.call(line, column)) {
-				
 				byField[column].push(line[column]);
 			}
 		}

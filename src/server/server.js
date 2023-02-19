@@ -116,12 +116,10 @@ app.use(
 		saveUninitialized: false,
 		genid: (req) => {
 			// we use the session ID from state if provided, otherwise generate new
-
 			if (req?.query?.state) {
 				return req.query.state;
-			} else {
-				return crypto.randomUUID();
 			}
+			return crypto.randomUUID();
 		}
 	})
 );

@@ -1,5 +1,4 @@
-import { LightningElement, track, api } from "lwc";
-import { classSet } from "lightning/utils";
+import { LightningElement, track } from "lwc";
 import LightningAlert from "lightning/alert";
 import SelectorModal from "dataViewer/selectorModal";
 export default class App extends LightningElement {
@@ -73,10 +72,12 @@ export default class App extends LightningElement {
 	handleFilter(e) {
 		console.log("handleFilter", e);
 		this._dataExtension.filter =
-			e.detail.value && e.detail.field && e.detail.operator ? e.detail : null;
+			e.detail.value && e.detail.field && e.detail.operator
+				? e.detail
+				: undefined;
 	}
 
-	async handleLoad(e) {
+	async handleLoad() {
 		this.isLoading = true;
 		const resData = await fetch("/dataViewer/DataExtensionData", {
 			method: "POST",
@@ -99,8 +100,9 @@ export default class App extends LightningElement {
 				label: "Error!" // this is the header text
 			});
 		} else {
+			const resJson = await resData.json();
 			LightningAlert.open({
-				message: (await resData.json()).message,
+				message: resJson.message,
 				theme: "error", // a red theme intended for error states
 				label: "Error!" // this is the header text
 			});

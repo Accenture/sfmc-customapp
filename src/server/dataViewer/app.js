@@ -63,7 +63,7 @@ dataViewer.post("/DataExtensionData", async (req, res) => {
 									rightOperand: req.body.filter.value
 								}
 						  }
-						: null
+						: undefined
 				);
 				if (objectData) {
 					res.json(
@@ -129,12 +129,14 @@ dataViewer.get("/DataTree", async (req, res) => {
 	});
 
 	//push the root
-	t.push({
-		label: "Parent",
-		name: "Parent",
-		id: 0
-	});
-	t.push(...deCorrected);
+	t.push(
+		{
+			label: "Parent",
+			name: "Parent",
+			id: 0
+		},
+		...deCorrected
+	);
 	fs.writeJSON("test.json", t);
 
 	try {

@@ -30,7 +30,7 @@
     "rules": {
         "unicorn/filename-case": "off",  //not LWC compliant
         "unicorn/prevent-abbreviations":"off", // dont like
-        "unicorn/prefer-dom-node-append": "off", // breaks LWC components
+        "unicorn/prefer-dom-node-append": "off" // breaks LWC components
         // "jsdoc/no-undefined-types": "off",
         // "jsdoc/require-jsdoc": [
         //     2,
@@ -42,13 +42,6 @@
         //         }
         //     }
         // ],
-        "indent": [
-            2,
-            "tab",
-            {
-                "SwitchCase": 1
-            }
-        ]
         // "func-names": "off",
         // "vars-on-top": "off",
         // "no-unused-expressions": "off"

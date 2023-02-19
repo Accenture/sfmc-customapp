@@ -19,13 +19,13 @@ export default class SelectorModal extends LightningModal {
 
 		if (e.detail && e.detail.name) {
 			if (
-				this.selectedDataExtension == undefined ||
+				this.selectedDataExtension === undefined ||
 				e.detail.name !== this.selectedDataExtension.name
 			) {
 				this.selectedDataExtension = e.detail;
 			}
 		} else {
-			this.selectedDataExtension = null;
+			this.selectedDataExtension = undefined;
 		}
 	}
 }
