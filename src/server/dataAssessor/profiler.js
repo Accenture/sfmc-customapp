@@ -1,6 +1,6 @@
 import { logger } from "../utils.js";
 import csv from "csvtojson";
-import moment from "moment";
+import { Temporal } from "@js-temporal/polyfill";
 import { languageCodes } from "./ISO_639-1.js";
 import libphonenumber from "google-libphonenumber";
 
@@ -21,8 +21,13 @@ const guessDataType = (values, phoneLocale) => {
 	const dateFormats = ["YYYY-MM-DDTHH:mm:ss.SSSZ"];
 	for (const line of values) {
 		// date time
-		const m = moment(line, dateFormats, true);
-		const possibleDate = m.isValid();
+		let possibleDate;
+		try {
+			Temporal.Instant.from(line);
+			possibleDate = true;
+		} catch (ex) {
+			possibleDate = false;
+		}
 		// locale
 		const possibleLocale = languageCodes.filter((code) => {
 			try {
