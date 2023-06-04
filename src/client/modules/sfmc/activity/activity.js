@@ -35,7 +35,9 @@ export default class Activity extends LightningElement {
 	 */
 	async connectedCallback() {
 		try {
-			const events = await Promise.all(this.contextEvents.map(event => sdk.interact(event)));
+			const events = await Promise.all(
+				this.contextEvents.map((event) => sdk.interact(event))
+			);
 
 			this.context = Object.assign(...events);
 			//authenticate to server for persisting context
@@ -50,7 +52,7 @@ export default class Activity extends LightningElement {
 			this.workingActivity = JSON.parse(JSON.stringify(this.context.activity));
 			this.loadStep();
 		} catch (error) {
-			console.error('UNHANDLED ERROR', error)
+			console.error("UNHANDLED ERROR", error);
 			this.template.querySelector("sfmc-toast").showToastEvent({
 				title: "Error",
 				message: error.message,

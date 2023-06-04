@@ -76,13 +76,15 @@ export default class StepOne extends LightningElement {
 
 	handleEventChange(e) {
 		this.config.event = e.detail.value;
-		this.fields = this.platformEventList.find((obj) => obj.value === e.detail.value).fields.filter((field) => field.createable)
+		this.fields = this.platformEventList
+			.find((obj) => obj.value === e.detail.value)
+			.fields.filter((field) => field.createable)
 			.map((field) => {
 				field.value = field.defaultValue || "";
 				field.disabled = true;
 				return field;
 			});
-		if(this.fields.length === 0){
+		if (this.fields.length === 0) {
 			this.dispatchEvent(
 				toastEvent(
 					"No fields supported",
@@ -91,8 +93,7 @@ export default class StepOne extends LightningElement {
 					3000
 				)
 			);
-
-		} 
+		}
 		this.config.fields = this.fields.map((field) => {
 			return {
 				disabled: true,
@@ -102,7 +103,7 @@ export default class StepOne extends LightningElement {
 				nillable: field.nillable
 			};
 		});
-		this.updateStep();	
+		this.updateStep();
 	}
 	/**
 	 *

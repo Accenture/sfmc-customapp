@@ -17,7 +17,6 @@ export default class Toast extends LightningElement {
 	 */
 	@api
 	showToastEvent(event) {
-		
 		this.isVisible = true;
 		const timer = setTimeout(
 			() => {

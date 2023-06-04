@@ -28,17 +28,15 @@ export default class SchemaPicker extends LightningElement {
 			items: data.schemaReponse.schema.attributeGroups
 				.filter((group) => group.attributeSetIdentifiers)
 				.map((group) => {
-					const definitions = new Set(group.attributeSetIdentifiers.map(
-						(id) => id.definitionID
-					));
+					const definitions = new Set(
+						group.attributeSetIdentifiers.map((id) => id.definitionID)
+					);
 					return {
 						label: group.fullyQualifiedName,
 						name: group.definitionID,
 						expanded: false,
 						items: data.schemaReponse.schema.setDefinitions
-							.filter((definition) =>
-								definitions.has(definition.definitionID)
-							)
+							.filter((definition) => definitions.has(definition.definitionID))
 							.map((setDef) => {
 								return {
 									label: setDef.fullyQualifiedName,
@@ -67,53 +65,37 @@ export default class SchemaPicker extends LightningElement {
 			label: "Journey",
 			name: "Journey",
 			expanded: false,
-			items: 
-				data
-					.filter(
-						(source) =>
-							(source.schema && source.schema.fields.length > 0) ||
-							(source.deSchema && source.deSchema.fields.length > 0)
-					)
-					.map((source) => {
-						//sometimes this is deSchema, sometimes schema
-						if (
-							source.deSchema &&
-							source.deSchema.fields &&
-							source.deSchema.fields.length > 0
-						) {
-							return {
-								label: source.name,
-								name: source.id,
-								expanded: false,
-								items: source.deSchema.fields.map((field) => {
-									return {
-										label: field.name,
-										name: `{{${source.keyPrefix}"${field.name}"}}`,
-										expanded: false,
-										items: []
-									};
-								})
-							};
-						} else if (
-							source.deSchema &&
-							source.schema.fields &&
-							source.schema.fields.length > 0
-						) {
-							return {
-								label: source.name,
-								name: source.id,
-								expanded: false,
-								items: source.schema.fields.map((field) => {
-									return {
-										label: field.name,
-										name: `{{${source.keyPrefix}"${field.name}"}}`,
-										expanded: false,
-										items: []
-									};
-								})
-							};
-						}
-
+			items: data
+				.filter(
+					(source) =>
+						(source.schema && source.schema.fields.length > 0) ||
+						(source.deSchema && source.deSchema.fields.length > 0)
+				)
+				.map((source) => {
+					//sometimes this is deSchema, sometimes schema
+					if (
+						source.deSchema &&
+						source.deSchema.fields &&
+						source.deSchema.fields.length > 0
+					) {
+						return {
+							label: source.name,
+							name: source.id,
+							expanded: false,
+							items: source.deSchema.fields.map((field) => {
+								return {
+									label: field.name,
+									name: `{{${source.keyPrefix}"${field.name}"}}`,
+									expanded: false,
+									items: []
+								};
+							})
+						};
+					} else if (
+						source.deSchema &&
+						source.schema.fields &&
+						source.schema.fields.length > 0
+					) {
 						return {
 							label: source.name,
 							name: source.id,
@@ -127,8 +109,22 @@ export default class SchemaPicker extends LightningElement {
 								};
 							})
 						};
-					})
-			
+					}
+
+					return {
+						label: source.name,
+						name: source.id,
+						expanded: false,
+						items: source.schema.fields.map((field) => {
+							return {
+								label: field.name,
+								name: `{{${source.keyPrefix}"${field.name}"}}`,
+								expanded: false,
+								items: []
+							};
+						})
+					};
+				})
 		};
 	}
 	/**

@@ -62,7 +62,7 @@ platformEvent.post("/v1/publish", decodeJwt, (req, res) => {
 	logger.info("LOGGING PUBLISH", req.body);
 	res.json({ status: "accepted" });
 });
-platformEvent.post("/v1/validate",decodeJwt, (req, res) => {
+platformEvent.post("/v1/validate", decodeJwt, (req, res) => {
 	logger.info("LOGGING VALIDATE", req.body);
 	res.json({ status: "accepted" });
 });
