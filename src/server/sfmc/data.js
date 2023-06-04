@@ -67,7 +67,7 @@ export async function createDataExtension(metadata, auth, mid) {
 	const sdk = getSDKFromSession(auth, mid);
 	const regex = /[()]/g; //not supported as data extension field names
 	metadata.fields = metadata.fields.map((field) => {
-		field.Name = field.Name.replace(regex, "");
+		field.Name = field.Name.replaceAll(regex, "");
 		return field;
 	});
 	return sdk.soap.create("DataExtension", {

@@ -8,8 +8,9 @@ import multiInput from "rollup-plugin-multi-input";
 const config = {
 	input: [
 		{
-			admin: "src/client/adminApp.js",
+			admin: "src/client/admin.js",
 			salesforceNotification: "src/client/salesforceNotification.js",
+			platformEvent: "src/client/platformEvent.js",
 			dataAssessor: "src/client/dataAssessor.js",
 			dataViewer: "src/client/dataViewer.js"
 			// platformEvent: "src/client/platformEvent.js",

@@ -38,8 +38,9 @@ export function decodeJwt(req, res, next) {
 			algorithm: "HS256"
 		});
 		return next();
-	} catch {
-		console.error("JWT PAYLOAD", req.body.toString("utf8"));
+	} catch (error){
+		console.error("JWT ERROR", error);
+		console.error("JWT PAYLOAD", req.body);
 		console.error("JWT KEY", process.env.SFMC_JWT);
 
 		res.status(401).send("JWT was not correctly signed");

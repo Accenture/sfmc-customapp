@@ -47,8 +47,8 @@
 						</template>
 					</template>
 					<template lwc:else>
-						<lightning-layout vertical-align="center" horizontal-align="space">
-							<lightning-layout-item flexibility="auto" padding="around-medium">
+						<lightning-layout horizontal-align="center">
+							<lightning-layout-item padding="around-medium">
 								<lightning-icon
 									icon-name="utility:success"
 									alternative-text="Success!"
@@ -58,14 +58,14 @@
 							</lightning-layout-item>
 						</lightning-layout>
 
-						<lightning-layout vertical-align="center" horizontal-align="space">
-							<lightning-layout-item flexibility="auto" padding="around-medium">
+						<lightning-layout horizontal-align="center">
+							<lightning-layout-item padding="around-medium">
 								<div>User: {connection.username}</div>
 								<div>Instance: {connection.urls.custom_domain}</div>
 							</lightning-layout-item>
 						</lightning-layout>
 
-						<lightning-layout vertical-align="center" horizontal-align="center">
+						<lightning-layout horizontal-align="center" >
 							<lightning-layout-item padding="around-medium">
 								<lightning-button
 									label="Change"

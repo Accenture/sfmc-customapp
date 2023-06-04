@@ -21,7 +21,7 @@ export default class Activity extends LightningElement {
 	 * @param stack
 	 */
 	errorCallback(ex, stack) {
-		console.error("error", ex, stack);
+		console.error("UNHANDLED ERROR", ex, stack);
 		this.template.querySelector("sfmc-toast").showToastEvent({
 			title: "Error",
 			message: ex.message,
@@ -35,7 +35,7 @@ export default class Activity extends LightningElement {
 	 */
 	async connectedCallback() {
 		try {
-			const events = await Promise.all(this.contextEvents.map(sdk.interact));
+			const events = await Promise.all(this.contextEvents.map(event => sdk.interact(event)));
 
 			this.context = Object.assign(...events);
 			//authenticate to server for persisting context
@@ -50,6 +50,7 @@ export default class Activity extends LightningElement {
 			this.workingActivity = JSON.parse(JSON.stringify(this.context.activity));
 			this.loadStep();
 		} catch (error) {
+			console.error('UNHANDLED ERROR', error)
 			this.template.querySelector("sfmc-toast").showToastEvent({
 				title: "Error",
 				message: error.message,
@@ -69,7 +70,7 @@ export default class Activity extends LightningElement {
 	 *
 	 */
 	get backLabel() {
-		return this.stepIndex > 0 ? "Back" : null;
+		return this.stepIndex > 0 ? "Back" : undefined;
 	}
 
 	/**
@@ -90,7 +91,8 @@ export default class Activity extends LightningElement {
 	 *
 	 */
 	async loadStep() {
-		this.stepComponent = (await this.steps[this.stepIndex]).default;
+		const stepPromise = await this.steps[this.stepIndex];
+		this.stepComponent = stepPromise.default;
 	}
 	/**
 	 *
@@ -101,15 +103,7 @@ export default class Activity extends LightningElement {
 			this.workingActivity.metaData.isConfigured = sdk.isConfigured(
 				this.workingActivity
 			);
-			const res = await sdk.interact("updateActivity", this.workingActivity);
-			console.log("Saved", res.updateActivity);
-			// this.dispatchEvent(
-			// 	new CustomEvent("save", {
-			// 		bubbles: true,
-			// 		composed: true,
-			// 		detail:
-			// 	})
-			// );
+			await sdk.interact("updateActivity", this.workingActivity);
 		} else {
 			this.stepIndex++;
 			this.loadStep();

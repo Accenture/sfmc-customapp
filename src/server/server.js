@@ -2,8 +2,9 @@ import { logger } from "./utils.js";
 import { Firestore } from "@google-cloud/firestore";
 import { FirestoreStore } from "@google-cloud/connect-firestore";
 import { getAuthRedirect, getAccessToken } from "./auth.js";
-import { sfdcRoutes } from "./adminApp/sfdc.js";
+import { sfdcRoutes } from "./admin/sfdc.js";
 import { salesforceNotifications } from "./salesforceNotifications/activity.js";
+import { platformEvent } from "./platformEvent/activity.js";
 import { dataAssessor } from "./dataAssessor/app.js";
 import { dataViewer } from "./dataViewer/app.js";
 import compression from "compression";
@@ -141,6 +142,7 @@ apiRoutes.get("/context", (req, res) => {
 app.use("/salesforceNotification", salesforceNotifications);
 app.use("/dataAssessor", dataAssessor);
 app.use("/dataViewer", dataViewer);
+app.use("/platformEvent", platformEvent);
 
 app.use("/sfdc", sfdcRoutes);
 app.use("/api", apiRoutes);

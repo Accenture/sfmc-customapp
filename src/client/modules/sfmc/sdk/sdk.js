@@ -5,8 +5,9 @@ import { getByEvent } from "./mapping.js";
 const stableSession = new Session();
 /**
  *
- * @param event
- * @param data
+ * @param event name of event which should be triggered
+ * @param [data] any relevant data which should be sent with event
+ * @returns result from interaction if available
  */
 export async function interact(event, data) {
 	const eventMap = getByEvent(event);
@@ -23,7 +24,9 @@ export async function interact(event, data) {
 		eventMap.on,
 		data || eventMap.defaultData
 	);
-
+	if (!eventMap.dataKey) {
+		return;
+	}
 	//special handling cases
 	switch (eventMap.dataKey) {
 		case "activity": {
@@ -43,7 +46,6 @@ export async function interact(event, data) {
 			break;
 		}
 	}
-
 	return obj;
 }
 

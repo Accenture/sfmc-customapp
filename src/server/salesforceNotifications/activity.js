@@ -1,5 +1,5 @@
 import express from "express";
-import { getConnection } from "../adminApp/sfdc.js";
+import { getConnection } from "../admin/sfdc.js";
 import { decodeJwt, logger } from "../utils.js";
 import { config } from "./config.js";
 
@@ -25,11 +25,13 @@ async function publishNotification(
 			inputs: payload
 		})
 	);
-	const res = await (
-		await getConnection(mid)
-	).requestPost("/actions/standard/customNotificationAction", {
-		inputs: payload
-	});
+	const conn = await getConnection(mid);
+	const res = await conn.requestPost(
+		"/actions/standard/customNotificationAction",
+		{
+			inputs: payload
+		}
+	);
 	logger.info("PUBLISH NOTIFICATION - Response", res);
 	return res;
 }
@@ -64,19 +66,19 @@ salesforceNotifications.post("/v1/execute", decodeJwt, async (req, res) => {
 		res.status(500).json(error.message);
 	}
 });
-salesforceNotifications.post("/v1/save", (req, res) => {
+salesforceNotifications.post("/v1/save", decodeJwt, (req, res) => {
 	logger.info("LOGGING SAVE", req.body);
 	res.json({ status: "accepted" });
 });
-salesforceNotifications.post("/v1/publish", (req, res) => {
+salesforceNotifications.post("/v1/publish", decodeJwt, (req, res) => {
 	logger.info("LOGGING PUBLISH", req.body);
 	res.json({ status: "accepted" });
 });
-salesforceNotifications.post("/v1/validate", (req, res) => {
+salesforceNotifications.post("/v1/validate", decodeJwt, (req, res) => {
 	logger.info("LOGGING VALIDATE", req.body);
 	res.json({ status: "accepted" });
 });
-salesforceNotifications.post("/v1/stop", (req, res) => {
+salesforceNotifications.post("/v1/stop", decodeJwt, (req, res) => {
 	logger.info("LOGGING STOP", req.body);
 	res.json({ status: "accepted" });
 });
