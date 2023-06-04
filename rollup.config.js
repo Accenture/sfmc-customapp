@@ -13,9 +13,6 @@ const config = {
 			platformEvent: "src/client/platformEvent.js",
 			dataAssessor: "src/client/dataAssessor.js",
 			dataViewer: "src/client/dataViewer.js"
-			// platformEvent: "src/client/platformEvent.js",
-			// dataTools: "src/client/dataTools.js",
-			// test: "src/client/test.js"
 		}
 	],
 	output: {
@@ -35,8 +32,7 @@ const config = {
 					dir: "modules"
 				},
 				{ npm: "@salesforce-ux/design-system" },
-				{ npm: "lightning-base-components" },
-				{ npm: "@avonni/base-components" }
+				{ npm: "lightning-base-components" }
 			]
 		}),
 		replace({

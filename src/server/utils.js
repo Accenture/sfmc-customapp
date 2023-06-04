@@ -39,9 +39,9 @@ export function decodeJwt(req, res, next) {
 		});
 		return next();
 	} catch (error) {
-		console.error("JWT ERROR", error);
-		console.error("JWT PAYLOAD", req.body);
-		console.error("JWT KEY", process.env.SFMC_JWT);
+		logger.error("JWT ERROR", error);
+		logger.error("JWT PAYLOAD", req.body);
+		logger.error("JWT KEY", process.env.SFMC_JWT);
 
 		res.status(401).send("JWT was not correctly signed");
 	}

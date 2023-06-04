@@ -28,7 +28,7 @@ dataAssessor.post("/createDataExtension", async (req, res) => {
 			)
 		);
 	} catch (error) {
-		console.error(error.json);
+		logger.error(error.json);
 		res.status(500).json(error.json);
 	}
 });

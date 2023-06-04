@@ -53,7 +53,7 @@ async function getContextFromToken(token) {
 			headers: { Authorization: `Bearer ${token}` }
 		});
 	} catch (error) {
-		console.error(error.response.data);
+		logger.error(error.response.data);
 	}
 }
 
@@ -106,7 +106,7 @@ export async function getAccessToken(req, res, next) {
 		req.session.context = user.data;
 		next();
 	} catch (error) {
-		console.error(error);
+		logger.error(error);
 		res.status(500).json(error);
 	}
 }
